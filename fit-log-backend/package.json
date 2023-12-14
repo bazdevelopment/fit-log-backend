@@ -10,7 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@fastify/cookie": "^9.2.0",
     "@prisma/client": "^5.7.0",
+    "crypto": "^1.0.1",
     "dotenv": "^16.3.1",
     "fastify": "^4.24.3",
     "fastify-jwt": "^4.2.0",
@@ -21,6 +23,7 @@
     "zod-to-json-schema": "^3.22.1"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.5",
     "@types/node": "^20.10.4",
     "tsx": "^4.6.2"
   }
