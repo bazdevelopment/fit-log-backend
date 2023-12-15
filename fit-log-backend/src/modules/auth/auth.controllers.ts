@@ -1,4 +1,4 @@
-import { FastifyReply, FastifyRequest } from "fastify";
+import fastify, { FastifyReply, FastifyRequest } from "fastify";
 import { TSignInUser, TTSignUpUserWithoutId } from "./auth.types";
 import {
   getUserByEmail,
@@ -8,7 +8,7 @@ import {
 import { HTTP_STATUS_CODE } from "../../enums/HttpStatusCodes";
 import { createHttpException } from "../../utils/exceptions";
 import { generateUniqueId } from "../../utils/generateUniqueId";
-import { tokenCookieOptions } from "./auth.constants";
+import { logoutCookieOptions, tokenCookieOptions } from "./auth.constants";
 import { verifyPassword } from "../../utils/hash";
 import { P } from "pino";
 
@@ -116,4 +116,14 @@ export const signInController = async (
     .code(HTTP_STATUS_CODE.CREATED)
     .cookie("Authorization", jwtToken, tokenCookieOptions)
     .send({ message: "Successfully logged in!", token: jwtToken });
+};
+
+export const signOutController = (
+  _request: FastifyRequest,
+  reply: FastifyReply
+) => {
+  return reply
+    .code(HTTP_STATUS_CODE.OK)
+    .cookie("Authorization", "", logoutCookieOptions)
+    .send({ message: "Logout successful!" });
 };

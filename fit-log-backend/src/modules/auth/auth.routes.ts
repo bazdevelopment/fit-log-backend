@@ -1,5 +1,9 @@
 import { FastifyInstance } from "fastify";
-import { signInController, signUpController } from "./auth.controllers";
+import {
+  signInController,
+  signOutController,
+  signUpController,
+} from "./auth.controllers";
 import { signInUserJsonSchema, signUpUserJsonSchema } from "./auth.schemas";
 
 /**
@@ -21,4 +25,6 @@ export const authRoutes = async (app: FastifyInstance) => {
     },
     signInController
   );
+
+  app.post("/logout", signOutController);
 };
