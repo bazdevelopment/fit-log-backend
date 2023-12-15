@@ -13,8 +13,14 @@ export const signUpUserSchema = z.object({
   password: z.string().min(6),
 });
 
+export const signInUserSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6),
+});
+
 export const signUpUserResponse = z.object({
   ...signUpUserFields,
+  password: z.string(),
   salt: z.string(),
   firstName: z.string(),
   lastName: z.string(),
@@ -34,4 +40,8 @@ export const signUpUserJsonSchema = {
     signUpUserSchema.omit({ id: true }),
     "signUpUserSchema"
   ),
+};
+
+export const signInUserJsonSchema = {
+  body: zodToJsonSchema(signInUserSchema, "signInUserSchema"),
 };
