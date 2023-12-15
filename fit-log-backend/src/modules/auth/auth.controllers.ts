@@ -118,6 +118,9 @@ export const signInController = async (
     .send({ message: "Successfully logged in!", token: jwtToken });
 };
 
+/**
+ *  This function serves as the controller for user authentication, handling the process of user logout
+ */
 export const signOutController = (
   _request: FastifyRequest,
   reply: FastifyReply
