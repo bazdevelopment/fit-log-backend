@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
-import { signUpController } from "./auth.controllers";
-import { signUpUserJsonSchema } from "./auth.schemas";
+import { signInController, signUpController } from "./auth.controllers";
+import { signInUserJsonSchema, signUpUserJsonSchema } from "./auth.schemas";
 
 /**
  * authRoutes
@@ -12,5 +12,13 @@ export const authRoutes = async (app: FastifyInstance) => {
     "/register",
     { schema: { body: signUpUserJsonSchema.body } },
     signUpController
+  );
+
+  app.post(
+    "/login",
+    {
+      schema: { body: signInUserJsonSchema.body },
+    },
+    signInController
   );
 };
