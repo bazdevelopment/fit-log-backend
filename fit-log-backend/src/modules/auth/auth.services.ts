@@ -62,7 +62,7 @@ export const getUserByEmail = async (
     return result;
   } catch (error: unknown) {
     const errorResponse = error as Error;
-    return createHttpException(
+    createHttpException(
       HTTP_STATUS_CODE.BAD_REQUEST,
       `[getUserByEmail]: ${errorResponse.message}`
     );
