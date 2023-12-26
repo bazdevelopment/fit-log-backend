@@ -15,7 +15,7 @@ import JWT from "jsonwebtoken";
  */
 export const signUpUserService = async (
   userInfo: TSignUpUser
-): Promise<TSignUpUserResponse | void> => {
+): Promise<TSignUpUserResponse> => {
   try {
     const { password, otpCode, ...restUserInfo } = userInfo;
     const { hash, salt } = hashField(password);
