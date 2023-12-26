@@ -11,6 +11,7 @@ const signUpUserFields = {
 export const signUpUserSchema = z.object({
   ...signUpUserFields,
   password: z.string().min(6),
+  otpCode: z.string().optional(),
 });
 
 export const signInUserSchema = z.object({
@@ -31,8 +32,16 @@ export const signUpUserResponse = z.object({
   nationality: z.string().nullable(),
   passwordResetToken: z.string().nullable(),
   passwordResetExpires: z.number().nullable(),
+  otpCode: z.string(),
+  isVerifiedOtp: z.boolean(),
+  otpExpiration: z.date().nullable(),
   createdAt: z.date(),
   updatedAt: z.date(),
+});
+
+export const otpVerificationSchema = z.object({
+  email: z.string().email(),
+  otpCode: z.string().min(6).max(6),
 });
 
 export const signUpUserJsonSchema = {
@@ -44,4 +53,8 @@ export const signUpUserJsonSchema = {
 
 export const signInUserJsonSchema = {
   body: zodToJsonSchema(signInUserSchema, "signInUserSchema"),
+};
+
+export const otpVerificationJsonSchema = {
+  body: zodToJsonSchema(otpVerificationSchema, "otpVerificationJsonSchema"),
 };

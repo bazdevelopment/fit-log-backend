@@ -1,16 +1,25 @@
-import fastify, { FastifyReply, FastifyRequest } from "fastify";
-import { TSignInUser, TTSignUpUserWithoutId } from "./auth.types";
+import { FastifyReply, FastifyRequest } from "fastify";
+import {
+  TOtpVerification,
+  TSignInUser,
+  TTSignUpUserWithoutId,
+} from "./auth.types";
 import {
   getUserByEmail,
+  resendOtpCode,
   signJwtToken,
   signUpUserService,
+  verifyOtpCode,
 } from "./auth.services";
 import { HTTP_STATUS_CODE } from "../../enums/HttpStatusCodes";
 import { createHttpException } from "../../utils/exceptions";
 import { generateUniqueId } from "../../utils/generateUniqueId";
 import { logoutCookieOptions, tokenCookieOptions } from "./auth.constants";
-import { verifyPassword } from "../../utils/hash";
-import { P } from "pino";
+import { verifyHashedField } from "../../utils/hash";
+import { generateOTPCode } from "../../utils/generateUniqueOtpCode";
+import { sendOtpCodeMail } from "../../utils/mail";
+import prisma from "../../config/prisma";
+import { computeFutureTimestamp } from "../../utils/computeFutureTimestamp";
 
 /**
  *  signUpController
@@ -24,6 +33,8 @@ export const signUpController = async (
   reply: FastifyReply
 ): Promise<void> => {
   const { email, password, firstName, lastName } = request.body;
+
+  const otpCode = generateOTPCode();
 
   /** 1. Check if the user already exists in db */
   const existingUser = await getUserByEmail(email);
@@ -45,15 +56,21 @@ export const signUpController = async (
     password,
     firstName,
     lastName,
+    otpCode,
   });
 
-  /* 4. create the JWT token */
+  /**4. Send email with otp code */
+
+  await sendOtpCodeMail(email, otpCode, userCreated?.firstName!);
+
+  /* 5. create the JWT token */
   const jwtToken = signJwtToken({
     email,
     password,
     id: userUniqueId,
     firstName,
     lastName,
+    otpCode: userCreated?.otpCode,
   });
 
   return reply
@@ -88,7 +105,7 @@ export const signInController = async (
 
   /** 2. Check if the password from db matches the password entered, otherwise throw an error */
 
-  const isPasswordMatching = verifyPassword(
+  const isPasswordMatching = verifyHashedField(
     password,
     registeredUser.salt,
     registeredUser.password
@@ -108,6 +125,7 @@ export const signInController = async (
     id: registeredUser.id,
     firstName: registeredUser.id,
     lastName: registeredUser.lastName,
+    otpCode: registeredUser.otpCode,
   });
 
   /** 3. In the end return a successful message, token and also user if needed */
@@ -118,6 +136,9 @@ export const signInController = async (
     .send({ message: "Successfully logged in!", token: jwtToken });
 };
 
+/**
+ *signOutController - controller responsible for logging out the user
+ */
 export const signOutController = (
   _request: FastifyRequest,
   reply: FastifyReply
@@ -126,4 +147,92 @@ export const signOutController = (
     .code(HTTP_STATUS_CODE.OK)
     .cookie("Authorization", "", logoutCookieOptions)
     .send({ message: "Logout successful!" });
+};
+
+/**
+ * The resendOtpCodeController function serves as a controller for resending OTP (One-Time Password) codes to users for email verification.
+ */
+export const resendOtpCodeController = async (
+  request: FastifyRequest<{
+    Body: {
+      email: string;
+    };
+  }>,
+  reply: FastifyReply
+) => {
+  const { email } = request.body;
+  const newOtpCode = generateOTPCode();
+
+  const user = await getUserByEmail(email);
+  if (!user) {
+    return createHttpException(
+      HTTP_STATUS_CODE.BAD_REQUEST,
+      "User doesn't exist!"
+    );
+  }
+
+  if (user.isVerifiedOtp) {
+    return createHttpException(
+      HTTP_STATUS_CODE.BAD_REQUEST,
+      "OTP code cannot be generated because your account has already been verified!"
+    );
+  }
+
+  await sendOtpCodeMail(email, newOtpCode, user.firstName);
+  await resendOtpCode({
+    email,
+    otpCode: newOtpCode,
+    otpExpiration: computeFutureTimestamp(10),
+  });
+
+  return reply
+    .code(HTTP_STATUS_CODE.OK)
+    .send({ message: "OTP is resent! Check you email inbox!" });
+};
+
+/**
+ * The verifyOtpCodeController function is a controller responsible for verifying OTP (One-Time Password) codes submitted by users for email verification.
+ */
+export const verifyOtpCodeController = async (
+  request: FastifyRequest<{
+    Body: TOtpVerification;
+  }>,
+  reply: FastifyReply
+) => {
+  const { email, otpCode } = request.body;
+
+  const user = await prisma.user.findUnique({
+    where: {
+      email,
+    },
+  });
+
+  if (!user) {
+    return createHttpException(
+      HTTP_STATUS_CODE.BAD_REQUEST,
+      "User with this email and otpCode doesn't exist!"
+    );
+  }
+  const isOtpMatching = verifyHashedField(otpCode, user.saltOtp, user.otpCode);
+
+  if (!isOtpMatching) {
+    return createHttpException(
+      HTTP_STATUS_CODE.BAD_REQUEST,
+      "[verifyOtpCode]: OTP does't match, try again!"
+    );
+  }
+
+  const isOtpExpired = new Date() > new Date(user?.otpExpiration!);
+  if (isOtpExpired) {
+    return createHttpException(
+      HTTP_STATUS_CODE.BAD_REQUEST,
+      "[verifyOtpCode]: OTP is expired, try again!"
+    );
+  }
+
+  await verifyOtpCode(email);
+
+  return reply
+    .code(HTTP_STATUS_CODE.OK)
+    .send({ message: "Your OTP code has been successfully verified!" });
 };

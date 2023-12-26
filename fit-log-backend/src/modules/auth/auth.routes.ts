@@ -1,10 +1,16 @@
 import { FastifyInstance } from "fastify";
 import {
+  resendOtpCodeController,
   signInController,
   signOutController,
   signUpController,
+  verifyOtpCodeController,
 } from "./auth.controllers";
-import { signInUserJsonSchema, signUpUserJsonSchema } from "./auth.schemas";
+import {
+  otpVerificationJsonSchema,
+  signInUserJsonSchema,
+  signUpUserJsonSchema,
+} from "./auth.schemas";
 
 /**
  * authRoutes
@@ -12,12 +18,13 @@ import { signInUserJsonSchema, signUpUserJsonSchema } from "./auth.schemas";
  * In particular, it registers a POST endpoint for user registration, utilizing the `signUpController` to handle the registration process.
  */
 export const authRoutes = async (app: FastifyInstance) => {
+  /* REGISTER USER */
   app.post(
     "/register",
     { schema: { body: signUpUserJsonSchema.body } },
     signUpController
   );
-
+  /* LOGIN USER */
   app.post(
     "/login",
     {
@@ -26,5 +33,14 @@ export const authRoutes = async (app: FastifyInstance) => {
     signInController
   );
 
+  /* LOGOUT USER */
   app.post("/logout", signOutController);
+  /* VERIFY OTP */
+  app.post(
+    "/verify-otp",
+    { schema: { body: otpVerificationJsonSchema.body } },
+    verifyOtpCodeController
+  );
+  /* RESEND OTP */
+  app.post("/resend-otp", {}, resendOtpCodeController);
 };
