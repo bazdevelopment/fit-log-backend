@@ -21,7 +21,7 @@ export const signInUserSchema = z.object({
 
 export const signUpUserResponse = z.object({
   ...signUpUserFields,
-  password: z.string(),
+  password: z.string().min(6),
   salt: z.string(),
   firstName: z.string(),
   lastName: z.string(),
@@ -31,7 +31,7 @@ export const signUpUserResponse = z.object({
   phoneNumber: z.string().nullable(),
   nationality: z.string().nullable(),
   passwordResetToken: z.string().nullable(),
-  passwordResetExpires: z.number().nullable(),
+  passwordResetExpires: z.date().nullable(),
   otpCode: z.string(),
   isVerifiedOtp: z.boolean(),
   otpExpiration: z.date().nullable(),
@@ -42,6 +42,17 @@ export const signUpUserResponse = z.object({
 export const otpVerificationSchema = z.object({
   email: z.string().email(),
   otpCode: z.string().min(6).max(6),
+});
+
+export const resetPasswordSchema = z.object({
+  email: z.string().email(),
+  resetToken: z.string().min(6).max(6),
+  password: z.string().min(6),
+  confirmPassword: z.string().min(6),
+});
+
+export const emailSchema = z.object({
+  email: z.string().email(),
 });
 
 export const signUpUserJsonSchema = {
@@ -57,4 +68,16 @@ export const signInUserJsonSchema = {
 
 export const otpVerificationJsonSchema = {
   body: zodToJsonSchema(otpVerificationSchema, "otpVerificationJsonSchema"),
+};
+
+export const forgotPasswordJsonSchema = {
+  body: zodToJsonSchema(emailSchema, "forgotPasswordJsonSchema"),
+};
+
+export const resendOtpCodeJsonSchema = {
+  body: zodToJsonSchema(emailSchema, "resendOtpCodeJsonSchema"),
+};
+
+export const resetPasswordJsonSchema = {
+  body: zodToJsonSchema(resetPasswordSchema, "resetPasswordSchema"),
 };

@@ -89,10 +89,12 @@ export const resendOtpCode = async ({
   email,
   otpCode,
   otpExpiration,
+  saltOtpCode,
 }: {
   email: string;
   otpCode: string;
   otpExpiration: Date;
+  saltOtpCode: string;
 }) => {
   try {
     return await prisma.user.update({
@@ -101,6 +103,7 @@ export const resendOtpCode = async ({
       },
       data: {
         otpCode,
+        saltOtp: saltOtpCode,
         otpExpiration,
       },
     });
@@ -133,6 +136,74 @@ export const verifyOtpCode = async (
     return createHttpException(
       HTTP_STATUS_CODE.BAD_REQUEST,
       `[verifyOtpCode]: ${errorResponse.message}`
+    );
+  }
+};
+
+/***
+ *  updatePasswordResetToken service function is responsible for saving in db the reset token and the expiration time
+ */
+export const updatePasswordResetToken = async ({
+  email,
+  passwordResetToken,
+  passwordResetExpires,
+}: {
+  email: string;
+  passwordResetToken: string;
+  passwordResetExpires: Date;
+}) => {
+  try {
+    return await prisma.user.update({
+      where: {
+        email,
+      },
+      data: {
+        passwordResetToken,
+        passwordResetExpires,
+      },
+    });
+  } catch (error) {
+    return createHttpException(
+      HTTP_STATUS_CODE.FORBIDDEN,
+      "[updatePasswordReset]: The passwordResetToken & passwordResetExpires cannot be updated!"
+    );
+  }
+};
+
+/**
+ * resetPassword service function is used for resetting the user's password and saving new credentials in db
+ * after resetting the password, the resetToken and expiration time will be null
+ */
+export const resetPassword = async ({
+  email,
+  resetToken,
+  password,
+}: {
+  email: string;
+  resetToken: string;
+  password: string;
+}) => {
+  try {
+    const { hash: hashPassword, salt: saltPassword } = hashField(password);
+    const { hash: hashOtp, salt: saltOtp } = hashField(resetToken);
+
+    return await prisma.user.update({
+      where: {
+        email,
+      },
+      data: {
+        otpCode: hashOtp,
+        saltOtp: saltOtp,
+        password: hashPassword,
+        salt: saltPassword,
+        passwordResetToken: null,
+        passwordResetExpires: null,
+      },
+    });
+  } catch (error) {
+    return createHttpException(
+      HTTP_STATUS_CODE.FORBIDDEN,
+      "[resetPassword]: Cannot change password"
     );
   }
 };
