@@ -3,7 +3,7 @@ POST http://localhost:3000/api/auth/register
 Content-Type: application/json
 
 {
-  "email": "marian@yahoo.com",
+  "email": "bazilucm@gmail.com",
   "firstName": "Marian",
   "lastName": "Baziluc",
   "password":"123456"
@@ -22,3 +22,22 @@ Content-Type: application/json
 
 ###  Logout user: /api/auth/logout
 POST http://localhost:3000/api/auth/logout
+
+###  Verify OTP code /api/auth/verify-otp
+POST http://localhost:3000/api/auth/verify-otp
+Content-Type: application/json
+
+{
+  "otpCode":"064973",
+  "email":"bazilucm@gmail.com"
+}
+
+
+###  Resend-otpOTP code /api/auth/resend-otp
+POST http://localhost:3000/api/auth/resend-otp
+Content-Type: application/json
+
+{
+  "email":"bazilucm@gmail.com"
+}
+

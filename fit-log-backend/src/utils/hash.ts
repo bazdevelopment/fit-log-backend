@@ -1,13 +1,13 @@
 import crypto from "crypto";
 
-interface IHashedPassword {
+interface IHashedField {
   salt: string;
   hash: string;
 }
 /**
- * Hashes a password using a random salt and the PBKDF2 key derivation algorithm.
+ * Hashes a field using a random salt and the PBKDF2 key derivation algorithm.
  */
-export const hashPassword = (password: string): IHashedPassword => {
+export const hashField = (password: string): IHashedField => {
   const salt = crypto.randomBytes(16).toString("hex");
   const hash = crypto
     .pbkdf2Sync(password, salt, 1000, 64, "sha512")
@@ -20,7 +20,7 @@ export const hashPassword = (password: string): IHashedPassword => {
  * This function verifies a candidate password by comparing its hashed representation with a provided hash and salt.
  * It uses the PBKDF2 key derivation algorithm for secure password verification.
  */
-export const verifyPassword = (
+export const verifyHashedField = (
   candidatePassword: string,
   salt: string,
   candidateHash: string
