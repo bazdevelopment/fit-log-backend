@@ -1,3 +1,7 @@
+/**
+ * Generates an HTML template for a password reset email.
+ * The template includes the user's name and a unique reset code for resetting the password.
+ */
 export const generateForgotPasswordTemplate = (
   userName: string,
   resetCode: string

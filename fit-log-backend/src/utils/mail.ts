@@ -1,7 +1,6 @@
 import { Resend } from "resend";
 import { createHttpException } from "./exceptions";
 import { HTTP_STATUS_CODE } from "../enums/HttpStatusCodes";
-import { sendOtpCodeTemplate } from "./email-templates/sendOtpCodeTemplate";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 

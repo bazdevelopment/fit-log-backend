@@ -2,7 +2,6 @@ import z from "zod";
 import {
   emailSchema,
   otpVerificationSchema,
-  resendOtpCodeJsonSchema,
   resetPasswordSchema,
   signInUserSchema,
   signUpUserResponse,

@@ -193,7 +193,7 @@ export const resetPassword = async ({
       },
       data: {
         otpCode: hashOtp,
-        saltOtp: saltOtp,
+        saltOtp,
         password: hashPassword,
         salt: saltPassword,
         passwordResetToken: null,

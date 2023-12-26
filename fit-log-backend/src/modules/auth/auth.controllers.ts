@@ -327,7 +327,7 @@ export const resetPasswordController = async (
   }
 
   const isResetPasswordTimeExpired =
-    new Date() > new Date(user?.passwordResetExpires!);
+    new Date() > new Date(user.passwordResetExpires!);
   if (isResetPasswordTimeExpired) {
     return createHttpException(
       HTTP_STATUS_CODE.BAD_REQUEST,
