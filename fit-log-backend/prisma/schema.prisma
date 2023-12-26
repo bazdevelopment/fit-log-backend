@@ -23,7 +23,7 @@ model User {
   phoneNumber          String?   @map("phone_number")
   nationality          String?
   passwordResetToken   String?   @default("") @map("password_reset_token")
-  passwordResetExpires Int?      @map("password_reset_expires")
+  passwordResetExpires DateTime? @map("password_reset_expires")
   otpCode              String    @map("otp_code")
   saltOtp              String    @map("salt_otp")
   otpExpiration        DateTime? @map("otp_expiration")

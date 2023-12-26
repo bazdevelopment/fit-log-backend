@@ -1,13 +1,18 @@
 import { FastifyInstance } from "fastify";
 import {
+  forgotPasswordController,
   resendOtpCodeController,
+  resetPasswordController,
   signInController,
   signOutController,
   signUpController,
   verifyOtpCodeController,
 } from "./auth.controllers";
 import {
+  forgotPasswordJsonSchema,
   otpVerificationJsonSchema,
+  resendOtpCodeJsonSchema,
+  resetPasswordJsonSchema,
   signInUserJsonSchema,
   signUpUserJsonSchema,
 } from "./auth.schemas";
@@ -42,5 +47,23 @@ export const authRoutes = async (app: FastifyInstance) => {
     verifyOtpCodeController
   );
   /* RESEND OTP */
-  app.post("/resend-otp", {}, resendOtpCodeController);
+  app.post(
+    "/resend-otp",
+    { schema: { body: resendOtpCodeJsonSchema.body } },
+    resendOtpCodeController
+  );
+
+  /*FORGOT PASSWORD */
+  app.post(
+    "/forgot-password",
+    { schema: { body: forgotPasswordJsonSchema.body } },
+    forgotPasswordController
+  );
+
+  /* RESET PASSWORD */
+  app.post(
+    "/reset-password",
+    { schema: { body: resetPasswordJsonSchema.body } },
+    resetPasswordController
+  );
 };
