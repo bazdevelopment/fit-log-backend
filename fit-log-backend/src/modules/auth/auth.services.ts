@@ -15,7 +15,7 @@ import JWT from "jsonwebtoken";
  */
 export const signUpUserService = async (
   userInfo: TSignUpUser
-): Promise<TSignUpUserResponse | undefined> => {
+): Promise<TSignUpUserResponse | undefined | void> => {
   try {
     const { password, otpCode, ...restUserInfo } = userInfo;
     const { hash, salt } = hashField(password);
@@ -35,7 +35,7 @@ export const signUpUserService = async (
     return result;
   } catch (error: unknown) {
     const errorResponse = error as Error;
-    createHttpException(
+    return createHttpException(
       HTTP_STATUS_CODE.BAD_REQUEST,
       `[signUpUserService]: ${errorResponse.message}`
     );
@@ -62,7 +62,7 @@ export const getUserByEmail = async (
     return result;
   } catch (error: unknown) {
     const errorResponse = error as Error;
-    createHttpException(
+    return createHttpException(
       HTTP_STATUS_CODE.BAD_REQUEST,
       `[getUserByEmail]: ${errorResponse.message}`
     );
@@ -118,7 +118,7 @@ export const resendOtpCode = async ({
  */
 export const verifyOtpCode = async (
   email: string
-): Promise<TSignUpUserResponse | undefined> => {
+): Promise<TSignUpUserResponse | undefined | void> => {
   try {
     return await prisma.user.update({
       where: {
@@ -130,7 +130,7 @@ export const verifyOtpCode = async (
     });
   } catch (error) {
     const errorResponse = error as Error;
-    createHttpException(
+    return createHttpException(
       HTTP_STATUS_CODE.BAD_REQUEST,
       `[verifyOtpCode]: ${errorResponse.message}`
     );
