@@ -218,7 +218,7 @@ export const verifyOtpCodeController = async (
   if (!isOtpMatching) {
     return createHttpException(
       HTTP_STATUS_CODE.BAD_REQUEST,
-      `[verifyOtpCode]: OTP does't match, try again!`
+      "[verifyOtpCode]: OTP does't match, try again!"
     );
   }
 
@@ -226,7 +226,7 @@ export const verifyOtpCodeController = async (
   if (isOtpExpired) {
     return createHttpException(
       HTTP_STATUS_CODE.BAD_REQUEST,
-      `[verifyOtpCode]: OTP is expired, try again!`
+      "[verifyOtpCode]: OTP is expired, try again!"
     );
   }
 

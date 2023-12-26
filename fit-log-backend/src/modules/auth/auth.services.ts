@@ -95,13 +95,13 @@ export const resendOtpCode = async ({
   otpExpiration: Date;
 }) => {
   try {
-    await prisma.user.update({
+    return await prisma.user.update({
       where: {
         email,
       },
       data: {
-        otpCode: otpCode,
-        otpExpiration: otpExpiration,
+        otpCode,
+        otpExpiration,
       },
     });
   } catch (error) {
@@ -116,9 +116,11 @@ export const resendOtpCode = async ({
 /**
  * verifyOtpCode service function is responsible for updating the verification status of the OTP (One-Time Password) for a user identified by their email in the database.
  */
-export const verifyOtpCode = async (email: string) => {
+export const verifyOtpCode = async (
+  email: string
+): Promise<TSignUpUserResponse | void> => {
   try {
-    await prisma.user.update({
+    return await prisma.user.update({
       where: {
         email,
       },

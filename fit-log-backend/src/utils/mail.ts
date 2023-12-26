@@ -5,13 +5,16 @@ import { sendOtpCodeTemplate } from "./email-templates/sendOtpCodeTemplate";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+/**
+ * sendOtpCodeMail function is responsible for sending an email containing an OTP (One-Time Password) verification code to a user.
+ */
 export const sendOtpCodeMail = async (
   receiverEmail: string,
   otpVerificationCode: string,
   firstName: string
 ) => {
   try {
-    await resend.emails.send({
+    return await resend.emails.send({
       from: "onboarding@resend.dev", //! change this email with you email domain
       to: receiverEmail,
       subject: "OTP verification code",

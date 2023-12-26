@@ -1,3 +1,6 @@
+/**
+ * Function used to send HTML template via email to the user in order to receive the confirmation code
+ */
 export const sendOtpCodeTemplate = (
   firstName: string,
   otpCode: string
