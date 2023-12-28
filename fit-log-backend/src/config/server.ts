@@ -1,7 +1,20 @@
-import fastify from "fastify";
+import fastify, { FastifyReply, FastifyRequest } from "fastify";
 import fastifyCookie from "@fastify/cookie";
+import fastifytJwt from "@fastify/jwt";
 import { logger } from "./logger";
 import { authRoutes } from "../modules/auth/auth.routes";
+import { createHttpException } from "../utils/exceptions";
+import { HTTP_STATUS_CODE } from "../enums/HttpStatusCodes";
+import { TSignInUser } from "../modules/auth/auth.types";
+
+declare module "fastify" {
+  interface FastifyInstance {
+    authenticate: (
+      request: FastifyRequest<{ Body: TSignInUser }>,
+      reply: FastifyReply
+    ) => Promise<void>;
+  }
+}
 
 /**
  * This function creates and configures a Fastify server instance, registering plugins, defining routes, and returning the configured server.
@@ -12,10 +25,29 @@ export async function buildServer() {
   });
 
   /* REGISTER PLUGINS */
-  app.register(fastifyCookie, {
-    secret: "my-secret", // for cookies signature
-    hook: "onRequest", // set to false to disable cookie autoparsing or set autoparsing on any of the following hooks: 'onRequest', 'preParsing', 'preHandler', 'preValidation'. default: 'onRequest'
+  app.register(fastifytJwt, {
+    secret: process.env.JWT_SECRET!,
   });
+
+  //! check if fastify cookie is needed
+  app.register(fastifyCookie, {
+    secret: process.env.JWT_SECRET!,
+  });
+
+  /* DECORATORS */
+  app.decorate(
+    "authenticate",
+    async (request: FastifyRequest, _reply: FastifyReply) => {
+      try {
+        await request.jwtVerify();
+      } catch (error) {
+        return createHttpException(
+          HTTP_STATUS_CODE.UNAUTHORIZED,
+          "Unauthorized"
+        );
+      }
+    }
+  );
 
   /* REGISTER ROUTES */
   app.get("/healthcheck", async () => {

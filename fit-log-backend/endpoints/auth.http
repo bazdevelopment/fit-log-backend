@@ -13,10 +13,11 @@ Content-Type: application/json
 ###  Login user: /api/auth/login
 POST http://localhost:3000/api/auth/login
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJhemlsdWNtQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiMTIzNDU2IiwiaWQiOiJscXBqMmUyYThiMWk0bXdtIiwiZmlyc3ROYW1lIjoiTWFyaWFuIiwibGFzdE5hbWUiOiJCYXppbHVjIiwib3RwQ29kZSI6ImMzMmEwOGNiMTIxNDg0ZWM2MWRmMDlkMGJjNWQwMTkzZTY1OTExZTc0YTJiYzgxMDljZmQ3Y2UzZDk4NmVkNzM0MDA1OGRmNTRiYjlmM2MyNTdjNTBlOWZjMmRiM2ViMTE4ZDQxMzM5NzM2ZTdlYzM1YmNiZTY4Y2NjMmUwMTk5IiwiaWF0IjoxNzAzNzg3NDY2LCJleHAiOjE3MDM4MjM0NjZ9.IqBjL8fDcE98N6dtZHqlXhpVlk2wjj5QLE06KckEk0w
 
 {
   "email": "bazilucm@gmail.com",
-  "password":"1234567"
+  "password":"123456"
 }
 
 
