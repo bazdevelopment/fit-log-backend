@@ -216,7 +216,7 @@ export const verifyOtpCodeController = async (
 ): Promise<void> => {
   const { email, otpCode } = request.body;
 
-  const user = await prisma.user.findUnique({
+  const user = await prisma.auth.findUnique({
     where: {
       email,
     },
