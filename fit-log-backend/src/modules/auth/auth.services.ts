@@ -21,7 +21,7 @@ export const signUpUserService = async (
     const { hash, salt } = hashField(password);
     const { hash: hashOtp, salt: saltOtp } = hashField(otpCode!);
 
-    const result = await prisma.user.create({
+    const result = await prisma.auth.create({
       data: {
         ...restUserInfo,
         password: hash,
@@ -53,7 +53,7 @@ export const getUserByEmail = async (
   email: string
 ): Promise<TSignUpUserResponse | null | void> => {
   try {
-    const result = await prisma.user.findUnique({
+    const result = await prisma.auth.findUnique({
       where: {
         email,
       },
@@ -97,7 +97,7 @@ export const resendOtpCode = async ({
   saltOtpCode: string;
 }) => {
   try {
-    return await prisma.user.update({
+    return await prisma.auth.update({
       where: {
         email,
       },
@@ -123,7 +123,7 @@ export const verifyOtpCode = async (
   email: string
 ): Promise<TSignUpUserResponse | undefined | void> => {
   try {
-    return await prisma.user.update({
+    const createdUser = await prisma.auth.update({
       where: {
         email,
       },
@@ -131,6 +131,16 @@ export const verifyOtpCode = async (
         isVerifiedOtp: true,
       },
     });
+
+    /** Create user in users table after OTP verification has been done */
+
+    await prisma.user.create({
+      data: {
+        userId: createdUser.id,
+      },
+    });
+
+    return createdUser;
   } catch (error) {
     const errorResponse = error as Error;
     return createHttpException(
@@ -153,7 +163,7 @@ export const updatePasswordResetToken = async ({
   passwordResetExpires: Date;
 }) => {
   try {
-    return await prisma.user.update({
+    return await prisma.auth.update({
       where: {
         email,
       },
@@ -187,7 +197,7 @@ export const resetPassword = async ({
     const { hash: hashPassword, salt: saltPassword } = hashField(password);
     const { hash: hashOtp, salt: saltOtp } = hashField(resetToken);
 
-    return await prisma.user.update({
+    return await prisma.auth.update({
       where: {
         email,
       },
