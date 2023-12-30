@@ -8,6 +8,9 @@ export const userResponseSchema = z
     birthDate: z.date().nullable(),
     phoneNumber: z.string().nullable(),
     nationality: z.string().nullable(),
+    weight: z.number().nullable(),
+    goal: z.array(z.string()).default([]),
+    activityLevel: z.string().nullable(),
   })
   .partial();
 
