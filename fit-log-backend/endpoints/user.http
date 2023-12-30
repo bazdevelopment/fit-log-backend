@@ -1,0 +1,16 @@
+### Get current user info : /api/user/currentUser
+GET  http://localhost:3000/api/user/currentUser
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImxxcXU1dTE5aG5ob25waWsiLCJmaXJzdE5hbWUiOiJscXF1NXUxOWhuaG9ucGlrIiwibGFzdE5hbWUiOiJCYXppbHVjIiwiZW1haWwiOiJCYXppbHVjIiwiaWF0IjoxNzAzODY3MDI4LCJleHAiOjE3MDM5MDMwMjh9.TR2T5AJ1eERyjoJOG0NKGMUzWZkE4d-xGp-Wuj7yCaE
+
+### Get current  user info : /api/user/currentUser
+PATCH  http://localhost:3000/api/user/lqrqk4nt13hdos9u
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImxxcnFrNG50MTNoZG9zOXUiLCJmaXJzdE5hbWUiOiJscXJxazRudDEzaGRvczl1IiwibGFzdE5hbWUiOiJCYXppbHVjIiwiZW1haWwiOiJCYXppbHVjIiwiaWF0IjoxNzAzOTIxMDgyLCJleHAiOjE3MDM5NTcwODJ9.tpNW6RrvOl0KS5QT1Bu9xRTD331LgaTHM7wWSbw2Txs
+
+{
+  "avatarImage":"https://avatar.jpg",
+  "phoneNumber": "0757357597",
+  "sex":"Male",
+  "nationality":"Romania",
+  "birthDate":"1998-07-29T21:00:00.000Z"
+}

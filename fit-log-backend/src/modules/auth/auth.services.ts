@@ -75,9 +75,18 @@ export const getUserByEmail = async (
  *  The JWT is signed using the specified secret (`process.env.JWT_SECRET`) and is configured to expire after a certain duration (`process.env.JWT_TOKEN_EXPIRES`).
  */
 export const signJwtToken = (userInfo: TSignUpUser): string => {
-  return JWT.sign(userInfo, process.env.JWT_SECRET!, {
-    expiresIn: process.env.JWT_TOKEN_EXPIRES!,
-  });
+  return JWT.sign(
+    {
+      id: userInfo.id,
+      firstName: userInfo.firstName,
+      lastName: userInfo.lastName,
+      email: userInfo.lastName,
+    },
+    process.env.JWT_SECRET!,
+    {
+      expiresIn: process.env.JWT_TOKEN_EXPIRES!,
+    }
+  );
 };
 /**
  * resendOtpCode function is responsible for updating the OTP (One-Time Password) code and its expiration timestamp for a user identified by their email in the database.
