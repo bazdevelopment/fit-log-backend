@@ -44,7 +44,9 @@ export const authRoutes = async (app: FastifyInstance) => {
   /* VERIFY OTP */
   app.post(
     "/verify-otp",
-    { schema: { body: otpVerificationJsonSchema.body } },
+    {
+      schema: { body: otpVerificationJsonSchema.body },
+    },
     verifyOtpCodeController
   );
   /* RESEND OTP */
