@@ -1,7 +1,7 @@
 import prisma from "../../config/prisma";
 import { HTTP_STATUS_CODE } from "../../enums/HttpStatusCodes";
 import { computeFutureTimestamp } from "../../utils/computeFutureTimestamp";
-import { createHttpException } from "../../utils/exceptions";
+import { createHttpException } from "../../utils/httpResponse";
 import { hashField } from "../../utils/hash";
 import { TSignUpUser, TSignUpUserResponse } from "./auth.types";
 import JWT from "jsonwebtoken";
@@ -35,10 +35,11 @@ export const signUpUserService = async (
     return result;
   } catch (error: unknown) {
     const errorResponse = error as Error;
-    return createHttpException(
-      HTTP_STATUS_CODE.BAD_REQUEST,
-      `[signUpUserService]: ${errorResponse.message}`
-    );
+    return createHttpException({
+      status: HTTP_STATUS_CODE.BAD_REQUEST,
+      message: errorResponse.message,
+      method: "signUpUserService",
+    });
   }
 };
 
@@ -62,10 +63,11 @@ export const getUserByEmail = async (
     return result;
   } catch (error: unknown) {
     const errorResponse = error as Error;
-    return createHttpException(
-      HTTP_STATUS_CODE.BAD_REQUEST,
-      `[getUserByEmail]: ${errorResponse.message}`
-    );
+    return createHttpException({
+      status: HTTP_STATUS_CODE.BAD_REQUEST,
+      message: errorResponse.message,
+      method: "getUserByEmail",
+    });
   }
 };
 
@@ -118,10 +120,11 @@ export const resendOtpCode = async ({
     });
   } catch (error) {
     const errorResponse = error as Error;
-    return createHttpException(
-      HTTP_STATUS_CODE.BAD_REQUEST,
-      `[resendOtpCode]: ${errorResponse.message}`
-    );
+    return createHttpException({
+      status: HTTP_STATUS_CODE.BAD_REQUEST,
+      message: errorResponse.message,
+      method: "resendOtpCode",
+    });
   }
 };
 
@@ -152,10 +155,11 @@ export const verifyOtpCode = async (
     return createdUser;
   } catch (error) {
     const errorResponse = error as Error;
-    return createHttpException(
-      HTTP_STATUS_CODE.BAD_REQUEST,
-      `[verifyOtpCode]: ${errorResponse.message}`
-    );
+    return createHttpException({
+      status: HTTP_STATUS_CODE.BAD_REQUEST,
+      message: errorResponse.message,
+      method: "verifyOtpCode",
+    });
   }
 };
 
@@ -182,10 +186,12 @@ export const updatePasswordResetToken = async ({
       },
     });
   } catch (error) {
-    return createHttpException(
-      HTTP_STATUS_CODE.FORBIDDEN,
-      "[updatePasswordReset]: The passwordResetToken & passwordResetExpires cannot be updated!"
-    );
+    return createHttpException({
+      status: HTTP_STATUS_CODE.FORBIDDEN,
+      message:
+        "The passwordResetToken & passwordResetExpires cannot be updated!",
+      method: "updatePasswordReset",
+    });
   }
 };
 
@@ -220,9 +226,10 @@ export const resetPassword = async ({
       },
     });
   } catch (error) {
-    return createHttpException(
-      HTTP_STATUS_CODE.FORBIDDEN,
-      "[resetPassword]: Cannot change password"
-    );
+    return createHttpException({
+      status: HTTP_STATUS_CODE.FORBIDDEN,
+      message: "Cannot change password!",
+      method: "resetPassword",
+    });
   }
 };

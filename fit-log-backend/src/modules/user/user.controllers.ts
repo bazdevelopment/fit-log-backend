@@ -2,6 +2,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { getUserById, updateUserByUserId } from "./user.services";
 import { HTTP_STATUS_CODE } from "../../enums/HttpStatusCodes";
 import { TUpdateUser } from "./user.types";
+import { createSuccessResponse } from "../../utils/httpResponse";
 
 /**
  * getCurrentUserController
@@ -14,7 +15,12 @@ export const getCurrentUserController = async (
   const { id: userId } = request.user;
 
   const currentUser = await getUserById(userId);
-  return reply.code(HTTP_STATUS_CODE.ACCEPTED).send(currentUser);
+  return reply.code(HTTP_STATUS_CODE.ACCEPTED).send(
+    createSuccessResponse({
+      status: HTTP_STATUS_CODE.ACCEPTED,
+      data: currentUser,
+    })
+  );
 };
 
 /**
@@ -34,7 +40,11 @@ export const updateUserByUserIdController = async (
   const userInfoFields = request.body;
 
   const updatedUser = await updateUserByUserId(userId, userInfoFields);
-  return reply
-    .code(HTTP_STATUS_CODE.ACCEPTED)
-    .send({ message: "User updated successfully!", updatedUser });
+  return reply.code(HTTP_STATUS_CODE.ACCEPTED).send(
+    createSuccessResponse({
+      status: HTTP_STATUS_CODE.ACCEPTED,
+      message: "User updated successfully!",
+      data: updatedUser,
+    })
+  );
 };
