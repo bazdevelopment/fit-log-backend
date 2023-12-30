@@ -43,13 +43,15 @@ export const getUserById = async (userId: string) => {
     );
   }
 };
-
-export const updateUserByUserId = (
+/**
+ * Service used to perform the request to prisma db in order to update the user info
+ */
+export const updateUserByUserId = async (
   userId: string,
   userInfoFields: TUpdateUser
 ) => {
   try {
-    return prisma.user.update({
+    return await prisma.user.update({
       where: { userId },
       data: userInfoFields,
     });
