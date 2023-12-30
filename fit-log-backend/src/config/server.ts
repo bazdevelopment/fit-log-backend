@@ -3,7 +3,7 @@ import fastifyCookie from "@fastify/cookie";
 import fastifytJwt from "@fastify/jwt";
 import { logger } from "./logger";
 import { authRoutes } from "../modules/auth/auth.routes";
-import { createHttpException } from "../utils/exceptions";
+import { createHttpException } from "../utils/httpResponse";
 import { HTTP_STATUS_CODE } from "../enums/HttpStatusCodes";
 import { TSignInUser } from "../modules/auth/auth.types";
 import { userRoutes } from "../modules/user/user.routes";
@@ -55,10 +55,11 @@ export async function buildServer() {
         /** by calling jwtVerify() method by default user object will be added to the response object and can be accessed by request.user */
         await request.jwtVerify();
       } catch (error) {
-        return createHttpException(
-          HTTP_STATUS_CODE.UNAUTHORIZED,
-          "Unauthorized"
-        );
+        return createHttpException({
+          status: HTTP_STATUS_CODE.UNAUTHORIZED,
+          message: "Unauthorized",
+          method: "Authenticate decorator",
+        });
       }
     }
   );

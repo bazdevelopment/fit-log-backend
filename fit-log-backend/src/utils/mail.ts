@@ -1,5 +1,5 @@
 import { Resend } from "resend";
-import { createHttpException } from "./exceptions";
+import { createHttpException } from "./httpResponse";
 import { HTTP_STATUS_CODE } from "../enums/HttpStatusCodes";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -25,9 +25,10 @@ export const sendOtpCodeMail = async ({
     });
   } catch (error) {
     const errorResponse = error as Error;
-    return createHttpException(
-      HTTP_STATUS_CODE.BAD_REQUEST,
-      `[sendOtpCodeMail]: ${errorResponse.message}`
-    );
+    return createHttpException({
+      status: HTTP_STATUS_CODE.BAD_REQUEST,
+      message: errorResponse.message,
+      method: "sendOtpCodeMail",
+    });
   }
 };

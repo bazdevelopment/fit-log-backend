@@ -1,6 +1,6 @@
 import prisma from "../../config/prisma";
 import { HTTP_STATUS_CODE } from "../../enums/HttpStatusCodes";
-import { createHttpException } from "../../utils/exceptions";
+import { createHttpException } from "../../utils/httpResponse";
 import { TUpdateUser } from "./user.types";
 
 /**
@@ -37,10 +37,11 @@ export const getUserById = async (userId: string) => {
     return { ...authData, ...userData };
   } catch (error: unknown) {
     const errorResponse = error as Error;
-    return createHttpException(
-      HTTP_STATUS_CODE.BAD_REQUEST,
-      `[getUserById] ${errorResponse.message}!`
-    );
+    return createHttpException({
+      status: HTTP_STATUS_CODE.BAD_REQUEST,
+      message: errorResponse.message,
+      method: "getUserById",
+    });
   }
 };
 /**
@@ -57,9 +58,10 @@ export const updateUserByUserId = async (
     });
   } catch (error: unknown) {
     const errorResponse = error as Error;
-    return createHttpException(
-      HTTP_STATUS_CODE.BAD_REQUEST,
-      `[updateUserByUserId] ${errorResponse.message}!`
-    );
+    return createHttpException({
+      status: HTTP_STATUS_CODE.BAD_REQUEST,
+      message: errorResponse.message,
+      method: "updateUserByUserId",
+    });
   }
 };

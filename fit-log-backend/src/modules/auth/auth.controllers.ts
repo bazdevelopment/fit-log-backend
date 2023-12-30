@@ -17,7 +17,10 @@ import {
   verifyOtpCode,
 } from "./auth.services";
 import { HTTP_STATUS_CODE } from "../../enums/HttpStatusCodes";
-import { createHttpException } from "../../utils/exceptions";
+import {
+  createHttpException,
+  createSuccessResponse,
+} from "../../utils/httpResponse";
 import { generateUniqueId } from "../../utils/generateUniqueId";
 import { logoutCookieOptions, tokenCookieOptions } from "./auth.constants";
 import { hashField, verifyHashedField } from "../../utils/hash";
@@ -47,10 +50,11 @@ export const signUpController = async (
   const existingUser = await getUserByEmail(email);
 
   if (existingUser) {
-    return createHttpException(
-      HTTP_STATUS_CODE.BAD_REQUEST,
-      "User already exists!"
-    );
+    return createHttpException({
+      status: HTTP_STATUS_CODE.BAD_REQUEST,
+      message: "User already exists!",
+      method: "signUpController",
+    });
   }
 
   /* 2. Upload avatar image to cloudinary after the account has been created successfully*/
@@ -86,7 +90,13 @@ export const signUpController = async (
   return reply
     .code(HTTP_STATUS_CODE.CREATED)
     .cookie("Authorization", jwtToken, tokenCookieOptions)
-    .send({ message: "User registered successfully!", user: userCreated });
+    .send(
+      createSuccessResponse({
+        status: HTTP_STATUS_CODE.CREATED,
+        message: "User registered successfully!",
+        data: userCreated,
+      })
+    );
 };
 
 /**
@@ -107,10 +117,11 @@ export const signInController = async (
   const registeredUser = await getUserByEmail(email);
 
   if (!registeredUser) {
-    return createHttpException(
-      HTTP_STATUS_CODE.BAD_REQUEST,
-      "[signInController]:User not found"
-    );
+    return createHttpException({
+      status: HTTP_STATUS_CODE.BAD_REQUEST,
+      message: "User not found!",
+      method: "signInController",
+    });
   }
 
   /** 2. Check if the password from db matches the password entered, otherwise throw an error */
@@ -122,10 +133,11 @@ export const signInController = async (
   );
 
   if (!isPasswordMatching) {
-    return createHttpException(
-      HTTP_STATUS_CODE.BAD_REQUEST,
-      "[signInController]:Password doesn't match!"
-    );
+    return createHttpException({
+      status: HTTP_STATUS_CODE.BAD_REQUEST,
+      message: "Passwords doesn't match!",
+      method: "signInController",
+    });
   }
 
   /**  generate JWT access token */
@@ -143,7 +155,15 @@ export const signInController = async (
   return reply
     .code(HTTP_STATUS_CODE.CREATED)
     .cookie("Authorization", jwtToken, tokenCookieOptions)
-    .send({ message: "Successfully logged in!", token: jwtToken });
+    .send(
+      createSuccessResponse({
+        status: HTTP_STATUS_CODE.CREATED,
+        message: "Successfully logged in!",
+        data: {
+          token: jwtToken,
+        },
+      })
+    );
 };
 
 /**
@@ -156,7 +176,12 @@ export const signOutController = (
   return reply
     .code(HTTP_STATUS_CODE.OK)
     .cookie("Authorization", "", logoutCookieOptions)
-    .send({ message: "Logout successful!" });
+    .send(
+      createSuccessResponse({
+        status: HTTP_STATUS_CODE.OK,
+        message: "Logout successful!",
+      })
+    );
 };
 
 /**
@@ -174,17 +199,20 @@ export const resendOtpCodeController = async (
 
   const user = await getUserByEmail(email);
   if (!user) {
-    return createHttpException(
-      HTTP_STATUS_CODE.BAD_REQUEST,
-      "User doesn't exist!"
-    );
+    return createHttpException({
+      status: HTTP_STATUS_CODE.BAD_REQUEST,
+      message: "User doesn't exist!",
+      method: "resendOtpCodeController",
+    });
   }
 
   if (!user.isVerifiedOtp) {
-    return createHttpException(
-      HTTP_STATUS_CODE.BAD_REQUEST,
-      "OTP code cannot be generated because your account has already been verified!"
-    );
+    return createHttpException({
+      status: HTTP_STATUS_CODE.BAD_REQUEST,
+      message:
+        "OTP code cannot be generated because your account has already been verified!",
+      method: "resendOtpCodeController",
+    });
   }
 
   await sendOtpCodeMail({
@@ -200,9 +228,12 @@ export const resendOtpCodeController = async (
     otpExpiration: computeFutureTimestamp(10),
   });
 
-  return reply
-    .code(HTTP_STATUS_CODE.OK)
-    .send({ message: "OTP is resent! Check you email inbox!" });
+  return reply.code(HTTP_STATUS_CODE.OK).send(
+    createSuccessResponse({
+      status: HTTP_STATUS_CODE.OK,
+      message: "OTP is resent! Check you email inbox!",
+    })
+  );
 };
 
 /**
@@ -223,33 +254,39 @@ export const verifyOtpCodeController = async (
   });
 
   if (!user) {
-    return createHttpException(
-      HTTP_STATUS_CODE.BAD_REQUEST,
-      "User with this email and otpCode doesn't exist!"
-    );
+    return createHttpException({
+      status: HTTP_STATUS_CODE.BAD_REQUEST,
+      message: "User with this email and otpCode doesn't exist!",
+      method: "verifyOtpCodeController",
+    });
   }
   const isOtpMatching = verifyHashedField(otpCode, user.saltOtp, user.otpCode);
 
   if (!isOtpMatching) {
-    return createHttpException(
-      HTTP_STATUS_CODE.BAD_REQUEST,
-      "[verifyOtpCode]: OTP does't match, try again!"
-    );
+    return createHttpException({
+      status: HTTP_STATUS_CODE.BAD_REQUEST,
+      message: "OTP does't match, try again!",
+      method: "verifyOtpCode",
+    });
   }
 
   const isOtpExpired = new Date() > new Date(user?.otpExpiration!);
   if (isOtpExpired) {
-    return createHttpException(
-      HTTP_STATUS_CODE.BAD_REQUEST,
-      "[verifyOtpCode]: OTP is expired, try again!"
-    );
+    return createHttpException({
+      status: HTTP_STATUS_CODE.BAD_REQUEST,
+      message: "OTP is expired, try again!",
+      method: "verifyOtpCodeController",
+    });
   }
 
   await verifyOtpCode(email);
 
-  return reply
-    .code(HTTP_STATUS_CODE.OK)
-    .send({ message: "Your OTP code has been successfully verified!" });
+  return reply.code(HTTP_STATUS_CODE.OK).send(
+    createSuccessResponse({
+      status: HTTP_STATUS_CODE.OK,
+      message: "Your OTP code has been successfully verified!",
+    })
+  );
 };
 
 /**
@@ -264,17 +301,19 @@ export const forgotPasswordController = async (
   const { email } = request.body;
   const user = await getUserByEmail(email);
   if (!user) {
-    return createHttpException(
-      HTTP_STATUS_CODE.BAD_REQUEST,
-      "User doesn't exist!"
-    );
+    return createHttpException({
+      status: HTTP_STATUS_CODE.BAD_REQUEST,
+      message: "User doesn't exist!",
+      method: "forgotPasswordController",
+    });
   }
 
   if (!user.isVerifiedOtp) {
-    return createHttpException(
-      HTTP_STATUS_CODE.FORBIDDEN,
-      "This account is not verified!"
-    );
+    return createHttpException({
+      status: HTTP_STATUS_CODE.FORBIDDEN,
+      message: "This account is not verified!",
+      method: "forgotPasswordController",
+    });
   }
 
   const resetOtpToken = generateOTPCode();
@@ -296,9 +335,12 @@ export const forgotPasswordController = async (
     ),
   });
 
-  return reply.code(HTTP_STATUS_CODE.CREATED).send({
-    message: "You will receive a reset code email. Please verify your inbox!",
-  });
+  return reply.code(HTTP_STATUS_CODE.CREATED).send(
+    createSuccessResponse({
+      status: HTTP_STATUS_CODE.CREATED,
+      message: "You will receive a reset code email. Please verify your inbox!",
+    })
+  );
 };
 
 /**
@@ -313,31 +355,37 @@ export const resetPasswordController = async (
   const { email, resetToken, password, confirmPassword } = request.body;
   const user = await getUserByEmail(email);
   if (!user) {
-    return createHttpException(
-      HTTP_STATUS_CODE.BAD_REQUEST,
-      "User doesn't exist!"
-    );
+    return createHttpException({
+      status: HTTP_STATUS_CODE.BAD_REQUEST,
+      message: "User doesn't exist!",
+      method: "resetPasswordController",
+    });
   }
 
   if (password !== confirmPassword) {
-    return createHttpException(
-      HTTP_STATUS_CODE.BAD_REQUEST,
-      "Passwords do not match!"
-    );
+    return createHttpException({
+      status: HTTP_STATUS_CODE.BAD_REQUEST,
+      message: "Passwords do not match!",
+      method: "resetPasswordController",
+    });
   }
 
   const isResetPasswordTimeExpired =
     new Date() > new Date(user.passwordResetExpires!);
   if (isResetPasswordTimeExpired) {
-    return createHttpException(
-      HTTP_STATUS_CODE.BAD_REQUEST,
-      "[resetPasswordController]: Reset token has expired!"
-    );
+    return createHttpException({
+      status: HTTP_STATUS_CODE.BAD_REQUEST,
+      message: "Reset token has expired!",
+      method: "resetPasswordController",
+    });
   }
 
   await resetPassword({ email, password, resetToken });
 
-  return reply.code(HTTP_STATUS_CODE.CREATED).send({
-    message: "Your password has been successfully reset!",
-  });
+  return reply.code(HTTP_STATUS_CODE.CREATED).send(
+    createSuccessResponse({
+      status: HTTP_STATUS_CODE.CREATED,
+      message: "Your password has been successfully reset!",
+    })
+  );
 };
