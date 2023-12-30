@@ -13,7 +13,7 @@ Content-Type: application/json
 ###  Login user: /api/auth/login
 POST http://localhost:3000/api/auth/login
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImxxcnFrNG50MTNoZG9zOXUiLCJmaXJzdE5hbWUiOiJscXJxazRudDEzaGRvczl1IiwibGFzdE5hbWUiOiJCYXppbHVjIiwiZW1haWwiOiJCYXppbHVjIiwiaWF0IjoxNzAzOTIxMDgyLCJleHAiOjE3MDM5NTcwODJ9.tpNW6RrvOl0KS5QT1Bu9xRTD331LgaTHM7wWSbw2Txs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Imxxc2RydTFoZHlvdHpydGEiLCJmaXJzdE5hbWUiOiJNYXJpYW4iLCJsYXN0TmFtZSI6IkJhemlsdWMiLCJlbWFpbCI6IkJhemlsdWMiLCJpYXQiOjE3MDM5NTk5NzQsImV4cCI6MTcwMzk5NTk3NH0.qc6E0s1rfiBN2xAa96KoRQceEXEqxHwmy6IWyZOcC64
 
 {
   "email": "bazilucm@gmail.com",
@@ -29,7 +29,7 @@ POST http://localhost:3000/api/auth/verify-otp
 Content-Type: application/json
 
 {
-  "otpCode":"140393",
+  "otpCode":"901048",
   "email":"bazilucm@gmail.com"
 }
 
