@@ -11,23 +11,22 @@ datasource db {
 }
 
 model Auth {
-  id String @id @unique
+  id                   String    @id @unique
   email                String    @unique
   password             String
   salt                 String
   firstName            String    @map("first_name")
   lastName             String    @map("last_name")
-  createdAt            DateTime  @default(now()) @map("created_at")
-  updatedAt            DateTime  @updatedAt @map("updated_at")
   passwordResetToken   String?   @default("") @map("password_reset_token")
   passwordResetExpires DateTime? @map("password_reset_expires")
   otpCode              String    @map("otp_code")
   saltOtp              String    @map("salt_otp")
   otpExpiration        DateTime? @map("otp_expiration")
   isVerifiedOtp        Boolean   @default(false) @map("is_verified_otp")
-
+  createdAt            DateTime  @default(now()) @map("created_at")
+  updatedAt            DateTime  @updatedAt @map("updated_at")
   // role                 Role[]
-  User User?
+  User                 User?
 
   @@map("app_auths")
 }
@@ -39,9 +38,9 @@ model User {
   birthDate   DateTime? @map("birth_date")
   phoneNumber String?   @map("phone_number")
   nationality String?
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  auth      Auth     @relation(fields: [userId], references: [id])
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  auth        Auth      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("app_users")
 }

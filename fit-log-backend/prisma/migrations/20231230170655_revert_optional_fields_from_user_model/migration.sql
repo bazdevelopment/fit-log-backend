@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE "app_users" ALTER COLUMN "avatar_image" DROP NOT NULL,
+ALTER COLUMN "sex" DROP NOT NULL,
+ALTER COLUMN "birth_date" DROP NOT NULL,
+ALTER COLUMN "phone_number" DROP NOT NULL,
+ALTER COLUMN "nationality" DROP NOT NULL;
