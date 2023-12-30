@@ -32,7 +32,7 @@ export const createHttpException = ({
 
   error.response = {
     success: false,
-    message: message,
+    message,
     statusCode: status,
     failMethod: method ?? "",
   };
