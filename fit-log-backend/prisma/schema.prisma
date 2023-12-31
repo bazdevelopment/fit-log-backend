@@ -48,6 +48,20 @@ model User {
   @@map("app_users")
 }
 
+model Exercise {
+  id               String   @id
+  name             String
+  bodyPart         String   @map("body_part")
+  target           String
+  equipment        String
+  gifUrl           String   @map("gif_url")
+  image            String?
+  secondaryMuscles String[] @map("secondary_muscles")
+  instructions     String[]
+
+  @@map("fitness_exercises")
+}
+
 // model Role {
 //   id          String   @id
 //   name        String
