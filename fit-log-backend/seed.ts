@@ -13,7 +13,7 @@ const seedDatabase = async () => {
 };
 
 seedDatabase()
-  .catch(async (error) => {
+  .catch((error) => {
     throw error;
   })
   .finally(() => prisma.$disconnect);
