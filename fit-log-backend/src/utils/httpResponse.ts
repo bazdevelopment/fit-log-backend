@@ -1,4 +1,4 @@
-interface ICustomError extends Error {
+export interface ICustomError extends Error {
   statusCode?: number;
   response?: {
     success: boolean;
@@ -26,7 +26,7 @@ export const createHttpException = ({
   status: number;
   message: string;
   method?: string;
-}): void => {
+}): ICustomError => {
   const error: ICustomError = new Error(message);
   error.statusCode = status;
 

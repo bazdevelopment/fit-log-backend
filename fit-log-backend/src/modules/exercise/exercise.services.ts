@@ -1,6 +1,6 @@
 import prisma from "../../config/prisma";
 import { HTTP_STATUS_CODE } from "../../enums/HttpStatusCodes";
-import { createHttpException } from "../../utils/httpResponse";
+import { ICustomError, createHttpException } from "../../utils/httpResponse";
 import { TExercisesResponse } from "./exercise.types";
 /**
  * Service used to fetch all the exercises from db using limit and offset for pagination/lazy loading
@@ -8,7 +8,7 @@ import { TExercisesResponse } from "./exercise.types";
 export const getExercises = async (
   limit: number,
   offset: number
-): Promise<TExercisesResponse[] | void> => {
+): Promise<TExercisesResponse[] | ICustomError> => {
   try {
     return await prisma.exercise.findMany({
       take: limit,
@@ -35,7 +35,7 @@ export const getExercisesByNameService = async ({
   exerciseName: string;
   limit: number;
   offset: number;
-}) => {
+}): Promise<TExercisesResponse[] | ICustomError> => {
   try {
     return await prisma.exercise.findMany({
       where: {
@@ -60,7 +60,7 @@ export const getExercisesByNameService = async ({
  */
 export const getExercisesByIdService = async (
   exerciseId: string
-): Promise<TExercisesResponse | void> => {
+): Promise<TExercisesResponse | ICustomError> => {
   try {
     return (await prisma.exercise.findUnique({
       where: {
@@ -87,7 +87,7 @@ export const getExercisesByMuscleTarget = async ({
   muscleTarget: string;
   limit: number;
   offset: number;
-}): Promise<TExercisesResponse[] | void> => {
+}): Promise<TExercisesResponse[] | ICustomError> => {
   try {
     return await prisma.exercise.findMany({
       where: {
@@ -117,7 +117,7 @@ export const getExercisesByEquipment = async ({
   equipmentType: string;
   limit: number;
   offset: number;
-}): Promise<TExercisesResponse[] | void> => {
+}): Promise<TExercisesResponse[] | ICustomError> => {
   try {
     return await prisma.exercise.findMany({
       where: {
@@ -138,7 +138,9 @@ export const getExercisesByEquipment = async ({
 /**
  * Get the muscle target list
  */
-export const getMuscleTargetList = async (): Promise<string[] | void> => {
+export const getMuscleTargetList = async (): Promise<
+  string[] | ICustomError
+> => {
   try {
     const targetList = await prisma.exercise.groupBy({
       by: "target",
@@ -157,7 +159,7 @@ export const getMuscleTargetList = async (): Promise<string[] | void> => {
 /**
  * Get the list with equipments
  */
-export const getEquipmentList = async (): Promise<string[] | void> => {
+export const getEquipmentList = async (): Promise<string[] | ICustomError> => {
   try {
     const targetList = await prisma.exercise.groupBy({
       by: "equipment",
@@ -177,7 +179,7 @@ export const getEquipmentList = async (): Promise<string[] | void> => {
 /**
  * Get the body part list
  */
-export const getBodyPartList = async (): Promise<string[] | void> => {
+export const getBodyPartList = async (): Promise<string[] | ICustomError> => {
   try {
     const targetList = await prisma.exercise.groupBy({
       by: "bodyPart",
@@ -205,7 +207,7 @@ export const getExercisesByBodyPart = async ({
   bodyPart: string;
   limit: number;
   offset: number;
-}): Promise<TExercisesResponse[] | void> => {
+}): Promise<TExercisesResponse[] | ICustomError> => {
   try {
     const exercises = await prisma.exercise.findMany({
       where: {
