@@ -35,7 +35,7 @@ export const updateUserByUserIdController = async (
     };
   }>,
   reply: FastifyReply
-) => {
+): Promise<TUpdateUser> => {
   const { userId } = request.params;
   const userInfoFields = request.body;
 

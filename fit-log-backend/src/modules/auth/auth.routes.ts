@@ -33,7 +33,7 @@ export const authRoutes = async (app: FastifyInstance) => {
   app.post(
     "/login",
     {
-      preHandler: [app.authenticate],
+      // preHandler: [app.authenticate],
       schema: { body: signInUserJsonSchema.body },
     },
     signInController

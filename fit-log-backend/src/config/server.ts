@@ -8,11 +8,25 @@ import { HTTP_STATUS_CODE } from "../enums/HttpStatusCodes";
 import { TSignInUser } from "../modules/auth/auth.types";
 import { userRoutes } from "../modules/user/user.routes";
 import { TUpdateUser } from "../modules/user/user.types";
+import { exerciseRoutes } from "../modules/exercise/exercise.routes";
 
 declare module "fastify" {
   interface FastifyInstance {
     authenticate: (
-      request: FastifyRequest<{ Body: TSignInUser | TUpdateUser }>,
+      request: FastifyRequest<{
+        Body: TSignInUser | TUpdateUser;
+        Querystring: {
+          bodyPart: string;
+          equipmentType: string;
+          target: string;
+          limit: string;
+          offset: string;
+          name: string;
+        };
+        Params: {
+          exerciseId: string;
+        };
+      }>,
       reply: FastifyReply
     ) => Promise<void>;
   }
@@ -71,6 +85,7 @@ export async function buildServer() {
 
   app.register(authRoutes, { prefix: "/api/auth" });
   app.register(userRoutes, { prefix: "/api/user" });
+  app.register(exerciseRoutes, { prefix: "/api/exercises" });
 
   return app;
 }

@@ -1,0 +1,40 @@
+### Get all the exercises /api/exercises?query
+GET  http://localhost:3000/api/exercises?limit=10&offset=0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Imxxc2RydTFoZHlvdHpydGEiLCJmaXJzdE5hbWUiOiJscXNkcnUxaGR5b3R6cnRhIiwibGFzdE5hbWUiOiJCYXppbHVjIiwiZW1haWwiOiJCYXppbHVjIiwiaWF0IjoxNzA0MTE1NDgxLCJleHAiOjE3MDQxNTE0ODF9.ZMcCj9QfL7ICWqOq88ezfYpfkeVkh5-PYKxFCmuads8
+
+
+### Search the exercises by name /api/exercises/search?query
+GET  http://localhost:3000/api/exercises/search?name=squat&limit=10&offset=0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Imxxc2RydTFoZHlvdHpydGEiLCJmaXJzdE5hbWUiOiJscXNkcnUxaGR5b3R6cnRhIiwibGFzdE5hbWUiOiJCYXppbHVjIiwiZW1haWwiOiJCYXppbHVjIiwiaWF0IjoxNzA0MTE1NDgxLCJleHAiOjE3MDQxNTE0ODF9.ZMcCj9QfL7ICWqOq88ezfYpfkeVkh5-PYKxFCmuads8
+
+
+### Get the exercise by id /api/exercises/:exerciseId
+GET  http://localhost:3000/api/exercises/0436
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Imxxc2RydTFoZHlvdHpydGEiLCJmaXJzdE5hbWUiOiJscXNkcnUxaGR5b3R6cnRhIiwibGFzdE5hbWUiOiJCYXppbHVjIiwiZW1haWwiOiJCYXppbHVjIiwiaWF0IjoxNzA0MTE1NDgxLCJleHAiOjE3MDQxNTE0ODF9.ZMcCj9QfL7ICWqOq88ezfYpfkeVkh5-PYKxFCmuads8
+
+
+### Get the exercises by muscle target  /api/exercises/target?target=abductors&limit=10&offset=0
+GET  http://localhost:3000/api/exercises/target?target=tricepss&limit=10&offset=0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Imxxc2RydTFoZHlvdHpydGEiLCJmaXJzdE5hbWUiOiJscXNkcnUxaGR5b3R6cnRhIiwibGFzdE5hbWUiOiJCYXppbHVjIiwiZW1haWwiOiJCYXppbHVjIiwiaWF0IjoxNzA0MTE1NDgxLCJleHAiOjE3MDQxNTE0ODF9.ZMcCj9QfL7ICWqOq88ezfYpfkeVkh5-PYKxFCmuads8
+
+
+### Get the exercises by equipment type  /api/exercises/equipment?equipmentType=&limit=10&offset=0
+GET  http://localhost:3000/api/exercises/equipment?equipmentType=rope&limit=10&offset=0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Imxxc2RydTFoZHlvdHpydGEiLCJmaXJzdE5hbWUiOiJscXNkcnUxaGR5b3R6cnRhIiwibGFzdE5hbWUiOiJCYXppbHVjIiwiZW1haWwiOiJCYXppbHVjIiwiaWF0IjoxNzA0MTE1NDgxLCJleHAiOjE3MDQxNTE0ODF9.ZMcCj9QfL7ICWqOq88ezfYpfkeVkh5-PYKxFCmuads8
+
+### Get the muscle target list  /api/exercises/muscle-target-list
+GET  http://localhost:3000/api/exercises/muscle-target-list
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Imxxc2RydTFoZHlvdHpydGEiLCJmaXJzdE5hbWUiOiJscXNkcnUxaGR5b3R6cnRhIiwibGFzdE5hbWUiOiJCYXppbHVjIiwiZW1haWwiOiJCYXppbHVjIiwiaWF0IjoxNzA0MTE1NDgxLCJleHAiOjE3MDQxNTE0ODF9.ZMcCj9QfL7ICWqOq88ezfYpfkeVkh5-PYKxFCmuads8
+
+### Get the muscle equipment list  /api/exercises/equipment-list
+GET  http://localhost:3000/api/exercises/equipment-list
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Imxxc2RydTFoZHlvdHpydGEiLCJmaXJzdE5hbWUiOiJscXNkcnUxaGR5b3R6cnRhIiwibGFzdE5hbWUiOiJCYXppbHVjIiwiZW1haWwiOiJCYXppbHVjIiwiaWF0IjoxNzA0MTE1NDgxLCJleHAiOjE3MDQxNTE0ODF9.ZMcCj9QfL7ICWqOq88ezfYpfkeVkh5-PYKxFCmuads8
+
+### Get the body part list  /api/exercises/body-part-list
+GET  http://localhost:3000/api/exercises/body-part-list
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Imxxc2RydTFoZHlvdHpydGEiLCJmaXJzdE5hbWUiOiJscXNkcnUxaGR5b3R6cnRhIiwibGFzdE5hbWUiOiJCYXppbHVjIiwiZW1haWwiOiJCYXppbHVjIiwiaWF0IjoxNzA0MTE1NDgxLCJleHAiOjE3MDQxNTE0ODF9.ZMcCj9QfL7ICWqOq88ezfYpfkeVkh5-PYKxFCmuads8
+
+
+### Get the exercises by body part /api/exercises/body-part?bodyPart=chest&limit=10&offset=0
+GET  http://localhost:3000/api/exercises/body-part?bodyPart=chest&limit=10&offset=0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Imxxc2RydTFoZHlvdHpydGEiLCJmaXJzdE5hbWUiOiJscXNkcnUxaGR5b3R6cnRhIiwibGFzdE5hbWUiOiJCYXppbHVjIiwiZW1haWwiOiJCYXppbHVjIiwiaWF0IjoxNzA0MTE1NDgxLCJleHAiOjE3MDQxNTE0ODF9.ZMcCj9QfL7ICWqOq88ezfYpfkeVkh5-PYKxFCmuads8

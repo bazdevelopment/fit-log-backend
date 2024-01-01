@@ -50,7 +50,7 @@ export const getUserById = async (userId: string) => {
 export const updateUserByUserId = async (
   userId: string,
   userInfoFields: TUpdateUser
-) => {
+): Promise<TUpdateUser | void> => {
   try {
     return await prisma.user.update({
       where: { userId },
