@@ -1,6 +1,6 @@
 import prisma from "../../config/prisma";
 import { HTTP_STATUS_CODE } from "../../enums/HttpStatusCodes";
-import { createHttpException } from "../../utils/httpResponse";
+import { ICustomError, createHttpException } from "../../utils/httpResponse";
 import { TUpdateUser } from "./user.types";
 
 /**
@@ -50,7 +50,7 @@ export const getUserById = async (userId: string) => {
 export const updateUserByUserId = async (
   userId: string,
   userInfoFields: TUpdateUser
-) => {
+): Promise<TUpdateUser | ICustomError> => {
   try {
     return await prisma.user.update({
       where: { userId },
