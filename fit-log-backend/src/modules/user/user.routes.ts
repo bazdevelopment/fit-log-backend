@@ -3,7 +3,8 @@ import {
   getCurrentUserController,
   updateUserByUserIdController,
 } from "./user.controllers";
-import { userResponseToJsonSchema } from "./user.schemas";
+import { $ref } from "./user.schemas";
+import { SWAGGER_TAGS } from "../../enums/SwaggerTags";
 
 /**
  * Routes associated to user model
@@ -13,6 +14,11 @@ export const userRoutes = async (app: FastifyInstance) => {
     "/currentUser",
     {
       preHandler: [app.authenticate],
+      schema: {
+        tags: [SWAGGER_TAGS.USER],
+        summary: "Get current user",
+        description: "Endpoint used to get the current user info",
+      },
     },
     getCurrentUserController
   );
@@ -21,7 +27,12 @@ export const userRoutes = async (app: FastifyInstance) => {
     "/:userId",
     {
       preHandler: [app.authenticate],
-      schema: { body: userResponseToJsonSchema.body },
+      schema: {
+        body: $ref("userResponseToJsonSchema"),
+        tags: [SWAGGER_TAGS.USER],
+        summary: "Update the used by userId",
+        description: "Endpoint user to update the user info",
+      },
     },
     updateUserByUserIdController
   );

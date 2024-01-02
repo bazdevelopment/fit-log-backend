@@ -1,14 +1,30 @@
-import fastify, { FastifyReply, FastifyRequest } from "fastify";
+import fastify, {
+  FastifyInstance,
+  FastifyReply,
+  FastifyRequest,
+  RawServerDefault,
+} from "fastify";
 import fastifyCookie from "@fastify/cookie";
 import fastifytJwt from "@fastify/jwt";
+import fastifyCors from "@fastify/cors";
+import swagger from "@fastify/swagger";
+import fastifySwaggerUi from "@fastify/swagger-ui";
 import { logger } from "./logger";
 import { authRoutes } from "../modules/auth/auth.routes";
-import { createHttpException } from "../utils/httpResponse";
+import { ICustomError, createHttpException } from "../utils/httpResponse";
 import { HTTP_STATUS_CODE } from "../enums/HttpStatusCodes";
 import { TSignInUser } from "../modules/auth/auth.types";
 import { userRoutes } from "../modules/user/user.routes";
 import { TUpdateUser } from "../modules/user/user.types";
 import { exerciseRoutes } from "../modules/exercise/exercise.routes";
+import { version } from "../../package.json";
+import { authSchemas } from "../modules/auth/auth.schemas";
+import { userSchemas } from "../modules/user/user.schemas";
+import { exerciseSchemas } from "../modules/exercise/exercise.schemas";
+import { registerSchemas } from "../utils/registerSchemas";
+import { Logger } from "pino";
+import { IncomingMessage, ServerResponse } from "http";
+import { SWAGGER_TAGS } from "../enums/SwaggerTags";
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -47,8 +63,15 @@ declare module "@fastify/jwt" {
  * This function creates and configures a Fastify server instance, registering plugins, defining routes, and returning the configured server.
  */
 export async function buildServer() {
-  const app = fastify({
-    logger,
+  const loggerConfig: Logger = logger; // Your logger configuration;
+
+  const app: FastifyInstance<
+    RawServerDefault,
+    IncomingMessage,
+    ServerResponse<IncomingMessage>,
+    Logger
+  > = fastify({
+    logger: loggerConfig,
   });
 
   /* REGISTER PLUGINS */
@@ -61,10 +84,68 @@ export async function buildServer() {
     secret: process.env.JWT_SECRET!,
   });
 
+  /**
+   * Register the schemas available for validation within the Fastify app, ensuring that incoming requests conform to the specified data structures.
+   */
+  registerSchemas(app, [...authSchemas, ...userSchemas, ...exerciseSchemas]);
+
+  app.register(swagger, {
+    swagger: {
+      info: {
+        title: "FitLog API Docs",
+        description: "This is a short documentation for FitLog API",
+        version,
+      },
+      host: `localhost:${process.env.PORT}`,
+      schemes: ["http", "https"],
+      consumes: ["application/json"],
+      produces: ["application/json"],
+      tags: [
+        {
+          name: SWAGGER_TAGS.AUTH,
+          description: `${SWAGGER_TAGS.AUTH} API`,
+        },
+        {
+          name: SWAGGER_TAGS.USER,
+          description: `${SWAGGER_TAGS.USER} API`,
+        },
+        {
+          name: SWAGGER_TAGS.EXERCISE,
+          description: `${SWAGGER_TAGS.EXERCISE} API`,
+        },
+      ],
+    },
+  });
+
+  app.register(fastifySwaggerUi, {
+    routePrefix: "/docs",
+    staticCSP: false,
+    uiConfig: {
+      docExpansion: "list", // expand/not all the documentations none|list|full
+      deepLinking: true,
+    },
+
+    transformStaticCSP(header) {
+      return header;
+    },
+  });
+
+  app.register(fastifyCors, {
+    origin: [
+      `http://localhost:${process.env.PORT}`,
+      // `http://127.0.0.1:${port}`,
+      // process.env.HEROKU_URL
+    ],
+    methods: ["GET", "PUT", "PATCH", "POST", "DELETE"],
+  });
+
   /* DECORATORS */
   app.decorate(
     "authenticate",
-    async (request: FastifyRequest, _reply: FastifyReply) => {
+    async (
+      request: FastifyRequest,
+      _reply: FastifyReply
+    ): Promise<any | ICustomError> => {
       try {
         /** by calling jwtVerify() method by default user object will be added to the response object and can be accessed by request.user */
         await request.jwtVerify();

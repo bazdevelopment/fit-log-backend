@@ -14,7 +14,8 @@ import {
   BODY_PART,
   EXERCISE_EQUIPMENT,
   MUSCLE_TARGET,
-} from "./exerice.constants";
+} from "./exercise.constants";
+import { SWAGGER_TAGS } from "../../enums/SwaggerTags";
 
 /**
  * Routes associated to exercise model
@@ -29,6 +30,10 @@ export const exerciseRoutes = async (app: FastifyInstance) => {
           limit: { type: "string" },
           offset: { type: "string" },
         },
+        tags: [SWAGGER_TAGS.EXERCISE],
+        summary: "Get the fitness exercises",
+        description:
+          "Endpoint used to get the fitness exercises (lazy loading with limit & offset)",
 
         // response: {
         //   202: {
@@ -61,6 +66,10 @@ export const exerciseRoutes = async (app: FastifyInstance) => {
           limit: { type: "string" },
           offset: { type: "string" },
         },
+        tags: [SWAGGER_TAGS.EXERCISE],
+        summary: "Search the exercises",
+        description:
+          "Endpoint used to search a specific fitness exercise by exercise name (lazy loading with limit & offset)",
       },
     },
     getExercisesByNameController
@@ -74,6 +83,9 @@ export const exerciseRoutes = async (app: FastifyInstance) => {
         params: {
           exerciseId: { type: "string" },
         },
+        tags: [SWAGGER_TAGS.EXERCISE],
+        summary: "Get the fitness exercise by id",
+        description: "Endpoint used to get a specific fitness exercise by id ",
       },
     },
     getExerciseById
@@ -89,6 +101,10 @@ export const exerciseRoutes = async (app: FastifyInstance) => {
           limit: { type: "string" },
           offset: { type: "string" },
         },
+        tags: [SWAGGER_TAGS.EXERCISE],
+        summary: "Get the fitness exercise for a specific muscle target",
+        description:
+          "Endpoint used to get some fitness exercises for a specific muscle target (lazy loading with limit & offset)",
       },
     },
     getExerciseByMuscleTarget
@@ -106,6 +122,10 @@ export const exerciseRoutes = async (app: FastifyInstance) => {
           limit: { type: "string" },
           offset: { type: "string" },
         },
+        tags: [SWAGGER_TAGS.EXERCISE],
+        summary: "Get the fitness exercise according to a specific equipment",
+        description:
+          "Endpoint used to get some fitness exercises for a specific equipment (lazy loading with limit & offset)",
       },
     },
     getExercisesByEquipmentController
@@ -115,6 +135,12 @@ export const exerciseRoutes = async (app: FastifyInstance) => {
     "/muscle-target-list",
     {
       preHandler: [app.authenticate],
+      schema: {
+        tags: [SWAGGER_TAGS.EXERCISE],
+        summary: "Get the list with all the target muscles",
+        description:
+          "Endpoint used to get the list with all the target muscles",
+      },
     },
     getMuscleTargetListController
   );
@@ -122,6 +148,12 @@ export const exerciseRoutes = async (app: FastifyInstance) => {
   app.get(
     "/equipment-list",
     {
+      schema: {
+        tags: [SWAGGER_TAGS.EXERCISE],
+        summary: "Get the list with all the fitness equipments",
+        description:
+          "Endpoint used to get the list with all the fitness equipments",
+      },
       preHandler: [app.authenticate],
     },
     getEquipmentListController
@@ -131,6 +163,11 @@ export const exerciseRoutes = async (app: FastifyInstance) => {
     "/body-part-list",
     {
       preHandler: [app.authenticate],
+      schema: {
+        tags: [SWAGGER_TAGS.EXERCISE],
+        summary: "Get the list with all the body parts",
+        description: "Endpoint used to get the list with all the body parts",
+      },
     },
     getBodyPartListController
   );
@@ -149,6 +186,9 @@ export const exerciseRoutes = async (app: FastifyInstance) => {
           limit: { type: "string" },
           offset: { type: "string" },
         },
+        tags: [SWAGGER_TAGS.EXERCISE],
+        summary: "Get the exercises for a specific body part",
+        description: "Endpoint used to get exercises for a specific body part",
       },
     },
     getExercisesByBodyPartController

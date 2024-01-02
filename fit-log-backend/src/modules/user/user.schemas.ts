@@ -1,5 +1,5 @@
 import z from "zod";
-import zodToJsonSchema from "zod-to-json-schema";
+import { buildJsonSchemas } from "fastify-zod";
 
 export const userResponseSchema = z
   .object({
@@ -14,6 +14,9 @@ export const userResponseSchema = z
   })
   .partial();
 
-export const userResponseToJsonSchema = {
-  body: zodToJsonSchema(userResponseSchema, "userResponseSchema"),
-};
+export const { schemas: userSchemas, $ref } = buildJsonSchemas(
+  {
+    userResponseToJsonSchema: userResponseSchema,
+  },
+  { $id: "userSchema" }
+);
