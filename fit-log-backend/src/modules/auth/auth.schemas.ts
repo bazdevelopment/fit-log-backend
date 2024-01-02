@@ -1,5 +1,5 @@
 import z from "zod";
-import zodToJsonSchema from "zod-to-json-schema";
+import { buildJsonSchemas } from "fastify-zod";
 
 const signUpUserFields = {
   id: z.string(),
@@ -50,29 +50,14 @@ export const emailSchema = z.object({
   email: z.string().email(),
 });
 
-export const signUpUserJsonSchema = {
-  body: zodToJsonSchema(
-    signUpUserSchema.omit({ id: true }),
-    "signUpUserSchema"
-  ),
-};
-
-export const signInUserJsonSchema = {
-  body: zodToJsonSchema(signInUserSchema, "signInUserSchema"),
-};
-
-export const otpVerificationJsonSchema = {
-  body: zodToJsonSchema(otpVerificationSchema, "otpVerificationJsonSchema"),
-};
-
-export const forgotPasswordJsonSchema = {
-  body: zodToJsonSchema(emailSchema, "forgotPasswordJsonSchema"),
-};
-
-export const resendOtpCodeJsonSchema = {
-  body: zodToJsonSchema(emailSchema, "resendOtpCodeJsonSchema"),
-};
-
-export const resetPasswordJsonSchema = {
-  body: zodToJsonSchema(resetPasswordSchema, "resetPasswordSchema"),
-};
+export const { schemas: authSchemas, $ref } = buildJsonSchemas(
+  {
+    signUpUserJsonSchema: signUpUserSchema.omit({ id: true, otpCode: true }),
+    signInUserJsonSchema: signInUserSchema,
+    otpVerificationJsonSchema: otpVerificationSchema,
+    forgotPasswordJsonSchema: emailSchema,
+    resendOtpCodeJsonSchema: emailSchema,
+    resetPasswordJsonSchema: resetPasswordSchema,
+  },
+  { $id: "authSchema" }
+);
