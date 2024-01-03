@@ -404,7 +404,7 @@ export const resetPasswordController = async (
 /**
  * Controller used to generate a new access token based on the lifetime of the refresh token
  */
-export const refreshTokenController = async (
+export const refreshTokenController = (
   request: FastifyRequest,
   reply: FastifyReply
 ) => {

@@ -25,9 +25,6 @@ import { registerSchemas } from "../utils/registerSchemas";
 import { Logger } from "pino";
 import { IncomingMessage, ServerResponse } from "http";
 import { SWAGGER_TAGS } from "../enums/SwaggerTags";
-import jwt from "jsonwebtoken";
-import { tokenCookieOptions } from "../modules/auth/auth.constants";
-
 declare module "fastify" {
   interface FastifyInstance {
     authenticate: (
@@ -179,7 +176,7 @@ export async function buildServer() {
         }
 
         const decodedAccessToken: IDecodedRefreshToken = request.jwt.verify(
-          accessToken!
+          accessToken as string
         );
         request.user = decodedAccessToken;
       } catch (error: unknown) {
