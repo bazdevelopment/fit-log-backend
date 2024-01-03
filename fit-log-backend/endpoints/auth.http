@@ -13,7 +13,6 @@ Content-Type: application/json
 ###  Login user: /api/auth/login
 POST http://localhost:3000/api/auth/login
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Imxxc2RydTFoZHlvdHpydGEiLCJmaXJzdE5hbWUiOiJNYXJpYW4iLCJsYXN0TmFtZSI6IkJhemlsdWMiLCJlbWFpbCI6IkJhemlsdWMiLCJpYXQiOjE3MDM5NTk5NzQsImV4cCI6MTcwMzk5NTk3NH0.qc6E0s1rfiBN2xAa96KoRQceEXEqxHwmy6IWyZOcC64
 
 {
   "email": "bazilucm@gmail.com",
@@ -29,7 +28,7 @@ POST http://localhost:3000/api/auth/verify-otp
 Content-Type: application/json
 
 {
-  "otpCode":"210145",
+  "otpCode":"612415",
   "email":"bazilucm@gmail.com"
 }
 
@@ -37,6 +36,7 @@ Content-Type: application/json
 ###  Resend OTP code /api/auth/resend-otp
 POST http://localhost:3000/api/auth/resend-otp
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJhemlsdWNtQGdtYWlsLmNvbSIsImlkIjoibHF3cWM3Zjh5M2NhM2FveiIsImZpcnN0TmFtZSI6Imxxd3FjN2Y4eTNjYTNhb3oiLCJsYXN0TmFtZSI6IkJhemlsdWMiLCJvdHBDb2RlIjoiZDc0YTlkOGRiNThlZTRmZWI4MDdkMTA4YTU1MThlMjc4ODkwMjllZDU3ZjM3ZDExZTQ5YTAxMjc5YThkNzMwMjk4N2E1ZGY2OTA4NjVlMzY1OTNiMGUzZGEwYWY3YTJiMGQ0OTJlOTQzODM2Y2JiYmUyMjE4Njg4ODdhODliMjQiLCJpYXQiOjE3MDQyNjI0Mjd9.5JMNYH6HGX5SbcQUfNOnQR8GVOiWzULhG3BRYh0ActY
 
 {
   "email":"bazilucm@gmail.com"
@@ -63,3 +63,7 @@ Content-Type: application/json
   "confirmPassword":"1234567"
 }
 
+
+
+###  Reset password /api/auth/reset-password
+POST http://localhost:3000/api/auth/refresh-token

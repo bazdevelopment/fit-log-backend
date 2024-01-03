@@ -1,23 +1,25 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import {
+  IDecodedRefreshToken,
   TForgotPasswordFields,
   TOtpVerification,
   TResendOtpFields,
   TResetPasswordFields,
   TSignInUser,
+  TSignUpUserResponse,
   TTSignUpUserWithoutId,
 } from "./auth.types";
 import {
   getUserByEmail,
   resendOtpCode,
   resetPassword,
-  signJwtToken,
   signUpUserService,
   updatePasswordResetToken,
   verifyOtpCode,
 } from "./auth.services";
 import { HTTP_STATUS_CODE } from "../../enums/HttpStatusCodes";
 import {
+  ICustomError,
   createHttpException,
   createSuccessResponse,
 } from "../../utils/httpResponse";
@@ -30,7 +32,6 @@ import prisma from "../../config/prisma";
 import { computeFutureTimestamp } from "../../utils/computeFutureTimestamp";
 import { generateForgotPasswordTemplate } from "../../utils/email-templates/forgotPasswordTemplate";
 import { sendOtpCodeTemplate } from "../../utils/email-templates/sendOtpCodeTemplate";
-
 /**
  *  signUpController
  *  This asynchronous function serves as the controller for user registration.
@@ -41,7 +42,7 @@ export const signUpController = async (
     Body: TTSignUpUserWithoutId;
   }>,
   reply: FastifyReply
-): Promise<void> => {
+): Promise<void | ICustomError> => {
   const { email, password, firstName, lastName } = request.body;
 
   const otpCode = generateOTPCode();
@@ -60,7 +61,7 @@ export const signUpController = async (
   /* 2. Upload avatar image to cloudinary after the account has been created successfully*/
 
   /* 3.Add user to database */
-  const userUniqueId = generateUniqueId();
+  const userUniqueId: string = generateUniqueId();
   const userCreated = await signUpUserService({
     email,
     id: userUniqueId,
@@ -77,26 +78,14 @@ export const signUpController = async (
     subject: "OTP verification code",
     htmlTemplate: sendOtpCodeTemplate(firstName, otpCode),
   });
-  /* 5. create the JWT token */
-  const jwtToken = signJwtToken({
-    email,
-    password,
-    id: userUniqueId,
-    firstName,
-    lastName,
-    otpCode: userCreated?.otpCode,
-  });
 
-  return reply
-    .code(HTTP_STATUS_CODE.CREATED)
-    .cookie("Authorization", jwtToken, tokenCookieOptions)
-    .send(
-      createSuccessResponse({
-        status: HTTP_STATUS_CODE.CREATED,
-        message: "User registered successfully!",
-        data: userCreated,
-      })
-    );
+  return reply.code(HTTP_STATUS_CODE.CREATED).send(
+    createSuccessResponse({
+      status: HTTP_STATUS_CODE.CREATED,
+      message: "User registered successfully!",
+      data: userCreated,
+    })
+  );
 };
 
 /**
@@ -110,7 +99,7 @@ export const signInController = async (
     Body: TSignInUser;
   }>,
   reply: FastifyReply
-): Promise<void> => {
+): Promise<void | ICustomError> => {
   const { email, password } = request.body;
 
   /** 1. Check if the users exists in db, otherwise throw an error */
@@ -120,6 +109,14 @@ export const signInController = async (
     return createHttpException({
       status: HTTP_STATUS_CODE.BAD_REQUEST,
       message: "User not found!",
+      method: "signInController",
+    });
+  }
+
+  if (!registeredUser.isVerifiedOtp) {
+    return createHttpException({
+      status: HTTP_STATUS_CODE.BAD_REQUEST,
+      message: "User is not verified, check your OTP code on your email!",
       method: "signInController",
     });
   }
@@ -141,26 +138,40 @@ export const signInController = async (
   }
 
   /**  generate JWT access token */
-  const jwtToken: string = signJwtToken({
-    email,
-    password,
-    id: registeredUser.id,
-    firstName: registeredUser.id,
-    lastName: registeredUser.lastName,
-    otpCode: registeredUser.otpCode,
-  });
+  const accessToken: string = request.jwt.sign(
+    {
+      email,
+      id: registeredUser.id,
+      firstName: registeredUser.firstName,
+      lastName: registeredUser.lastName,
+      otpCode: registeredUser.otpCode,
+    },
+    { expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRES }
+  );
+
+  const refreshToken: string = request.jwt.sign(
+    {
+      email,
+      id: registeredUser.id,
+      firstName: registeredUser.id,
+      lastName: registeredUser.lastName,
+      otpCode: registeredUser.otpCode,
+    },
+    { expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRES }
+  );
 
   /** 3. In the end return a successful message, token and also user if needed */
 
   return reply
     .code(HTTP_STATUS_CODE.CREATED)
-    .cookie("Authorization", jwtToken, tokenCookieOptions)
+    .header("Authorization", accessToken)
+    .setCookie("refresh_token", refreshToken, tokenCookieOptions)
     .send(
       createSuccessResponse({
         status: HTTP_STATUS_CODE.CREATED,
         message: "Successfully logged in!",
         data: {
-          token: jwtToken,
+          token: accessToken,
         },
       })
     );
@@ -175,7 +186,8 @@ export const signOutController = (
 ) => {
   return reply
     .code(HTTP_STATUS_CODE.OK)
-    .cookie("Authorization", "", logoutCookieOptions)
+    .clearCookie("refresh_token", logoutCookieOptions)
+    .header("Authorization", "")
     .send(
       createSuccessResponse({
         status: HTTP_STATUS_CODE.OK,
@@ -192,7 +204,7 @@ export const resendOtpCodeController = async (
     Body: TResendOtpFields;
   }>,
   reply: FastifyReply
-): Promise<void> => {
+): Promise<void | ICustomError> => {
   const { email } = request.body;
   const newOtpCode = generateOTPCode();
   const { hash: hashNewOtpCode, salt: saltNewOtpCode } = hashField(newOtpCode);
@@ -244,7 +256,7 @@ export const verifyOtpCodeController = async (
     Body: TOtpVerification;
   }>,
   reply: FastifyReply
-): Promise<void> => {
+): Promise<void | ICustomError> => {
   const { email, otpCode } = request.body;
 
   const user = await prisma.auth.findUnique({
@@ -297,7 +309,7 @@ export const forgotPasswordController = async (
     Body: TForgotPasswordFields;
   }>,
   reply: FastifyReply
-): Promise<void> => {
+): Promise<void | ICustomError> => {
   const { email } = request.body;
   const user = await getUserByEmail(email);
   if (!user) {
@@ -320,17 +332,17 @@ export const forgotPasswordController = async (
   //! consider in the future to hash resetOtpToken
   // const { hash, salt } = hashField(resetOtpToken);
 
-  const userUpdated = await updatePasswordResetToken({
+  const userUpdated = (await updatePasswordResetToken({
     email,
     passwordResetToken: resetOtpToken,
     passwordResetExpires: computeFutureTimestamp(10),
-  });
+  })) as TSignUpUserResponse;
 
   await sendOtpCodeMail({
     receiverEmail: email,
     subject: "Forgot password",
     htmlTemplate: generateForgotPasswordTemplate(
-      userUpdated?.firstName!,
+      userUpdated.firstName,
       resetOtpToken
     ),
   });
@@ -351,7 +363,7 @@ export const resetPasswordController = async (
     Body: TResetPasswordFields;
   }>,
   reply: FastifyReply
-): Promise<void> => {
+): Promise<void | ICustomError> => {
   const { email, resetToken, password, confirmPassword } = request.body;
   const user = await getUserByEmail(email);
   if (!user) {
@@ -388,4 +400,56 @@ export const resetPasswordController = async (
       message: "Your password has been successfully reset!",
     })
   );
+};
+/**
+ * Controller used to generate a new access token based on the lifetime of the refresh token
+ */
+export const refreshTokenController = (
+  request: FastifyRequest,
+  reply: FastifyReply
+) => {
+  try {
+    const refreshToken = request.cookies["refresh_token"];
+    if (!refreshToken) {
+      return createHttpException({
+        status: HTTP_STATUS_CODE.BAD_REQUEST,
+        message: "Access Denied. No refresh token provided'!",
+        method: "refreshTokenController",
+      });
+    }
+
+    const decodedRefreshToken: IDecodedRefreshToken =
+      request.jwt.verify(refreshToken);
+
+    const newAccessToken = request.jwt.sign(
+      {
+        email: decodedRefreshToken.email,
+        id: decodedRefreshToken.id,
+        firstName: decodedRefreshToken.firstName,
+        lastName: decodedRefreshToken.lastName,
+        otpCode: decodedRefreshToken.otpCode,
+      },
+      {
+        expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRES,
+      }
+    );
+
+    return reply
+      .code(HTTP_STATUS_CODE.CREATED)
+      .header("Authorization", newAccessToken)
+      .setCookie("refresh_token", refreshToken, tokenCookieOptions)
+      .send(
+        createSuccessResponse({
+          status: HTTP_STATUS_CODE.CREATED,
+          message: "Successfully refresh token!",
+        })
+      );
+  } catch (error: unknown) {
+    const errorResponse = error as ICustomError;
+    return createHttpException({
+      status: HTTP_STATUS_CODE.BAD_REQUEST,
+      message: errorResponse.message,
+      method: "resetPasswordController",
+    });
+  }
 };

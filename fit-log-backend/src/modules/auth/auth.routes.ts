@@ -1,6 +1,7 @@
 import { FastifyInstance } from "fastify";
 import {
   forgotPasswordController,
+  refreshTokenController,
   resendOtpCodeController,
   resetPasswordController,
   signInController,
@@ -34,7 +35,6 @@ export const authRoutes = async (app: FastifyInstance) => {
   app.post(
     "/login",
     {
-      // preHandler: [app.authenticate],
       schema: {
         body: $ref("signInUserJsonSchema"),
         tags: [SWAGGER_TAGS.AUTH],
@@ -112,5 +112,18 @@ export const authRoutes = async (app: FastifyInstance) => {
       },
     },
     resetPasswordController
+  );
+
+  /* REFRESH TOKEN */
+  app.post(
+    "/refresh-token",
+    {
+      schema: {
+        tags: [SWAGGER_TAGS.AUTH],
+        summary: "Refresh token ",
+        description: "Endpoint to handle refresh token",
+      },
+    },
+    refreshTokenController
   );
 };
