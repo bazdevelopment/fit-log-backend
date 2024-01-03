@@ -5,7 +5,7 @@ import fastify, {
   RawServerDefault,
 } from "fastify";
 import fastifyCookie from "@fastify/cookie";
-import fastifytJwt from "@fastify/jwt";
+import fastifytJwt, { JWT } from "@fastify/jwt";
 import fastifyCors from "@fastify/cors";
 import swagger from "@fastify/swagger";
 import fastifySwaggerUi from "@fastify/swagger-ui";
@@ -13,7 +13,7 @@ import { logger } from "./logger";
 import { authRoutes } from "../modules/auth/auth.routes";
 import { ICustomError, createHttpException } from "../utils/httpResponse";
 import { HTTP_STATUS_CODE } from "../enums/HttpStatusCodes";
-import { TSignInUser } from "../modules/auth/auth.types";
+import { IDecodedRefreshToken, TSignInUser } from "../modules/auth/auth.types";
 import { userRoutes } from "../modules/user/user.routes";
 import { TUpdateUser } from "../modules/user/user.types";
 import { exerciseRoutes } from "../modules/exercise/exercise.routes";
@@ -25,6 +25,8 @@ import { registerSchemas } from "../utils/registerSchemas";
 import { Logger } from "pino";
 import { IncomingMessage, ServerResponse } from "http";
 import { SWAGGER_TAGS } from "../enums/SwaggerTags";
+import jwt from "jsonwebtoken";
+import { tokenCookieOptions } from "../modules/auth/auth.constants";
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -46,10 +48,19 @@ declare module "fastify" {
       reply: FastifyReply
     ) => Promise<void>;
   }
+  interface FastifyRequest {
+    jwt: JWT;
+  }
 }
 declare module "@fastify/jwt" {
   interface FastifyJWT {
-    payload: { id: number }; // payload type is used for signing and verifying
+    payload: {
+      id: string;
+      email: string;
+      firstName: string;
+      lastName: string;
+      otpCode: string;
+    }; // payload type is used for signing and verifying
     user: {
       id: string;
       firstName: string;
@@ -79,9 +90,19 @@ export async function buildServer() {
     secret: process.env.JWT_SECRET!,
   });
 
+  app.addHook(
+    "preHandler",
+    (request: FastifyRequest, _reply: FastifyReply, next) => {
+      // here we are
+      request.jwt = app.jwt;
+      return next();
+    }
+  );
+
   //! check if fastify cookie is needed
   app.register(fastifyCookie, {
     secret: process.env.JWT_SECRET!,
+    hook: "preHandler",
   });
 
   /**
@@ -142,17 +163,30 @@ export async function buildServer() {
   /* DECORATORS */
   app.decorate(
     "authenticate",
-    async (
-      request: FastifyRequest,
-      _reply: FastifyReply
-    ): Promise<any | ICustomError> => {
+    async (request: FastifyRequest): Promise<any | ICustomError> => {
       try {
-        /** by calling jwtVerify() method by default user object will be added to the response object and can be accessed by request.user */
-        await request.jwtVerify();
-      } catch (error) {
+        const accessToken = request.headers.authorization?.replace(
+          "Bearer ",
+          ""
+        );
+        const refreshToken = request.cookies["refresh_token"];
+        if (!accessToken && !refreshToken) {
+          return createHttpException({
+            status: HTTP_STATUS_CODE.UNAUTHORIZED,
+            message: "Access Denied. No token provided.",
+            method: "Authenticate decorator",
+          });
+        }
+
+        const decodedAccessToken: IDecodedRefreshToken = request.jwt.verify(
+          accessToken!
+        );
+        request.user = decodedAccessToken;
+      } catch (error: unknown) {
+        const errorResponse = error as ICustomError;
         return createHttpException({
           status: HTTP_STATUS_CODE.UNAUTHORIZED,
-          message: "Unauthorized",
+          message: errorResponse.message,
           method: "Authenticate decorator",
         });
       }

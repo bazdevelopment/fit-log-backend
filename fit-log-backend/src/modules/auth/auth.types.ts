@@ -16,3 +16,13 @@ export type TOtpVerification = z.infer<typeof otpVerificationSchema>;
 export type TResetPasswordFields = z.infer<typeof resetPasswordSchema>;
 export type TForgotPasswordFields = z.infer<typeof emailSchema>;
 export type TResendOtpFields = z.infer<typeof emailSchema>;
+
+export interface IDecodedRefreshToken {
+  email: string;
+  id: string;
+  firstName: string;
+  lastName: string;
+  otpCode: string;
+  iat: number;
+  exp: number;
+}

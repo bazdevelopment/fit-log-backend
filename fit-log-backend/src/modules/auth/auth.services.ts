@@ -1,7 +1,7 @@
 import prisma from "../../config/prisma";
 import { HTTP_STATUS_CODE } from "../../enums/HttpStatusCodes";
 import { computeFutureTimestamp } from "../../utils/computeFutureTimestamp";
-import { createHttpException } from "../../utils/httpResponse";
+import { ICustomError, createHttpException } from "../../utils/httpResponse";
 import { hashField } from "../../utils/hash";
 import { TSignUpUser, TSignUpUserResponse } from "./auth.types";
 import JWT from "jsonwebtoken";
@@ -15,7 +15,7 @@ import JWT from "jsonwebtoken";
  */
 export const signUpUserService = async (
   userInfo: TSignUpUser
-): Promise<TSignUpUserResponse | undefined | void> => {
+): Promise<TSignUpUserResponse | ICustomError> => {
   try {
     const { password, otpCode, ...restUserInfo } = userInfo;
     const { hash, salt } = hashField(password);
@@ -52,15 +52,13 @@ export const signUpUserService = async (
  */
 export const getUserByEmail = async (
   email: string
-): Promise<TSignUpUserResponse | null | void> => {
+): Promise<TSignUpUserResponse> => {
   try {
-    const result = await prisma.auth.findUnique({
+    return await prisma.auth.findUnique({
       where: {
         email,
       },
     });
-
-    return result;
   } catch (error: unknown) {
     const errorResponse = error as Error;
     return createHttpException({
@@ -133,7 +131,7 @@ export const resendOtpCode = async ({
  */
 export const verifyOtpCode = async (
   email: string
-): Promise<TSignUpUserResponse | undefined | void> => {
+): Promise<TSignUpUserResponse | ICustomError> => {
   try {
     const createdUser = await prisma.auth.update({
       where: {
@@ -174,9 +172,9 @@ export const updatePasswordResetToken = async ({
   email: string;
   passwordResetToken: string;
   passwordResetExpires: Date;
-}) => {
+}): Promise<TSignUpUserResponse | void> => {
   try {
-    return await prisma.auth.update({
+    return (await prisma.auth.update({
       where: {
         email,
       },
@@ -184,9 +182,9 @@ export const updatePasswordResetToken = async ({
         passwordResetToken,
         passwordResetExpires,
       },
-    });
+    })) as TSignUpUserResponse;
   } catch (error) {
-    return createHttpException({
+    createHttpException({
       status: HTTP_STATUS_CODE.FORBIDDEN,
       message:
         "The passwordResetToken & passwordResetExpires cannot be updated!",

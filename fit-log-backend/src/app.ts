@@ -11,6 +11,7 @@ const gracefulShutDownApp = async (
   app: Awaited<ReturnType<typeof buildServer>>
 ) => {
   await app.close();
+  process.exit(0);
 };
 
 async function main() {
