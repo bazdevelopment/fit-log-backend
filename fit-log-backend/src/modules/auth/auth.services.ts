@@ -4,8 +4,6 @@ import { computeFutureTimestamp } from "../../utils/computeFutureTimestamp";
 import { createHttpException } from "../../utils/httpResponse";
 import { hashField } from "../../utils/hash";
 import { TSignUpUser, TSignUpUserResponse } from "./auth.types";
-import JWT from "jsonwebtoken";
-import { environmentVariables } from "../../config/environment-variables";
 
 /**
  * signUpUserService
