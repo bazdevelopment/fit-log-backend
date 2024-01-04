@@ -132,6 +132,16 @@ export async function buildServer() {
           description: `${SWAGGER_TAGS.EXERCISE} API`,
         },
       ],
+      securityDefinitions: {
+        Bearer: {
+          type: "apiKey",
+          name: "Authorization",
+          in: "header",
+          description:
+            "Enter the token with the `Bearer: ` prefix, e.g. `Bearer abcde12345`",
+        },
+      },
+      security: [{ Bearer: [] }],
     },
   });
 

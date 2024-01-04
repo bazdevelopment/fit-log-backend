@@ -1,7 +1,7 @@
 import prisma from "../../config/prisma";
 import { HTTP_STATUS_CODE } from "../../enums/HttpStatusCodes";
 import { computeFutureTimestamp } from "../../utils/computeFutureTimestamp";
-import { ICustomError, createHttpException } from "../../utils/httpResponse";
+import { createHttpException } from "../../utils/httpResponse";
 import { hashField } from "../../utils/hash";
 import { TSignUpUser, TSignUpUserResponse } from "./auth.types";
 import JWT from "jsonwebtoken";
@@ -15,7 +15,7 @@ import JWT from "jsonwebtoken";
  */
 export const signUpUserService = async (
   userInfo: TSignUpUser
-): Promise<TSignUpUserResponse | ICustomError> => {
+): Promise<TSignUpUserResponse> => {
   try {
     const { password, otpCode, ...restUserInfo } = userInfo;
     const { hash, salt } = hashField(password);
@@ -31,11 +31,10 @@ export const signUpUserService = async (
         otpExpiration: computeFutureTimestamp(10),
       },
     });
-
-    return result;
+    return result as TSignUpUserResponse;
   } catch (error: unknown) {
     const errorResponse = error as Error;
-    return createHttpException({
+    throw createHttpException({
       status: HTTP_STATUS_CODE.BAD_REQUEST,
       message: errorResponse.message,
       method: "signUpUserService",
@@ -52,7 +51,7 @@ export const signUpUserService = async (
  */
 export const getUserByEmail = async (
   email: string
-): Promise<TSignUpUserResponse> => {
+): Promise<TSignUpUserResponse | null> => {
   try {
     return await prisma.auth.findUnique({
       where: {
@@ -61,7 +60,7 @@ export const getUserByEmail = async (
     });
   } catch (error: unknown) {
     const errorResponse = error as Error;
-    return createHttpException({
+    throw createHttpException({
       status: HTTP_STATUS_CODE.BAD_REQUEST,
       message: errorResponse.message,
       method: "getUserByEmail",
@@ -104,7 +103,7 @@ export const resendOtpCode = async ({
   otpCode: string;
   otpExpiration: Date;
   saltOtpCode: string;
-}) => {
+}): Promise<TSignUpUserResponse> => {
   try {
     return await prisma.auth.update({
       where: {
@@ -118,7 +117,7 @@ export const resendOtpCode = async ({
     });
   } catch (error) {
     const errorResponse = error as Error;
-    return createHttpException({
+    throw createHttpException({
       status: HTTP_STATUS_CODE.BAD_REQUEST,
       message: errorResponse.message,
       method: "resendOtpCode",
@@ -131,7 +130,7 @@ export const resendOtpCode = async ({
  */
 export const verifyOtpCode = async (
   email: string
-): Promise<TSignUpUserResponse | ICustomError> => {
+): Promise<TSignUpUserResponse> => {
   try {
     const createdUser = await prisma.auth.update({
       where: {
@@ -153,7 +152,7 @@ export const verifyOtpCode = async (
     return createdUser;
   } catch (error) {
     const errorResponse = error as Error;
-    return createHttpException({
+    throw createHttpException({
       status: HTTP_STATUS_CODE.BAD_REQUEST,
       message: errorResponse.message,
       method: "verifyOtpCode",
@@ -172,9 +171,9 @@ export const updatePasswordResetToken = async ({
   email: string;
   passwordResetToken: string;
   passwordResetExpires: Date;
-}): Promise<TSignUpUserResponse | void> => {
+}): Promise<TSignUpUserResponse> => {
   try {
-    return (await prisma.auth.update({
+    return await prisma.auth.update({
       where: {
         email,
       },
@@ -182,9 +181,9 @@ export const updatePasswordResetToken = async ({
         passwordResetToken,
         passwordResetExpires,
       },
-    })) as TSignUpUserResponse;
+    });
   } catch (error) {
-    createHttpException({
+    throw createHttpException({
       status: HTTP_STATUS_CODE.FORBIDDEN,
       message:
         "The passwordResetToken & passwordResetExpires cannot be updated!",
@@ -205,7 +204,7 @@ export const resetPassword = async ({
   email: string;
   resetToken: string;
   password: string;
-}) => {
+}): Promise<TSignUpUserResponse> => {
   try {
     const { hash: hashPassword, salt: saltPassword } = hashField(password);
     const { hash: hashOtp, salt: saltOtp } = hashField(resetToken);
@@ -224,7 +223,7 @@ export const resetPassword = async ({
       },
     });
   } catch (error) {
-    return createHttpException({
+    throw createHttpException({
       status: HTTP_STATUS_CODE.FORBIDDEN,
       message: "Cannot change password!",
       method: "resetPassword",
