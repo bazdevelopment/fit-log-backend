@@ -33,6 +33,7 @@ import { computeFutureTimestamp } from "../../utils/computeFutureTimestamp";
 import { generateForgotPasswordTemplate } from "../../utils/email-templates/forgotPasswordTemplate";
 import { sendOtpCodeTemplate } from "../../utils/email-templates/sendOtpCodeTemplate";
 import { environmentVariables } from "../../config/environment-variables";
+import { generateTokens } from "../../utils/generate-tokens";
 /**
  *  signUpController
  *  This asynchronous function serves as the controller for user registration.
@@ -138,35 +139,28 @@ export const signInController = async (
     });
   }
 
-  /**  generate JWT access token */
-  const accessToken: string = request.jwt.sign(
-    {
+  /**  generate JWT access token/ refresh token */
+  const { accessToken, refreshToken } = generateTokens({
+    request,
+    userInfo: {
       email,
       id: registeredUser.id,
       firstName: registeredUser.firstName,
       lastName: registeredUser.lastName,
       otpCode: registeredUser.otpCode,
     },
-    { expiresIn: environmentVariables.authentication.jwtAccessTokenExpires }
-  );
-
-  const refreshToken: string = request.jwt.sign(
-    {
-      email,
-      id: registeredUser.id,
-      firstName: registeredUser.id,
-      lastName: registeredUser.lastName,
-      otpCode: registeredUser.otpCode,
-    },
-    { expiresIn: environmentVariables.authentication.jwtRefreshTokenExpires }
-  );
+    expiresAccessToken:
+      environmentVariables.authentication.jwtAccessTokenExpires!,
+    expiresRefreshToken:
+      environmentVariables.authentication.jwtRefreshTokenExpires!,
+  });
 
   /** 3. In the end return a successful message, token and also user if needed */
 
   return reply
     .code(HTTP_STATUS_CODE.CREATED)
     .header("Authorization", accessToken)
-    .setCookie("refresh_token", refreshToken, tokenCookieOptions)
+    .setCookie("refresh_token", refreshToken ?? "", tokenCookieOptions)
     .send(
       createSuccessResponse({
         status: HTTP_STATUS_CODE.CREATED,
@@ -422,18 +416,18 @@ export const refreshTokenController = (
     const decodedRefreshToken: IDecodedRefreshToken =
       request.jwt.verify(refreshToken);
 
-    const newAccessToken = request.jwt.sign(
-      {
+    const { accessToken: newAccessToken } = generateTokens({
+      request,
+      userInfo: {
         email: decodedRefreshToken.email,
         id: decodedRefreshToken.id,
         firstName: decodedRefreshToken.firstName,
         lastName: decodedRefreshToken.lastName,
         otpCode: decodedRefreshToken.otpCode,
       },
-      {
-        expiresIn: environmentVariables.authentication.jwtAccessTokenExpires,
-      }
-    );
+      expiresAccessToken:
+        environmentVariables.authentication.jwtAccessTokenExpires,
+    });
 
     return reply
       .code(HTTP_STATUS_CODE.CREATED)

@@ -17,12 +17,15 @@ export type TResetPasswordFields = z.infer<typeof resetPasswordSchema>;
 export type TForgotPasswordFields = z.infer<typeof emailSchema>;
 export type TResendOtpFields = z.infer<typeof emailSchema>;
 
-export interface IDecodedRefreshToken {
+export interface IEncodedToken {
   email: string;
   id: string;
   firstName: string;
   lastName: string;
   otpCode: string;
+}
+
+export interface IDecodedRefreshToken extends IEncodedToken {
   iat: number;
   exp: number;
 }
