@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { getUserById, updateUserByUserId } from "./user.services";
-import { HTTP_STATUS_CODE } from "../../enums/HttpStatusCodes";
+import { HTTP_STATUS_CODE } from "../../enums/http-status-codes";
 import { TUpdateUser } from "./user.types";
 import { createSuccessResponse } from "../../utils/httpResponse";
 

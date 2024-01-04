@@ -17,7 +17,7 @@ import {
   updatePasswordResetToken,
   verifyOtpCode,
 } from "./auth.services";
-import { HTTP_STATUS_CODE } from "../../enums/HttpStatusCodes";
+import { HTTP_STATUS_CODE } from "../../enums/http-status-codes";
 import {
   ICustomError,
   createHttpException,
@@ -32,6 +32,7 @@ import prisma from "../../config/prisma";
 import { computeFutureTimestamp } from "../../utils/computeFutureTimestamp";
 import { generateForgotPasswordTemplate } from "../../utils/email-templates/forgotPasswordTemplate";
 import { sendOtpCodeTemplate } from "../../utils/email-templates/sendOtpCodeTemplate";
+import { environmentVariables } from "../../config/environment-variables";
 /**
  *  signUpController
  *  This asynchronous function serves as the controller for user registration.
@@ -146,7 +147,7 @@ export const signInController = async (
       lastName: registeredUser.lastName,
       otpCode: registeredUser.otpCode,
     },
-    { expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRES }
+    { expiresIn: environmentVariables.authentication.jwtAccessTokenExpires }
   );
 
   const refreshToken: string = request.jwt.sign(
@@ -157,7 +158,7 @@ export const signInController = async (
       lastName: registeredUser.lastName,
       otpCode: registeredUser.otpCode,
     },
-    { expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRES }
+    { expiresIn: environmentVariables.authentication.jwtRefreshTokenExpires }
   );
 
   /** 3. In the end return a successful message, token and also user if needed */
@@ -430,7 +431,7 @@ export const refreshTokenController = (
         otpCode: decodedRefreshToken.otpCode,
       },
       {
-        expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRES,
+        expiresIn: environmentVariables.authentication.jwtAccessTokenExpires,
       }
     );
 

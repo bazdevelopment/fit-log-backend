@@ -63,3 +63,25 @@ export enum BODY_PART {
   UpperLegs = "upper legs",
   Waist = "waist",
 }
+
+export const GET_EXERCISES_ROUTE = "/";
+export const GET_EXERCISES_BY_NAME_ROUTE = "/search";
+export const GET_EXERCISE_BY_ID_ROUTE = "/:exerciseId";
+export const GET_EXERCISE_BY_MUSCLE_TARGET_ROUTE = "/target";
+export const GET_EXERCISE_BY_EQUIPMENT_ROUTE = "/equipment";
+export const GET_MUSCLE_TARGET_LIST_ROUTE = "/muscle-target-list";
+export const GET_EQUIPMENT_LIST_ROUTE = "/equipment-list";
+export const GET_BODY_PART_LIST_ROUTE = "/body-part-list";
+export const GET_EXERCISES_BY_BODY_PART_LIST = "/body-part";
+
+export const EXERCISE_ROUTES = {
+  GET_EXERCISES_ROUTE,
+  GET_EXERCISES_BY_NAME_ROUTE,
+  GET_EXERCISE_BY_ID_ROUTE,
+  GET_EXERCISE_BY_MUSCLE_TARGET_ROUTE,
+  GET_EXERCISE_BY_EQUIPMENT_ROUTE,
+  GET_MUSCLE_TARGET_LIST_ROUTE,
+  GET_EQUIPMENT_LIST_ROUTE,
+  GET_BODY_PART_LIST_ROUTE,
+  GET_EXERCISES_BY_BODY_PART_LIST,
+};

@@ -10,7 +10,7 @@ import {
   getExercisesByNameService,
   getMuscleTargetList,
 } from "./exercise.services";
-import { HTTP_STATUS_CODE } from "../../enums/HttpStatusCodes";
+import { HTTP_STATUS_CODE } from "../../enums/http-status-codes";
 import { createSuccessResponse } from "../../utils/httpResponse";
 import { TExercisesResponse } from "./exercise.types";
 
@@ -197,7 +197,7 @@ export const getBodyPartListController = async (
   return reply.code(HTTP_STATUS_CODE.ACCEPTED).send(
     createSuccessResponse({
       status: HTTP_STATUS_CODE.ACCEPTED,
-      message: "Equipment list has been fetched successfully!",
+      message: "Body part list has been fetched successfully!",
       data: bodyPartList,
     })
   );

@@ -13,16 +13,17 @@ import {
 import {
   BODY_PART,
   EXERCISE_EQUIPMENT,
+  EXERCISE_ROUTES,
   MUSCLE_TARGET,
 } from "./exercise.constants";
-import { SWAGGER_TAGS } from "../../enums/SwaggerTags";
+import { SWAGGER_TAGS } from "../../enums/swagger-tags";
 
 /**
  * Routes associated to exercise model
  */
 export const exerciseRoutes = async (app: FastifyInstance) => {
   app.get(
-    "/",
+    EXERCISE_ROUTES.GET_EXERCISES_ROUTE,
     {
       preHandler: [app.authenticate],
       schema: {
@@ -57,7 +58,7 @@ export const exerciseRoutes = async (app: FastifyInstance) => {
   );
 
   app.get(
-    "/search",
+    EXERCISE_ROUTES.GET_EXERCISES_BY_NAME_ROUTE,
     {
       preHandler: [app.authenticate],
       schema: {
@@ -76,7 +77,7 @@ export const exerciseRoutes = async (app: FastifyInstance) => {
   );
 
   app.get(
-    "/:exerciseId",
+    EXERCISE_ROUTES.GET_EXERCISE_BY_ID_ROUTE,
     {
       preHandler: [app.authenticate],
       schema: {
@@ -92,7 +93,7 @@ export const exerciseRoutes = async (app: FastifyInstance) => {
   );
 
   app.get(
-    "/target",
+    EXERCISE_ROUTES.GET_EXERCISE_BY_MUSCLE_TARGET_ROUTE,
     {
       preHandler: [app.authenticate],
       schema: {
@@ -110,7 +111,7 @@ export const exerciseRoutes = async (app: FastifyInstance) => {
     getExerciseByMuscleTarget
   );
   app.get(
-    "/equipment",
+    EXERCISE_ROUTES.GET_EXERCISE_BY_EQUIPMENT_ROUTE,
     {
       preHandler: [app.authenticate],
       schema: {
@@ -132,7 +133,7 @@ export const exerciseRoutes = async (app: FastifyInstance) => {
   );
 
   app.get(
-    "/muscle-target-list",
+    EXERCISE_ROUTES.GET_MUSCLE_TARGET_LIST_ROUTE,
     {
       preHandler: [app.authenticate],
       schema: {
@@ -146,7 +147,7 @@ export const exerciseRoutes = async (app: FastifyInstance) => {
   );
 
   app.get(
-    "/equipment-list",
+    EXERCISE_ROUTES.GET_EQUIPMENT_LIST_ROUTE,
     {
       schema: {
         tags: [SWAGGER_TAGS.EXERCISE],
@@ -160,7 +161,7 @@ export const exerciseRoutes = async (app: FastifyInstance) => {
   );
 
   app.get(
-    "/body-part-list",
+    EXERCISE_ROUTES.GET_BODY_PART_LIST_ROUTE,
     {
       preHandler: [app.authenticate],
       schema: {
@@ -173,10 +174,9 @@ export const exerciseRoutes = async (app: FastifyInstance) => {
   );
 
   app.get(
-    "/body-part",
+    EXERCISE_ROUTES.GET_EXERCISES_BY_BODY_PART_LIST,
     {
       preHandler: [app.authenticate],
-
       schema: {
         querystring: {
           bodyPart: {

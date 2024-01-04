@@ -1,10 +1,11 @@
 import prisma from "../../config/prisma";
-import { HTTP_STATUS_CODE } from "../../enums/HttpStatusCodes";
+import { HTTP_STATUS_CODE } from "../../enums/http-status-codes";
 import { computeFutureTimestamp } from "../../utils/computeFutureTimestamp";
 import { createHttpException } from "../../utils/httpResponse";
 import { hashField } from "../../utils/hash";
 import { TSignUpUser, TSignUpUserResponse } from "./auth.types";
 import JWT from "jsonwebtoken";
+import { environmentVariables } from "../../config/environment-variables";
 
 /**
  * signUpUserService
@@ -81,7 +82,7 @@ export const signJwtToken = (userInfo: TSignUpUser): string => {
       lastName: userInfo.lastName,
       email: userInfo.lastName,
     },
-    process.env.JWT_SECRET!,
+    environmentVariables.authentication.jwtSecret!,
     {
       expiresIn: process.env.JWT_TOKEN_EXPIRES!,
     }

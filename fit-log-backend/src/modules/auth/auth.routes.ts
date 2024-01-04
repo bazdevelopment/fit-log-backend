@@ -10,7 +10,8 @@ import {
   verifyOtpCodeController,
 } from "./auth.controllers";
 import { $ref } from "./auth.schemas";
-import { SWAGGER_TAGS } from "../../enums/SwaggerTags";
+import { SWAGGER_TAGS } from "../../enums/swagger-tags";
+import { AUTH_ROUTES } from "./auth.constants";
 
 /**
  * authRoutes
@@ -20,7 +21,7 @@ import { SWAGGER_TAGS } from "../../enums/SwaggerTags";
 export const authRoutes = async (app: FastifyInstance) => {
   /* REGISTER USER */
   app.post(
-    "/register",
+    AUTH_ROUTES.REGISTER_ROUTE,
     {
       schema: {
         body: $ref("signUpUserJsonSchema"),
@@ -33,7 +34,7 @@ export const authRoutes = async (app: FastifyInstance) => {
   );
   /* LOGIN USER */
   app.post(
-    "/login",
+    AUTH_ROUTES.LOGIN_ROUTE,
     {
       schema: {
         body: $ref("signInUserJsonSchema"),
@@ -47,7 +48,7 @@ export const authRoutes = async (app: FastifyInstance) => {
 
   /* LOGOUT USER */
   app.post(
-    "/logout",
+    AUTH_ROUTES.LOGOUT_ROUTE,
     {
       schema: {
         tags: [SWAGGER_TAGS.AUTH],
@@ -60,7 +61,7 @@ export const authRoutes = async (app: FastifyInstance) => {
   );
   /* VERIFY OTP */
   app.post(
-    "/verify-otp",
+    AUTH_ROUTES.VERIFY_OTP_ROUTE,
     {
       schema: {
         body: $ref("otpVerificationJsonSchema"),
@@ -74,7 +75,7 @@ export const authRoutes = async (app: FastifyInstance) => {
   );
   /* RESEND OTP */
   app.post(
-    "/resend-otp",
+    AUTH_ROUTES.RESEND_OTP_ROUTE,
     {
       schema: {
         body: $ref("resendOtpCodeJsonSchema"),
@@ -88,7 +89,7 @@ export const authRoutes = async (app: FastifyInstance) => {
 
   /*FORGOT PASSWORD */
   app.post(
-    "/forgot-password",
+    AUTH_ROUTES.FORGOT_PASSWORD_ROUTE,
     {
       schema: {
         body: $ref("forgotPasswordJsonSchema"),
@@ -102,7 +103,7 @@ export const authRoutes = async (app: FastifyInstance) => {
 
   /* RESET PASSWORD */
   app.post(
-    "/reset-password",
+    AUTH_ROUTES.RESET_PASSWORD_ROUTE,
     {
       schema: {
         body: $ref("resetPasswordJsonSchema"),
@@ -116,7 +117,7 @@ export const authRoutes = async (app: FastifyInstance) => {
 
   /* REFRESH TOKEN */
   app.post(
-    "/refresh-token",
+    AUTH_ROUTES.REFRESH_TOKEN_ROUTE,
     {
       schema: {
         tags: [SWAGGER_TAGS.AUTH],

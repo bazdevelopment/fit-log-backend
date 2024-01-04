@@ -1,5 +1,5 @@
 import prisma from "../../config/prisma";
-import { HTTP_STATUS_CODE } from "../../enums/HttpStatusCodes";
+import { HTTP_STATUS_CODE } from "../../enums/http-status-codes";
 import { createHttpException } from "../../utils/httpResponse";
 import { TExercisesResponse } from "./exercise.types";
 /**

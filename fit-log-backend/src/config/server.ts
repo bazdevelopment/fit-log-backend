@@ -12,7 +12,7 @@ import fastifySwaggerUi from "@fastify/swagger-ui";
 import { logger } from "./logger";
 import { authRoutes } from "../modules/auth/auth.routes";
 import { ICustomError, createHttpException } from "../utils/httpResponse";
-import { HTTP_STATUS_CODE } from "../enums/HttpStatusCodes";
+import { HTTP_STATUS_CODE } from "../enums/http-status-codes";
 import { IDecodedRefreshToken, TSignInUser } from "../modules/auth/auth.types";
 import { userRoutes } from "../modules/user/user.routes";
 import { TUpdateUser } from "../modules/user/user.types";
@@ -24,7 +24,9 @@ import { exerciseSchemas } from "../modules/exercise/exercise.schemas";
 import { registerSchemas } from "../utils/registerSchemas";
 import { Logger } from "pino";
 import { IncomingMessage, ServerResponse } from "http";
-import { SWAGGER_TAGS } from "../enums/SwaggerTags";
+import { SWAGGER_TAGS } from "../enums/swagger-tags";
+import { environmentVariables } from "./environment-variables";
+
 declare module "fastify" {
   interface FastifyInstance {
     authenticate: (
@@ -84,7 +86,7 @@ export async function buildServer() {
 
   /* REGISTER PLUGINS */
   app.register(fastifytJwt, {
-    secret: process.env.JWT_SECRET!,
+    secret: environmentVariables.authentication.jwtSecret!,
   });
 
   app.addHook(
@@ -98,7 +100,7 @@ export async function buildServer() {
 
   //! check if fastify cookie is needed
   app.register(fastifyCookie, {
-    secret: process.env.JWT_SECRET!,
+    secret: environmentVariables.authentication.cookieSecret!,
     hook: "preHandler",
   });
 
@@ -114,7 +116,7 @@ export async function buildServer() {
         description: "This is a short documentation for FitLog API",
         version,
       },
-      host: `localhost:${process.env.PORT}`,
+      host: `localhost:${environmentVariables.default.port}`,
       schemes: ["http", "https"],
       consumes: ["application/json"],
       produces: ["application/json"],
@@ -160,7 +162,7 @@ export async function buildServer() {
 
   app.register(fastifyCors, {
     origin: [
-      `http://localhost:${process.env.PORT}`,
+      `http://localhost:${environmentVariables.default.port}`,
       // `http://127.0.0.1:${port}`,
       // process.env.HEROKU_URL
     ],
