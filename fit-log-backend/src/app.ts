@@ -1,3 +1,4 @@
+import { environmentVariables } from "./config/environment-variables";
 import { buildServer } from "./config/server";
 import dotenv from "dotenv";
 dotenv.config();
@@ -17,11 +18,9 @@ const gracefulShutDownApp = async (
 async function main() {
   const app = await buildServer();
 
-  const port = process.env.PORT ? Number(process.env.PORT) : 3000;
-
   app.listen({
-    port,
-    host: process.env.HOST,
+    port: Number(environmentVariables.default.port),
+    host: environmentVariables.default.host,
   });
 
   /** The following code snippet demonstrates the implementation of a graceful shutdown mechanism for a Node.js application using signals. This ensures that the application handles termination signals gracefully, allowing it to perform necessary cleanup tasks before shutting down.

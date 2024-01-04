@@ -4,14 +4,15 @@ import {
   updateUserByUserIdController,
 } from "./user.controllers";
 import { $ref } from "./user.schemas";
-import { SWAGGER_TAGS } from "../../enums/SwaggerTags";
+import { SWAGGER_TAGS } from "../../enums/swagger-tags";
+import { USER_ROUTES } from "./user.constants";
 
 /**
  * Routes associated to user model
  */
 export const userRoutes = async (app: FastifyInstance) => {
   app.get(
-    "/currentUser",
+    USER_ROUTES.GET_CURRENT_USER_ROUTE,
     {
       preHandler: [app.authenticate],
       schema: {
@@ -24,7 +25,7 @@ export const userRoutes = async (app: FastifyInstance) => {
   );
 
   app.patch(
-    "/:userId",
+    USER_ROUTES.UPDATE_USER_BY_USER_ID_ROUTE,
     {
       preHandler: [app.authenticate],
       schema: {

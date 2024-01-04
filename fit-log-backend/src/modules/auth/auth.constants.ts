@@ -1,4 +1,5 @@
 import { CookieSerializeOptions } from "@fastify/cookie";
+import { environmentVariables } from "../../config/environment-variables";
 /**
  * maxAge - This option sets the maximum age of the cookie in milliseconds. It determines how long the cookie will be valid
  * secure:true - This option indicates whether the cookie should only be sent over secure HTTPS connections. Setting it to true means the cookie will only be sent if the connection is secure.
@@ -8,7 +9,7 @@ import { CookieSerializeOptions } from "@fastify/cookie";
  */
 export const tokenCookieOptions: CookieSerializeOptions = {
   maxAge: Number(process.env.JWT_REFRESH_TOKEN_EXPIRES),
-  secure: process.env.NODE_ENV === "production",
+  secure: environmentVariables.default.nodeEnvironment === "production",
   httpOnly: true,
   path: "/",
   // signed: true, //this value produce the error when jwt.decode method is called- The token payload is not a valid base64url serialized JSON
@@ -19,4 +20,24 @@ export const tokenCookieOptions: CookieSerializeOptions = {
 export const logoutCookieOptions = {
   maxAge: 0,
   path: "/",
+};
+
+const REGISTER_ROUTE = "/register";
+const LOGIN_ROUTE = "/login";
+const LOGOUT_ROUTE = "/logout";
+const VERIFY_OTP_ROUTE = "/verify-otp";
+const RESEND_OTP_ROUTE = "/resend-otp";
+const FORGOT_PASSWORD_ROUTE = "/forgot-password";
+const RESET_PASSWORD_ROUTE = "/reset-password";
+const REFRESH_TOKEN_ROUTE = "/refresh-token";
+
+export const AUTH_ROUTES = {
+  REGISTER_ROUTE,
+  LOGIN_ROUTE,
+  LOGOUT_ROUTE,
+  VERIFY_OTP_ROUTE,
+  RESEND_OTP_ROUTE,
+  FORGOT_PASSWORD_ROUTE,
+  RESET_PASSWORD_ROUTE,
+  REFRESH_TOKEN_ROUTE,
 };

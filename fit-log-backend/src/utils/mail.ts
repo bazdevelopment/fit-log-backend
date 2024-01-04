@@ -1,8 +1,9 @@
 import { Resend } from "resend";
 import { createHttpException } from "./httpResponse";
-import { HTTP_STATUS_CODE } from "../enums/HttpStatusCodes";
+import { HTTP_STATUS_CODE } from "../enums/http-status-codes";
+import { environmentVariables } from "../config/environment-variables";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = new Resend(environmentVariables.emailProvider.resendApiKey);
 
 /**
  * sendOtpCodeMail function is responsible for sending an email containing an OTP (One-Time Password) verification code to a user.
