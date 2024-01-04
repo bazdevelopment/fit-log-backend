@@ -1,6 +1,6 @@
 import prisma from "../../config/prisma";
 import { HTTP_STATUS_CODE } from "../../enums/HttpStatusCodes";
-import { ICustomError, createHttpException } from "../../utils/httpResponse";
+import { createHttpException } from "../../utils/httpResponse";
 import { TUpdateUser } from "./user.types";
 
 /**
@@ -50,7 +50,7 @@ export const getUserById = async (userId: string) => {
 export const updateUserByUserId = async (
   userId: string,
   userInfoFields: TUpdateUser
-): Promise<TUpdateUser | ICustomError> => {
+): Promise<TUpdateUser> => {
   try {
     return await prisma.user.update({
       where: { userId },
@@ -58,7 +58,7 @@ export const updateUserByUserId = async (
     });
   } catch (error: unknown) {
     const errorResponse = error as Error;
-    return createHttpException({
+    throw createHttpException({
       status: HTTP_STATUS_CODE.BAD_REQUEST,
       message: errorResponse.message,
       method: "updateUserByUserId",

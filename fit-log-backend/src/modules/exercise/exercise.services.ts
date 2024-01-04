@@ -1,6 +1,6 @@
 import prisma from "../../config/prisma";
 import { HTTP_STATUS_CODE } from "../../enums/HttpStatusCodes";
-import { ICustomError, createHttpException } from "../../utils/httpResponse";
+import { createHttpException } from "../../utils/httpResponse";
 import { TExercisesResponse } from "./exercise.types";
 /**
  * Service used to fetch all the exercises from db using limit and offset for pagination/lazy loading
@@ -8,7 +8,7 @@ import { TExercisesResponse } from "./exercise.types";
 export const getExercises = async (
   limit: number,
   offset: number
-): Promise<TExercisesResponse[] | ICustomError> => {
+): Promise<TExercisesResponse[]> => {
   try {
     return await prisma.exercise.findMany({
       take: limit,
@@ -16,7 +16,7 @@ export const getExercises = async (
     });
   } catch (error: unknown) {
     const errorResponse = error as Error;
-    return createHttpException({
+    throw createHttpException({
       status: HTTP_STATUS_CODE.BAD_REQUEST,
       message: errorResponse.message,
       method: "getExercises service",
@@ -35,7 +35,7 @@ export const getExercisesByNameService = async ({
   exerciseName: string;
   limit: number;
   offset: number;
-}): Promise<TExercisesResponse[] | ICustomError> => {
+}): Promise<TExercisesResponse[]> => {
   try {
     return await prisma.exercise.findMany({
       where: {
@@ -48,7 +48,7 @@ export const getExercisesByNameService = async ({
     });
   } catch (error: unknown) {
     const errorResponse = error as Error;
-    return createHttpException({
+    throw createHttpException({
       status: HTTP_STATUS_CODE.BAD_REQUEST,
       message: errorResponse.message,
       method: "getExercisesByNameService",
@@ -60,16 +60,16 @@ export const getExercisesByNameService = async ({
  */
 export const getExercisesByIdService = async (
   exerciseId: string
-): Promise<TExercisesResponse | ICustomError> => {
+): Promise<TExercisesResponse | null> => {
   try {
-    return (await prisma.exercise.findUnique({
+    return await prisma.exercise.findUnique({
       where: {
         id: exerciseId,
       },
-    })) as TExercisesResponse;
+    });
   } catch (error: unknown) {
     const errorResponse = error as Error;
-    return createHttpException({
+    throw createHttpException({
       status: HTTP_STATUS_CODE.BAD_REQUEST,
       message: errorResponse.message,
       method: "getExercisesByIdService",
@@ -87,7 +87,7 @@ export const getExercisesByMuscleTarget = async ({
   muscleTarget: string;
   limit: number;
   offset: number;
-}): Promise<TExercisesResponse[] | ICustomError> => {
+}): Promise<TExercisesResponse[]> => {
   try {
     return await prisma.exercise.findMany({
       where: {
@@ -98,7 +98,7 @@ export const getExercisesByMuscleTarget = async ({
     });
   } catch (error: unknown) {
     const errorResponse = error as Error;
-    return createHttpException({
+    throw createHttpException({
       status: HTTP_STATUS_CODE.BAD_REQUEST,
       message: errorResponse.message,
       method: "getExercisesByMuscleTarget",
@@ -117,7 +117,7 @@ export const getExercisesByEquipment = async ({
   equipmentType: string;
   limit: number;
   offset: number;
-}): Promise<TExercisesResponse[] | ICustomError> => {
+}): Promise<TExercisesResponse[]> => {
   try {
     return await prisma.exercise.findMany({
       where: {
@@ -128,7 +128,7 @@ export const getExercisesByEquipment = async ({
     });
   } catch (error: unknown) {
     const errorResponse = error as Error;
-    return createHttpException({
+    throw createHttpException({
       status: HTTP_STATUS_CODE.BAD_REQUEST,
       message: errorResponse.message,
       method: "getExercisesByEquipment service",
@@ -138,9 +138,7 @@ export const getExercisesByEquipment = async ({
 /**
  * Get the muscle target list
  */
-export const getMuscleTargetList = async (): Promise<
-  string[] | ICustomError
-> => {
+export const getMuscleTargetList = async (): Promise<string[]> => {
   try {
     const targetList = await prisma.exercise.groupBy({
       by: "target",
@@ -149,7 +147,7 @@ export const getMuscleTargetList = async (): Promise<
     return targetList.map((record) => record.target);
   } catch (error: unknown) {
     const errorResponse = error as Error;
-    return createHttpException({
+    throw createHttpException({
       status: HTTP_STATUS_CODE.BAD_REQUEST,
       message: errorResponse.message,
       method: "getMuscleTargetList service",
@@ -159,7 +157,7 @@ export const getMuscleTargetList = async (): Promise<
 /**
  * Get the list with equipments
  */
-export const getEquipmentList = async (): Promise<string[] | ICustomError> => {
+export const getEquipmentList = async (): Promise<string[]> => {
   try {
     const targetList = await prisma.exercise.groupBy({
       by: "equipment",
@@ -168,7 +166,7 @@ export const getEquipmentList = async (): Promise<string[] | ICustomError> => {
     return targetList.map((record) => record.equipment);
   } catch (error: unknown) {
     const errorResponse = error as Error;
-    return createHttpException({
+    throw createHttpException({
       status: HTTP_STATUS_CODE.BAD_REQUEST,
       message: errorResponse.message,
       method: "getEquipmentList service",
@@ -179,7 +177,7 @@ export const getEquipmentList = async (): Promise<string[] | ICustomError> => {
 /**
  * Get the body part list
  */
-export const getBodyPartList = async (): Promise<string[] | ICustomError> => {
+export const getBodyPartList = async (): Promise<string[]> => {
   try {
     const targetList = await prisma.exercise.groupBy({
       by: "bodyPart",
@@ -188,7 +186,7 @@ export const getBodyPartList = async (): Promise<string[] | ICustomError> => {
     return targetList.map((record) => record.bodyPart);
   } catch (error: unknown) {
     const errorResponse = error as Error;
-    return createHttpException({
+    throw createHttpException({
       status: HTTP_STATUS_CODE.BAD_REQUEST,
       message: errorResponse.message,
       method: "getBodyPartList service",
@@ -207,7 +205,7 @@ export const getExercisesByBodyPart = async ({
   bodyPart: string;
   limit: number;
   offset: number;
-}): Promise<TExercisesResponse[] | ICustomError> => {
+}): Promise<TExercisesResponse[]> => {
   try {
     const exercises = await prisma.exercise.findMany({
       where: {
@@ -219,7 +217,7 @@ export const getExercisesByBodyPart = async ({
     return exercises;
   } catch (error: unknown) {
     const errorResponse = error as Error;
-    return createHttpException({
+    throw createHttpException({
       status: HTTP_STATUS_CODE.BAD_REQUEST,
       message: errorResponse.message,
       method: "getExercisesByBodyPart service",
