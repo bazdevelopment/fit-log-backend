@@ -455,7 +455,7 @@ export const refreshTokenController = (
 export const cleanUnverifiedOtpAccountsController = async (
   _request: FastifyRequest,
   reply: FastifyReply
-) => {
+): Promise<void | ICustomError> => {
   try {
     await cleanUnverifiedOtpAccounts();
     reply.code(HTTP_STATUS_CODE.ACCEPTED).send(

@@ -215,7 +215,7 @@ export const resetPassword = async ({
  * This method is responsible for cleaning up unverified OTP (One-Time Password) accounts in the authentication system.
  * It uses Prisma to delete records from the 'auth' database table where the 'isVerifiedOtp' field is set to false.
  */
-export const cleanUnverifiedOtpAccounts = async () => {
+export const cleanUnverifiedOtpAccounts = async (): Promise<void> => {
   try {
     await prisma.auth.deleteMany({
       where: {
