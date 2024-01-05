@@ -17,11 +17,13 @@ const gracefulShutDownApp = async (
 
 async function main() {
   const app = await buildServer();
-
+  /** start the node server */
   app.listen({
     port: Number(environmentVariables.default.port),
     host: environmentVariables.default.host,
   });
+  /** enable all the jobs */
+  app.cron.startAllJobs();
 
   /** The following code snippet demonstrates the implementation of a graceful shutdown mechanism for a Node.js application using signals. This ensures that the application handles termination signals gracefully, allowing it to perform necessary cleanup tasks before shutting down.
    */

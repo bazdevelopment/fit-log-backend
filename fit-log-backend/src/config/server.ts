@@ -7,6 +7,7 @@ import fastify, {
 import fastifyCookie from "@fastify/cookie";
 import fastifytJwt, { JWT } from "@fastify/jwt";
 import fastifyCors from "@fastify/cors";
+import fastifyCron from "fastify-cron";
 import swagger from "@fastify/swagger";
 import fastifySwaggerUi from "@fastify/swagger-ui";
 import { logger } from "./logger";
@@ -26,6 +27,7 @@ import { Logger } from "pino";
 import { IncomingMessage, ServerResponse } from "http";
 import { SWAGGER_TAGS } from "../enums/swagger-tags";
 import { environmentVariables } from "./environment-variables";
+import { CRON_TIME } from "../enums/cron-time";
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -167,6 +169,24 @@ export async function buildServer() {
       // process.env.HEROKU_URL
     ],
     methods: ["GET", "PUT", "PATCH", "POST", "DELETE"],
+  });
+  /* CRON JOBS */
+  app.register(fastifyCron, {
+    jobs: [
+      {
+        cronTime: CRON_TIME.FIRST_DAY_OF_MONTH_MIDNIGHT,
+        onTick: async (app) => {
+          try {
+            await app.inject({
+              url: "/api/auth/cleanup-otp-users",
+              method: "POST",
+            });
+          } catch (err) {
+            console.error(err);
+          }
+        },
+      },
+    ],
   });
 
   /* DECORATORS */
