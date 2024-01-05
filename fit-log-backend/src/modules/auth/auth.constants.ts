@@ -30,6 +30,7 @@ const RESEND_OTP_ROUTE = "/resend-otp";
 const FORGOT_PASSWORD_ROUTE = "/forgot-password";
 const RESET_PASSWORD_ROUTE = "/reset-password";
 const REFRESH_TOKEN_ROUTE = "/refresh-token";
+const CLEANUP_UNVERIFIED_OTP_ACCOUNTS_ROUTE = "/cleanup-otp-users";
 
 export const AUTH_ROUTES = {
   REGISTER_ROUTE,
@@ -40,4 +41,5 @@ export const AUTH_ROUTES = {
   FORGOT_PASSWORD_ROUTE,
   RESET_PASSWORD_ROUTE,
   REFRESH_TOKEN_ROUTE,
+  CLEANUP_UNVERIFIED_OTP_ACCOUNTS_ROUTE,
 };

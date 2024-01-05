@@ -1,5 +1,6 @@
 import { FastifyInstance } from "fastify";
 import {
+  cleanUnverifiedOtpAccountsController,
   forgotPasswordController,
   refreshTokenController,
   resendOtpCodeController,
@@ -121,10 +122,24 @@ export const authRoutes = async (app: FastifyInstance) => {
     {
       schema: {
         tags: [SWAGGER_TAGS.AUTH],
-        summary: "Refresh token ",
+        summary: "Refresh token",
         description: "Endpoint to handle refresh token",
       },
     },
     refreshTokenController
+  );
+
+  app.post(
+    AUTH_ROUTES.CLEANUP_UNVERIFIED_OTP_ACCOUNTS_ROUTE,
+    {
+      schema: {
+        tags: [SWAGGER_TAGS.AUTH],
+        summary:
+          "Cleanup unverified OTP user accounts (isVerifiedOtp -> false)",
+        description:
+          "Endpoint used to do a cleanup in db for the users that isVerifiedOtp field is false, meaning that the account cannot be verified successfully",
+      },
+    },
+    cleanUnverifiedOtpAccountsController
   );
 };

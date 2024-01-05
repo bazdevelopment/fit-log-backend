@@ -10,6 +10,7 @@ import {
   TTSignUpUserWithoutId,
 } from "./auth.types";
 import {
+  cleanUnverifiedOtpAccounts,
   getUserByEmail,
   resendOtpCode,
   resetPassword,
@@ -445,6 +446,30 @@ export const refreshTokenController = (
       status: HTTP_STATUS_CODE.BAD_REQUEST,
       message: errorResponse.message,
       method: "resetPasswordController",
+    });
+  }
+};
+/**
+ * Controller used to delete unverified OTP user accounts
+ */
+export const cleanUnverifiedOtpAccountsController = async (
+  _request: FastifyRequest,
+  reply: FastifyReply
+): Promise<void | ICustomError> => {
+  try {
+    await cleanUnverifiedOtpAccounts();
+    reply.code(HTTP_STATUS_CODE.ACCEPTED).send(
+      createSuccessResponse({
+        status: HTTP_STATUS_CODE.CREATED,
+        message: "Successfully deleted unverified otp accounts!",
+      })
+    );
+  } catch (error) {
+    const errorResponse = error as ICustomError;
+    return createHttpException({
+      status: HTTP_STATUS_CODE.BAD_REQUEST,
+      message: errorResponse.message,
+      method: "cleanUnverifiedOtpAccountsController",
     });
   }
 };
