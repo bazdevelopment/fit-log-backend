@@ -60,13 +60,14 @@ declare module "@fastify/jwt" {
       email: string;
       firstName: string;
       lastName: string;
-      otpCode: string;
+      role: string;
     }; // payload type is used for signing and verifying
     user: {
       id: string;
       firstName: string;
       lastName: string;
       email: string;
+      role: string;
     }; // user type is return type of `request.user` object
   }
 }
@@ -175,6 +176,9 @@ export async function buildServer() {
     jobs: [
       {
         cronTime: CRON_TIME.FIRST_DAY_OF_MONTH_MIDNIGHT,
+        /**
+         * !consider replacing the inject method with the handler that does the cleanup, otherwise can be some inconsistencies for the check from pre-handler for each route
+         */
         onTick: async (app) => {
           try {
             await app.inject({

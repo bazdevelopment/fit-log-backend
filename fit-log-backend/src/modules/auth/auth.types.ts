@@ -22,7 +22,7 @@ export interface IEncodedToken {
   id: string;
   firstName: string;
   lastName: string;
-  otpCode: string;
+  role: string;
 }
 
 export interface IDecodedRefreshToken extends IEncodedToken {
