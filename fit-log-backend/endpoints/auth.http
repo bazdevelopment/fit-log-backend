@@ -28,7 +28,7 @@ POST http://localhost:3000/api/auth/verify-otp
 Content-Type: application/json
 
 {
-  "otpCode":"566563",
+  "otpCode":"212678",
   "email":"bazilucm@gmail.com"
 }
 

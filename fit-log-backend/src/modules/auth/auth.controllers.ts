@@ -11,6 +11,7 @@ import {
 } from "./auth.types";
 import {
   cleanUnverifiedOtpAccounts,
+  createUserProfile,
   getUserByEmail,
   resendOtpCode,
   resetPassword,
@@ -35,6 +36,10 @@ import { generateForgotPasswordTemplate } from "../../utils/email-templates/forg
 import { sendOtpCodeTemplate } from "../../utils/email-templates/sendOtpCodeTemplate";
 import { environmentVariables } from "../../config/environment-variables";
 import { generateTokens } from "../../utils/generate-tokens";
+import { ADMIN_EMAILS } from "../../config/permissions";
+import { USER_ROLE } from "../../enums/user-role";
+import { assignRoleToUser, getRoleByName } from "../role/role.services";
+import { ROLE_NAME } from "@prisma/client";
 /**
  *  signUpController
  *  This asynchronous function serves as the controller for user registration.
@@ -140,6 +145,10 @@ export const signInController = async (
     });
   }
 
+  const userRole = ADMIN_EMAILS.includes(email)
+    ? USER_ROLE.ADMIN
+    : USER_ROLE.USER;
+
   /**  generate JWT access token/ refresh token */
   const { accessToken, refreshToken } = generateTokens({
     request,
@@ -148,7 +157,7 @@ export const signInController = async (
       id: registeredUser.id,
       firstName: registeredUser.firstName,
       lastName: registeredUser.lastName,
-      otpCode: registeredUser.otpCode,
+      role: userRole,
     },
     expiresAccessToken:
       environmentVariables.authentication.jwtAccessTokenExpires!,
@@ -269,6 +278,13 @@ export const verifyOtpCodeController = async (
     });
   }
   const isOtpMatching = verifyHashedField(otpCode, user.saltOtp, user.otpCode);
+  const isOtpExpired = new Date() > new Date(user?.otpExpiration!);
+  /** check in the list of admin emails and assign a proper role */
+  const userRole = ADMIN_EMAILS.includes(user.email)
+    ? USER_ROLE.ADMIN
+    : USER_ROLE.USER;
+
+  const role = await getRoleByName(userRole);
 
   if (!isOtpMatching) {
     return createHttpException({
@@ -278,7 +294,6 @@ export const verifyOtpCodeController = async (
     });
   }
 
-  const isOtpExpired = new Date() > new Date(user?.otpExpiration!);
   if (isOtpExpired) {
     return createHttpException({
       status: HTTP_STATUS_CODE.BAD_REQUEST,
@@ -287,7 +302,22 @@ export const verifyOtpCodeController = async (
     });
   }
 
-  await verifyOtpCode(email);
+  if (!role) {
+    return createHttpException({
+      status: HTTP_STATUS_CODE.BAD_REQUEST,
+      message: "The role doesn't exist!",
+      method: "verifyOtpCodeController",
+    });
+  }
+
+  const verifiedOtpUser = await verifyOtpCode(email);
+
+  if (verifiedOtpUser.isVerifiedOtp) {
+    /*crete the user profile only if the otp code is verified by email */
+    await createUserProfile(verifiedOtpUser.id);
+    /* assign a role to the user only if the user account is verified otp*/
+    await assignRoleToUser(role.id, user.id);
+  }
 
   return reply.code(HTTP_STATUS_CODE.OK).send(
     createSuccessResponse({
@@ -424,7 +454,7 @@ export const refreshTokenController = (
         id: decodedRefreshToken.id,
         firstName: decodedRefreshToken.firstName,
         lastName: decodedRefreshToken.lastName,
-        otpCode: decodedRefreshToken.otpCode,
+        role: decodedRefreshToken.role,
       },
       expiresAccessToken:
         environmentVariables.authentication.jwtAccessTokenExpires,

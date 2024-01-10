@@ -120,15 +120,6 @@ export const verifyOtpCode = async (
         isVerifiedOtp: true,
       },
     });
-
-    /** Create user in users table after OTP verification has been done */
-
-    await prisma.user.create({
-      data: {
-        userId: createdUser.id,
-      },
-    });
-
     return createdUser;
   } catch (error) {
     const errorResponse = error as Error;
@@ -136,6 +127,28 @@ export const verifyOtpCode = async (
       status: HTTP_STATUS_CODE.BAD_REQUEST,
       message: errorResponse.message,
       method: "verifyOtpCode",
+    });
+  }
+};
+/**
+ * Create the user profile and update users table after OTP verification has been done
+ *
+ *  */
+export const createUserProfile = async (
+  userId: string
+): Promise<TSignUpUserResponse | void> => {
+  try {
+    await prisma.user.create({
+      data: {
+        userId,
+      },
+    });
+  } catch (error) {
+    const errorResponse = error as Error;
+    throw createHttpException({
+      status: HTTP_STATUS_CODE.BAD_REQUEST,
+      message: errorResponse.message,
+      method: "createUserProfile",
     });
   }
 };

@@ -1,5 +1,5 @@
-import { fitnessExercises } from "./mocks/exercises";
-import prisma from "./src/config/prisma";
+import { fitnessExercises } from "../mocks/exercises";
+import prisma from "../src/config/prisma";
 
 /**
  * helper function used to populate "fitness_exercises" db table with data

@@ -16,7 +16,7 @@ export const generateTokens = ({
   expiresAccessToken?: string;
   expiresRefreshToken?: string;
 }): { accessToken: string | undefined; refreshToken: string | undefined } => {
-  const { email, id, firstName, lastName, otpCode } = userInfo;
+  const { email, id, firstName, lastName, role } = userInfo;
 
   const accessToken = expiresAccessToken
     ? request.jwt.sign(
@@ -25,7 +25,7 @@ export const generateTokens = ({
           id,
           firstName,
           lastName,
-          otpCode,
+          role,
         },
         { expiresIn: expiresAccessToken }
       )
@@ -38,7 +38,7 @@ export const generateTokens = ({
           id,
           firstName,
           lastName,
-          otpCode,
+          role,
         },
         { expiresIn: expiresRefreshToken }
       )
