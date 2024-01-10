@@ -16,7 +16,7 @@ const hasPermission = (
 ) => {
   return userPermissions.some(
     (permission: IUserPermission) =>
-      permission.name === requiredPermission && permission.value === true
+      permission.name === requiredPermission && permission.value
   );
 };
 

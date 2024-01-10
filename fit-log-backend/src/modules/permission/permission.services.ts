@@ -12,7 +12,7 @@ export const getUserPermissions = async (userId: string) => {
         role: {
           users: {
             some: {
-              userId: userId,
+              userId,
             },
           },
         },

@@ -50,7 +50,7 @@ export const signUpUserService = async (
  */
 export const getUserByEmail = async (
   email: string
-): Promise<TSignUpUserResponse | null> => {
+): Promise<TSignUpUserResponse | void | null> => {
   try {
     return await prisma.auth.findUnique({
       where: {

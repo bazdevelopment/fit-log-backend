@@ -10,6 +10,7 @@ const transformedUserPermissions = Object.keys(PERMISSIONS_NAME).map(
   (name) => name
 );
 
+/** Populate the permissions table */
 const seedPermissions = async () => {
   for (const userPermission of transformedUserPermissions) {
     await prisma.permission.create({

@@ -10,6 +10,7 @@ const roles = [
   { id: generateUniqueId(), name: "ADMIN" },
 ];
 
+/** populate the roles table */
 const seedRoles = async () => {
   for (const role of roles) {
     await prisma.role.create({

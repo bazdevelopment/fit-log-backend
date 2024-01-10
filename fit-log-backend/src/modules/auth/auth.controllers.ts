@@ -39,7 +39,6 @@ import { generateTokens } from "../../utils/generate-tokens";
 import { ADMIN_EMAILS } from "../../config/permissions";
 import { USER_ROLE } from "../../enums/user-role";
 import { assignRoleToUser, getRoleByName } from "../role/role.services";
-import { ROLE_NAME } from "@prisma/client";
 /**
  *  signUpController
  *  This asynchronous function serves as the controller for user registration.
