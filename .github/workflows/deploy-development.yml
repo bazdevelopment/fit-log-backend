@@ -69,7 +69,7 @@ jobs:
           PLT_SERVER_CORS_ORIGIN: ${{ vars.PLT_SERVER_CORS_ORIGIN }}
           PLT_AUTHORIZATION_JWT_NAMESPACE: ${{ vars.PLT_AUTHORIZATION_JWT_NAMESPACE }}
           PLT_AUTHORIZATION_JWT_JWKS_ALLOWED_DOMAINS: ${{ vars.PLT_AUTHORIZATION_JWT_JWKS_ALLOWED_DOMAINS }}
-          DATABASE_URL: ${{ steps.create-branch-db.outputs.db_url }}/neondb
+          DATABASE_URL: ${{ steps.create-branch-db.outputs.db_url }}
 
 
   comment-on-pr:
