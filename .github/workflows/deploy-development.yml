@@ -57,7 +57,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           platformatic_workspace_id: ${{ secrets.PLATFORMATIC_DYNAMIC_WORKSPACE_ID }}
           platformatic_workspace_key: ${{ secrets.PLATFORMATIC_DYNAMIC_WORKSPACE_API_KEY }}
-          platformatic_config_path: ./blog-api/platformatic.db.json
+          platformatic_config_path: ./fit-log-backend/platformatic.db.json
           post_pr_comment: false
           secrets: DATABASE_URL
         env:
