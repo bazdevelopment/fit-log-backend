@@ -5,6 +5,7 @@
   "main": "app.ts",
   "scripts": {
     "dev": "tsx watch src/app.ts",
+    "build": "tsc && prisma generate && prisma migrate deploy",
     "seed:exercise": "tsx seeds/seed-exercise.ts",
     "seed:roles": "tsx seeds/seed-roles.ts",
     "seed:permissions": "tsx seeds/seed-permissions.ts",
