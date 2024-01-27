@@ -40,7 +40,7 @@ jobs:
         id: create-branch-db
         uses: neondatabase/create-branch-action@v3
         with:
-          project_id: ${{ vars.NEON_PROJECT_ID }}
+          project_id: ${{ secrets.NEON_PROJECT_ID }}
           branch_name: ${{ github.head_ref }}
           api_key: ${{ secrets.NEON_API_KEY }}
           username: ${{ secrets.NEON_DB_USER }}
