@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       platformatic_app_url: ${{ steps.deploy-preview-app.outputs.platformatic_app_url }}
-      neon_branch_url: https://console.neon.tech/app/projects/${{ vars.NEON_PROJECT_ID }}/branches/${{ steps.create-branch-db.outputs.branch_id }}
+      neon_branch_url: https://console.neon.tech/app/projects/${{ secrets.NEON_PROJECT_ID }}/branches/${{ steps.create-branch-db.outputs.branch_id }}
     defaults:
       run:
         working-directory: fit-log-backend
