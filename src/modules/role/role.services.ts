@@ -1,4 +1,4 @@
-import { ROLE_NAME } from "@prisma/client";
+// import { ROLE_NAME } from "@prisma/client";
 import prisma from "../../config/prisma";
 import { HTTP_STATUS_CODE } from "../../enums/http-status-codes";
 import { ICustomError, createHttpException } from "../../utils/httpResponse";
