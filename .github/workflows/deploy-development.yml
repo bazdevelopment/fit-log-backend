@@ -47,6 +47,7 @@ jobs:
           password: ${{ secrets.NEON_DB_PASSWORD }}
 
 
+
       - name: Install Platformatic app dependencies
         run: npm install --omit=dev
 
