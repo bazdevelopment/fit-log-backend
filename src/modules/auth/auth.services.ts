@@ -28,7 +28,7 @@ export const signUpUserService = async (
         otpCode: hashOtp,
         saltOtp,
         otpExpiration: computeFutureTimestamp(10),
-      },
+      } as any,
     });
     return result as TSignUpUserResponse;
   } catch (error: unknown) {

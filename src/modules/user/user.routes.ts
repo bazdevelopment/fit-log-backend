@@ -35,6 +35,6 @@ export const userRoutes = async (app: FastifyInstance) => {
         description: "Endpoint user to update the user info",
       },
     },
-    updateUserByUserIdController
+    updateUserByUserIdController as any
   );
 };
