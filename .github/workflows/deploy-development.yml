@@ -26,15 +26,15 @@ jobs:
       - name: Checkout application project repository
         uses: actions/checkout@v3
 
-      - name: Delete any existing Neon database for this branch
-        uses: neondatabase/delete-branch-by-name-action@main
-        with:
-          project_id: ${{ vars.NEON_PROJECT_ID }}
-          branch_name: ${{ github.head_ref }}
-          api_key: ${{ secrets.NEON_API_KEY }}
+      # - name: Delete any existing Neon database for this branch
+      #   uses: neondatabase/delete-branch-by-name-action@main
+      #   with:
+      #     project_id: ${{ vars.NEON_PROJECT_ID }}
+      #     branch_name: ${{ github.head_ref }}
+      #     api_key: ${{ secrets.NEON_API_KEY }}
 
-      - name: Wait for any existing Neon branch database to be deleted
-        run: sleep 10
+      # - name: Wait for any existing Neon branch database to be deleted
+      #   run: sleep 10
 
       - name: Create Neon branch database
         id: create-branch-db
