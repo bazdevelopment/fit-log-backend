@@ -71,6 +71,11 @@ jobs:
           PLT_AUTHORIZATION_JWT_JWKS_ALLOWED_DOMAINS: ${{ vars.PLT_AUTHORIZATION_JWT_JWKS_ALLOWED_DOMAINS }}
           DATABASE_URL: ${{ steps.create-branch-db.outputs.db_url }}
 
+      - name: Another Step
+        run: |
+         echo ${{ steps.create-branch-db.outputs.db_url }}
+
+
 
   comment-on-pr:
     permissions:
