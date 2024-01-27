@@ -1,4 +1,4 @@
-import { ROLE_NAME } from "@prisma/client";
+// import { ROLE_NAME } from "@prisma/client";
 import prisma from "../src/config/prisma";
 import { generateUniqueId } from "../src/utils/generateUniqueId";
 /**
@@ -14,7 +14,7 @@ const roles = [
 const seedRoles = async () => {
   for (const role of roles) {
     await prisma.role.create({
-      data: { id: role.id, name: role.name as ROLE_NAME },
+      data: { id: role.id, name: role.name as any },
     });
   }
 };

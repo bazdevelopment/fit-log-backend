@@ -7,7 +7,7 @@ import { ICustomError, createHttpException } from "../../utils/httpResponse";
  * Retrieve a role from the database by its name.
  */
 export const getRoleByName = async (
-  roleName: ROLE_NAME
+  roleName: any //ROLE_NAME
 ): Promise<{ id: string; name: string } | null> => {
   try {
     return await prisma.role.findUnique({
