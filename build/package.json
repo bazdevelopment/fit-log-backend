@@ -4,8 +4,10 @@
     "description": "",
     "main": "app.ts",
     "scripts": {
-        "dev": "tsx watch src/app.ts",
-        "build": "tsc && prisma generate && prisma migrate deploy",
+        "start:local": "NODE_ENV=local tsx watch src/app.ts",
+        "start:dev": "NODE_ENV=development tsx watch src/app.ts",
+        "start:prod": "NODE_ENV=production node build/src/app.js",
+        "build": "tsc",
         "seed:exercise": "tsx seeds/seed-exercise.ts",
         "seed:roles": "tsx seeds/seed-roles.ts",
         "seed:permissions": "tsx seeds/seed-permissions.ts",

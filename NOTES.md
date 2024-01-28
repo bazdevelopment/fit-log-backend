@@ -13,3 +13,7 @@ npx prisma migrate dev --name init
 ### Initialize typescript
 npx tsc --init
 
+### Build command (not sure if npx prisma generate && npx prisma migrate are needed)
+"build": "tsc && npx prisma generate && npx prisma migrate"
+
+

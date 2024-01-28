@@ -111,7 +111,6 @@ export async function buildServer() {
    * Register the schemas available for validation within the Fastify app, ensuring that incoming requests conform to the specified data structures.
    */
   registerSchemas(app, [...authSchemas, ...userSchemas, ...exerciseSchemas]);
-
   app.register(swagger, {
     swagger: {
       info: {

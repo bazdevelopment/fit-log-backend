@@ -13,12 +13,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.assignRoleToUser = exports.getRoleByName = void 0;
+// import { ROLE_NAME } from "@prisma/client";
 const prisma_1 = __importDefault(require("../../config/prisma"));
 const httpResponse_1 = require("../../utils/httpResponse");
 /**
  * Retrieve a role from the database by its name.
  */
-const getRoleByName = (roleName) => __awaiter(void 0, void 0, void 0, function* () {
+const getRoleByName = (roleName //ROLE_NAME
+) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         return yield prisma_1.default.role.findUnique({
             where: {

@@ -1,5 +1,5 @@
 ### Register user: /api/auth/register
-POST http://localhost:3000/api/auth/register
+POST {{baseUrl}}/api/auth/register
 Content-Type: application/json
 
 
@@ -12,7 +12,7 @@ Content-Type: application/json
 
 
 ###  Login user: /api/auth/login
-POST http://localhost:3000/api/auth/login
+POST {{baseUrl}}/api/auth/login
 Content-Type: application/json
 
 {
@@ -22,10 +22,10 @@ Content-Type: application/json
 
 
 ###  Logout user: /api/auth/logout
-POST http://localhost:3000/api/auth/logout
+POST {{baseUrl}}/api/auth/logout
 
 ###  Verify OTP code /api/auth/verify-otp
-POST http://localhost:3000/api/auth/verify-otp
+POST {{baseUrl}}/api/auth/verify-otp
 Content-Type: application/json
 
 {
@@ -35,7 +35,7 @@ Content-Type: application/json
 
 
 ###  Resend OTP code /api/auth/resend-otp
-POST http://localhost:3000/api/auth/resend-otp
+POST {{baseUrl}}/api/auth/resend-otp
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJhemlsdWNtQGdtYWlsLmNvbSIsImlkIjoibHF3cWM3Zjh5M2NhM2FveiIsImZpcnN0TmFtZSI6Imxxd3FjN2Y4eTNjYTNhb3oiLCJsYXN0TmFtZSI6IkJhemlsdWMiLCJvdHBDb2RlIjoiZDc0YTlkOGRiNThlZTRmZWI4MDdkMTA4YTU1MThlMjc4ODkwMjllZDU3ZjM3ZDExZTQ5YTAxMjc5YThkNzMwMjk4N2E1ZGY2OTA4NjVlMzY1OTNiMGUzZGEwYWY3YTJiMGQ0OTJlOTQzODM2Y2JiYmUyMjE4Njg4ODdhODliMjQiLCJpYXQiOjE3MDQyNjI0Mjd9.5JMNYH6HGX5SbcQUfNOnQR8GVOiWzULhG3BRYh0ActY
 
@@ -45,7 +45,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJhemlsd
 
 
 ###  Forgot password code /api/auth/forgot-password
-POST http://localhost:3000/api/auth/forgot-password
+POST {{baseUrl}}/api/auth/forgot-password
 Content-Type: application/json
 
 {
@@ -54,7 +54,7 @@ Content-Type: application/json
 
 
 ###  Reset password /api/auth/reset-password
-POST http://localhost:3000/api/auth/reset-password
+POST {{baseUrl}}/api/auth/reset-password
 Content-Type: application/json
 
 {
@@ -67,7 +67,7 @@ Content-Type: application/json
 
 
 ###  Reset password /api/auth/reset-password
-POST http://localhost:3000/api/auth/refresh-token
+POST {{baseUrl}}/api/auth/refresh-token
 
 ###  Cleanup unverified OTP user accounts (isVerifiedOTp -> false)
-POST http://localhost:3000/api/auth/cleanup-otp-users
+POST {{baseUrl}}/api/auth/cleanup-otp-users
