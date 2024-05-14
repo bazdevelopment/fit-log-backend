@@ -23,6 +23,7 @@
     "@fastify/swagger": "^8.13.0",
     "@fastify/swagger-ui": "^2.0.1",
     "@prisma/client": "^5.7.0",
+    "@serialport/parser-readline": "^12.0.0",
     "crypto": "^1.0.1",
     "dotenv": "^16.3.1",
     "fastify": "^4.24.3",
@@ -34,6 +35,8 @@
     "pino-pretty": "^10.2.3",
     "platformatic": "^1.17.0",
     "resend": "^2.0.0",
+    "serialport": "^12.0.0",
+    "socket.io": "^4.7.5",
     "zod": "^3.22.4"
   },
   "devDependencies": {

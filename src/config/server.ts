@@ -91,7 +91,7 @@ export async function buildServer() {
   app.register(fastifytJwt, {
     secret: environmentVariables.authentication.jwtSecret!,
   });
-
+  /* REGISTER fastify websocket plugin */
   app.addHook(
     "preHandler",
     (request: FastifyRequest, _reply: FastifyReply, next) => {
@@ -101,7 +101,7 @@ export async function buildServer() {
     }
   );
 
-  //! check if fastify cookie is needed
+  // //! check if fastify cookie is needed
   app.register(fastifyCookie, {
     secret: environmentVariables.authentication.cookieSecret!,
     hook: "preHandler",
@@ -163,11 +163,7 @@ export async function buildServer() {
   });
 
   app.register(fastifyCors, {
-    origin: [
-      `http://localhost:${environmentVariables.default.port}`,
-      // `http://127.0.0.1:${port}`,
-      // process.env.HEROKU_URL
-    ],
+    origin: [`http://192.168.100.3:3000`],
     methods: ["GET", "PUT", "PATCH", "POST", "DELETE"],
   });
   /* CRON JOBS */

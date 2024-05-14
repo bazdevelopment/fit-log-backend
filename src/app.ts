@@ -1,6 +1,8 @@
+import { startArduinoCommunication } from "./config/arduino-serial";
 import { environmentVariables } from "./config/environment-variables";
 import { buildServer } from "./config/server";
 import dotenv from "dotenv";
+import { initializeSocketServer } from "./config/socket-io-connection";
 dotenv.config();
 
 const signals = ["SIGINT", "SIGTERM"];
@@ -22,6 +24,9 @@ async function main() {
     port: Number(environmentVariables.default.port),
     host: environmentVariables.default.host,
   });
+  initializeSocketServer();
+  startArduinoCommunication();
+
   /** enable all the jobs */
   app.cron.startAllJobs();
 
