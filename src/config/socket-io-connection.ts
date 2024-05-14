@@ -39,5 +39,8 @@ export function getConnectedClients(): Socket[] {
 }
 /** Function used return an instance of SocketIO server */
 export function getSocketServer(): Server {
+  if (!io) {
+    throw new Error("SocketIO server has not been initialized.");
+  }
   return io;
 }
