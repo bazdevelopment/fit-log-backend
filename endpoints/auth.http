@@ -29,7 +29,7 @@ POST {{baseUrl}}/api/auth/verify-otp
 Content-Type: application/json
 
 {
-  "otpCode":"212678",
+  "otpCode":"802182",
   "email":"bazilucm@gmail.com"
 }
 
