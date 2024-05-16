@@ -4,8 +4,7 @@ import { buildJsonSchemas } from "fastify-zod";
 const signUpUserFields = {
   id: z.string(),
   email: z.string().email(),
-  firstName: z.string().min(2),
-  lastName: z.string().min(2),
+  userName: z.string().min(6),
 };
 
 export const signUpUserSchema = z.object({
@@ -23,8 +22,7 @@ export const signUpUserResponse = z.object({
   ...signUpUserFields,
   password: z.string().min(6),
   salt: z.string(),
-  firstName: z.string(),
-  lastName: z.string(),
+  userName: z.string(),
   passwordResetToken: z.string().nullable(),
   passwordResetExpires: z.date().nullable(),
   otpCode: z.string(),

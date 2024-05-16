@@ -16,8 +16,7 @@ export const getUserById = async (userId: string) => {
         select: {
           id: true,
           email: true,
-          firstName: true,
-          lastName: true,
+          userName: true,
           isVerifiedOtp: true,
         },
       }),

@@ -50,7 +50,7 @@ export const signUpController = async (
   }>,
   reply: FastifyReply
 ): Promise<void | ICustomError> => {
-  const { email, password, firstName, lastName } = request.body;
+  const { email, password, userName } = request.body;
 
   const otpCode = generateOTPCode();
 
@@ -59,7 +59,7 @@ export const signUpController = async (
 
   if (existingUser) {
     return createHttpException({
-      status: HTTP_STATUS_CODE.BAD_REQUEST,
+      status: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
       message: "User already exists!",
       method: "signUpController",
     });
@@ -73,8 +73,7 @@ export const signUpController = async (
     email,
     id: userUniqueId,
     password,
-    firstName,
-    lastName,
+    userName,
     otpCode,
   });
 
@@ -83,7 +82,7 @@ export const signUpController = async (
   await sendOtpCodeMail({
     receiverEmail: email,
     subject: "OTP verification code",
-    htmlTemplate: sendOtpCodeTemplate(firstName, otpCode),
+    htmlTemplate: sendOtpCodeTemplate(userName, otpCode),
   });
 
   return reply.code(HTTP_STATUS_CODE.CREATED).send(
@@ -154,8 +153,7 @@ export const signInController = async (
     userInfo: {
       email,
       id: registeredUser.id,
-      firstName: registeredUser.firstName,
-      lastName: registeredUser.lastName,
+      userName: registeredUser.userName,
       role: userRole,
     },
     expiresAccessToken:
@@ -234,7 +232,7 @@ export const resendOtpCodeController = async (
   await sendOtpCodeMail({
     receiverEmail: email,
     subject: "Resent OTP verification code",
-    htmlTemplate: sendOtpCodeTemplate(user.firstName, newOtpCode),
+    htmlTemplate: sendOtpCodeTemplate(user.userName, newOtpCode),
   });
 
   await resendOtpCode({
@@ -367,7 +365,7 @@ export const forgotPasswordController = async (
     receiverEmail: email,
     subject: "Forgot password",
     htmlTemplate: generateForgotPasswordTemplate(
-      userUpdated.firstName,
+      userUpdated.userName,
       resetOtpToken
     ),
   });
@@ -451,8 +449,7 @@ export const refreshTokenController = (
       userInfo: {
         email: decodedRefreshToken.email,
         id: decodedRefreshToken.id,
-        firstName: decodedRefreshToken.firstName,
-        lastName: decodedRefreshToken.lastName,
+        userName: decodedRefreshToken.userName,
         role: decodedRefreshToken.role,
       },
       expiresAccessToken:

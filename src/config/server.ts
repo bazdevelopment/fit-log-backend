@@ -58,14 +58,12 @@ declare module "@fastify/jwt" {
     payload: {
       id: string;
       email: string;
-      firstName: string;
-      lastName: string;
+      userName: string;
       role: string;
     }; // payload type is used for signing and verifying
     user: {
       id: string;
-      firstName: string;
-      lastName: string;
+      userName: string;
       email: string;
       role: string;
     }; // user type is return type of `request.user` object

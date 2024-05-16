@@ -20,8 +20,7 @@ export type TResendOtpFields = z.infer<typeof emailSchema>;
 export interface IEncodedToken {
   email: string;
   id: string;
-  firstName: string;
-  lastName: string;
+  userName: string;
   role: string;
 }
 

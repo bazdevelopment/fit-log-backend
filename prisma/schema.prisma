@@ -20,8 +20,7 @@ model Auth {
   email                String    @unique
   password             String
   salt                 String
-  firstName            String    @map("first_name")
-  lastName             String    @map("last_name")
+  userName             String    @map("user_name")
   passwordResetToken   String?   @map("password_reset_token")
   passwordResetExpires DateTime? @map("password_reset_expires")
   otpCode              String    @map("otp_code")
