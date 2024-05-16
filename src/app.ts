@@ -3,8 +3,7 @@ import { environmentVariables } from "./config/environment-variables";
 import { buildServer } from "./config/server";
 import dotenv from "dotenv";
 import { initializeSocketServer } from "./config/socket-io-connection";
-dotenv.config();
-
+dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 const signals = ["SIGINT", "SIGTERM"];
 
 /**
@@ -25,7 +24,7 @@ async function main() {
     host: environmentVariables.default.host,
   });
   initializeSocketServer();
-  startArduinoCommunication();
+  // startArduinoCommunication();
 
   /** enable all the jobs */
   app.cron.startAllJobs();

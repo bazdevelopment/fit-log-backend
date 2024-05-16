@@ -12,7 +12,7 @@ interface ISuccessResponse {
   success: true;
   statusCode: number;
   message: string;
-  data?: { [key: string]: any };
+  record?: { [key: string]: any };
 }
 
 /**
@@ -55,5 +55,5 @@ export const createSuccessResponse = ({
   success: true,
   statusCode: status,
   message: message ?? "",
-  data,
+  record: data,
 });
