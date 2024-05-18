@@ -195,8 +195,9 @@ export async function buildServer() {
           "Bearer ",
           ""
         );
-        const refreshToken = request.cookies["refresh_token"];
-        if (!accessToken && !refreshToken) {
+
+        // const refreshToken = request.cookies["refresh_token"];
+        if (!accessToken) {
           return createHttpException({
             status: HTTP_STATUS_CODE.UNAUTHORIZED,
             message: "Access Denied. No token provided.",

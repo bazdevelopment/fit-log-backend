@@ -3,6 +3,7 @@ import {
   IDecodedRefreshToken,
   TForgotPasswordFields,
   TOtpVerification,
+  TRefreshTokenBody,
   TResendOtpFields,
   TResetPasswordFields,
   TSignInUser,
@@ -173,7 +174,8 @@ export const signInController = async (
         status: HTTP_STATUS_CODE.CREATED,
         message: "Successfully logged in!",
         data: {
-          token: accessToken,
+          accessToken,
+          refreshToken,
         },
       })
     );
@@ -260,7 +262,6 @@ export const verifyOtpCodeController = async (
   reply: FastifyReply
 ): Promise<void | ICustomError> => {
   const { email, otpCode } = request.body;
-
   const user = await prisma.auth.findUnique({
     where: {
       email,
@@ -269,7 +270,7 @@ export const verifyOtpCodeController = async (
 
   if (!user) {
     return createHttpException({
-      status: HTTP_STATUS_CODE.BAD_REQUEST,
+      status: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
       message: "User with this email and otpCode doesn't exist!",
       method: "verifyOtpCodeController",
     });
@@ -285,7 +286,7 @@ export const verifyOtpCodeController = async (
 
   if (!isOtpMatching) {
     return createHttpException({
-      status: HTTP_STATUS_CODE.BAD_REQUEST,
+      status: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
       message: "OTP does't match, try again!",
       method: "verifyOtpCode",
     });
@@ -308,7 +309,6 @@ export const verifyOtpCodeController = async (
   }
 
   const verifiedOtpUser = await verifyOtpCode(email);
-
   if (verifiedOtpUser.isVerifiedOtp) {
     /*crete the user profile only if the otp code is verified by email */
     await createUserProfile(verifiedOtpUser.id);
@@ -428,11 +428,15 @@ export const resetPasswordController = async (
  * Controller used to generate a new access token based on the lifetime of the refresh token
  */
 export const refreshTokenController = (
-  request: FastifyRequest,
+  request: FastifyRequest<{
+    Body: TRefreshTokenBody;
+  }>,
   reply: FastifyReply
 ) => {
   try {
-    const refreshToken = request.cookies["refresh_token"];
+    // const refreshToken = request.cookies["refresh_token"];
+    const { refreshToken } = request.body;
+
     if (!refreshToken) {
       return createHttpException({
         status: HTTP_STATUS_CODE.BAD_REQUEST,
@@ -464,6 +468,10 @@ export const refreshTokenController = (
         createSuccessResponse({
           status: HTTP_STATUS_CODE.CREATED,
           message: "Successfully refresh token!",
+          data: {
+            accessToken: newAccessToken,
+            refreshToken,
+          },
         })
       );
   } catch (error: unknown) {
@@ -471,7 +479,7 @@ export const refreshTokenController = (
     return createHttpException({
       status: HTTP_STATUS_CODE.BAD_REQUEST,
       message: errorResponse.message,
-      method: "resetPasswordController",
+      method: "resetTokenController",
     });
   }
 };
