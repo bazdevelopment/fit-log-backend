@@ -48,6 +48,10 @@ export const emailSchema = z.object({
   email: z.string().email(),
 });
 
+export const refreshTokenSchema = z.object({
+  refreshToken: z.string(),
+});
+
 export const { schemas: authSchemas, $ref } = buildJsonSchemas(
   {
     signUpUserJsonSchema: signUpUserSchema.omit({ id: true, otpCode: true }),
@@ -56,6 +60,7 @@ export const { schemas: authSchemas, $ref } = buildJsonSchemas(
     forgotPasswordJsonSchema: emailSchema,
     resendOtpCodeJsonSchema: emailSchema,
     resetPasswordJsonSchema: resetPasswordSchema,
+    refreshTokenJsonSchema: refreshTokenSchema,
   },
   { $id: "authSchema" }
 );

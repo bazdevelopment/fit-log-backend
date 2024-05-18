@@ -195,8 +195,9 @@ export async function buildServer() {
           "Bearer ",
           ""
         );
-        const refreshToken = request.cookies["refresh_token"];
-        if (!accessToken && !refreshToken) {
+
+        // const refreshToken = request.cookies["refresh_token"];
+        if (!accessToken) {
           return createHttpException({
             status: HTTP_STATUS_CODE.UNAUTHORIZED,
             message: "Access Denied. No token provided.",
@@ -207,6 +208,7 @@ export async function buildServer() {
         const decodedAccessToken: IDecodedRefreshToken = request.jwt.verify(
           accessToken as string
         );
+        console.log("decodedAccessToken", decodedAccessToken);
         request.user = decodedAccessToken;
       } catch (error: unknown) {
         const errorResponse = error as ICustomError;

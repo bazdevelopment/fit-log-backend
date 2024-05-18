@@ -121,6 +121,7 @@ export const authRoutes = async (app: FastifyInstance) => {
     AUTH_ROUTES.REFRESH_TOKEN_ROUTE,
     {
       schema: {
+        body: $ref("refreshTokenJsonSchema"),
         tags: [SWAGGER_TAGS.AUTH],
         summary: "Refresh token",
         description: "Endpoint to handle refresh token",

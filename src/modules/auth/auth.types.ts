@@ -2,6 +2,7 @@ import z from "zod";
 import {
   emailSchema,
   otpVerificationSchema,
+  refreshTokenSchema,
   resetPasswordSchema,
   signInUserSchema,
   signUpUserResponse,
@@ -16,6 +17,7 @@ export type TOtpVerification = z.infer<typeof otpVerificationSchema>;
 export type TResetPasswordFields = z.infer<typeof resetPasswordSchema>;
 export type TForgotPasswordFields = z.infer<typeof emailSchema>;
 export type TResendOtpFields = z.infer<typeof emailSchema>;
+export type TRefreshTokenBody = z.infer<typeof refreshTokenSchema>;
 
 export interface IEncodedToken {
   email: string;

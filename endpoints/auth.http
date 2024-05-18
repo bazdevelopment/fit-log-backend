@@ -6,7 +6,7 @@ Content-Type: application/json
 {
   "email": "bazilucm@gmail.com",
   "userName":"marian b",
-  "password":"123456"
+  "password":"123222456"
 }
 
 
@@ -28,7 +28,7 @@ POST {{baseUrl}}/api/auth/verify-otp
 Content-Type: application/json
 
 {
-  "otpCode":"802182",
+  "otpCode":"360908",
   "email":"bazilucm@gmail.com"
 }
 
@@ -67,6 +67,11 @@ Content-Type: application/json
 
 ###  Reset password /api/auth/reset-password
 POST {{baseUrl}}/api/auth/refresh-token
+Content-Type: application/json
+
+{
+ "refreshToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJhemlsdWNtQGdtYWlsLmNvbSIsImlkIjoibHdidW1hZDlkOG52ZjFnNSIsInVzZXJOYW1lIjoibWFyaWFuYmIiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3MTYwMzg4NTksImV4cCI6MTcxODYzMDg1OX0.CDAMJsBDKpP0BUNJ-ECOSt521UW6eO-b_lLkJHeZpnY"
+}
 
 ###  Cleanup unverified OTP user accounts (isVerifiedOTp -> false)
 POST {{baseUrl}}/api/auth/cleanup-otp-users
