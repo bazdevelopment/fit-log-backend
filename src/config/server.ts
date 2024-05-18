@@ -208,7 +208,6 @@ export async function buildServer() {
         const decodedAccessToken: IDecodedRefreshToken = request.jwt.verify(
           accessToken as string
         );
-        console.log("decodedAccessToken", decodedAccessToken);
         request.user = decodedAccessToken;
       } catch (error: unknown) {
         const errorResponse = error as ICustomError;
