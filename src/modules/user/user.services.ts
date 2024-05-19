@@ -26,10 +26,11 @@ export const getUserById = async (userId: string) => {
         },
         select: {
           avatarImage: true,
-          sex: true,
+          gender: true,
           birthDate: true,
           nationality: true,
           phoneNumber: true,
+          isOnboarded: true,
         },
       }),
     ]);

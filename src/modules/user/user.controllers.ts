@@ -17,6 +17,7 @@ export const getCurrentUserController = async (
   const currentUser = await getUserById(userId);
   return reply.code(HTTP_STATUS_CODE.ACCEPTED).send(
     createSuccessResponse({
+      message: "Successfully fetched user info details",
       status: HTTP_STATUS_CODE.ACCEPTED,
       data: currentUser,
     })
@@ -39,12 +40,11 @@ export const updateUserByUserIdController = async (
   const { userId } = request.params;
   const userInfoFields = request.body;
 
-  const updatedUser = await updateUserByUserId(userId, userInfoFields);
+  await updateUserByUserId(userId, userInfoFields);
   return reply.code(HTTP_STATUS_CODE.ACCEPTED).send(
     createSuccessResponse({
       status: HTTP_STATUS_CODE.ACCEPTED,
       message: "User updated successfully!",
-      data: updatedUser,
     })
   );
 };

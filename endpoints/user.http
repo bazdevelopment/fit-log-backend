@@ -3,14 +3,15 @@ GET  {{baseUrl}}/api/user/currentUser
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJhemlsdWNtQGdtYWlsLmNvbSIsImlkIjoibHF6anluY3h4cmpibWxpYyIsImZpcnN0TmFtZSI6Imxxemp5bmN4eHJqYm1saWMiLCJsYXN0TmFtZSI6IkJhemlsdWMiLCJvdHBDb2RlIjoiNGM1Mjg4OThkZDQyYWFlMWI4ZTdjNmI5ODkwMzRkYjc2Y2IwNmQyODYxNTI3ODkyNzNhYTgxZjkwNDVhMDFlNDIzN2E4ODI3ZDAyMDJiMzA3MDJhMzE2N2Q0OTBkMWI1NTA3YjgzYTdhYzZlY2JiODk1MWExYWE0Mjg3NDI4NTkiLCJpYXQiOjE3MDQzOTM2NTksImV4cCI6MTcwNDQyOTY1OX0.hWR4shAUEIAh2nlEF6yVKdPlhinUAjIneMzPXZCQqsY
 
 ### Get current  user info : /api/user/currentUser
-PATCH  {{baseUrl}}/api/user/lqzjyncxxrjbmlic
+PATCH  {{baseUrl}}/api/user/lwc6rbym0unoehe7
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJhemlsdWNtQGdtYWlsLmNvbSIsImlkIjoibHF6anluY3h4cmpibWxpYyIsImZpcnN0TmFtZSI6Imxxemp5bmN4eHJqYm1saWMiLCJsYXN0TmFtZSI6IkJhemlsdWMiLCJvdHBDb2RlIjoiNGM1Mjg4OThkZDQyYWFlMWI4ZTdjNmI5ODkwMzRkYjc2Y2IwNmQyODYxNTI3ODkyNzNhYTgxZjkwNDVhMDFlNDIzN2E4ODI3ZDAyMDJiMzA3MDJhMzE2N2Q0OTBkMWI1NTA3YjgzYTdhYzZlY2JiODk1MWExYWE0Mjg3NDI4NTkiLCJpYXQiOjE3MDQzOTM2NTksImV4cCI6MTcwNDQyOTY1OX0.hWR4shAUEIAh2nlEF6yVKdPlhinUAjIneMzPXZCQqsY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJhemlsdWNtQGdtYWlsLmNvbSIsImlkIjoibHdjNnJieW0wdW5vZWhlNyIsInVzZXJOYW1lIjoiYmF6bHVjbWkiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3MTYwOTc2MjksImV4cCI6MTcxNjA5NzgwOX0.OslJpYjaKQccH4k25DZbht8-OhQO8dxgCvz73sne1zA
 
 {
-  "avatarImage":"https://avatar.jpg",
-  "phoneNumber": "0757357597",
-  "sex":"Male",
-  "nationality":"Romania",
-  "birthDate":"1998-07-29T21:00:00.000Z"
+  "gender":"Male",
+  "goal":["Learn new things", "Gain knowledge"],
+  "weight":100,
+  "height":120,
+  "activityLevel":"Intermediate",
+  "isOnboarded":true
 }
