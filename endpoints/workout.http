@@ -1,0 +1,46 @@
+### Create a new workout: /api/workout
+POST {{baseUrl}}/api/workout
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJhemlsdWNtQGdtYWlsLmNvbSIsImlkIjoibHdnb2IzMW1ydmNtbGE0cSIsInVzZXJOYW1lIjoiYmF6aWx1Y20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3MTY0Mzk2NTMsImV4cCI6MTcxNjQ3NTY1M30.3RK2MiONpocWbSh3r3aBLQFBueCl8Qknuq6Btn_QMHw
+Content-Type: application/json
+
+{
+  "userId": "lwgob31mrvcmla4q",
+  "name":"Workout rcc5",
+  "musclesGroupTarget":["Biceps"],
+  "creationDate":"2024-05-26"
+}
+
+### add a new exercise to an workout: /api/workout/:workoutId/exercises/:exerciseId
+POST {{baseUrl}}/api/workout/68bbdc18-44d7-4665-bf71-79047c112ce4/exercises/2355
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJhemlsdWNtQGdtYWlsLmNvbSIsImlkIjoibHdnb2IzMW1ydmNtbGE0cSIsInVzZXJOYW1lIjoiYmF6aWx1Y20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3MTY2MzIyNjUsImV4cCI6MTcxNjY2ODI2NX0.FBzakYKuYuut_Jlnqa1PRyyHCnlTl6nW2HBPagugNF0
+### add a new set to an existing workout /api/workout/workout-exercise-set/:workoutExerciseId
+POST {{baseUrl}}/api/workout/workout-exercise-set/2cf8696a-4d8f-41b2-9f36-2218d12ffcba
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJhemlsdWNtQGdtYWlsLmNvbSIsImlkIjoibHdkOWpkcW8zMXZ6bmI0aCIsInVzZXJOYW1lIjoiYmF6aWx1Y20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3MTYyNzE0NTUsImV4cCI6MTcxNjMwNzQ1NX0.lTeZjC8O9NxgoCbVg5m4y0FKnEtX_gVrXtpUPhzW2h4
+Content-Type: application/json
+
+{
+  "weight": 60,
+  "reps": 10
+}
+
+### get a specific detailed workout /api/workout/:workoutId
+GET  {{baseUrl}}/api/workout/ddaaaedb-ff76-445c-8211-038f53edd53b
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJhemlsdWNtQGdtYWlsLmNvbSIsImlkIjoibHdnb2IzMW1ydmNtbGE0cSIsInVzZXJOYW1lIjoiYmF6aWx1Y20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3MTYzMTI3OTcsImV4cCI6MTcxNjM0ODc5N30.1tPtC_omkSo8iMaoHF4YJKqq3aBE05YvNBch7p5LOHU
+
+
+### get a specific detailed workout /api/workout/:workoutId
+GET  {{baseUrl}}/api/workout/user-workouts?startDate=2024-05-21&endDate=2024-05-27
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJhemlsdWNtQGdtYWlsLmNvbSIsImlkIjoibHdnb2IzMW1ydmNtbGE0cSIsInVzZXJOYW1lIjoiYmF6aWx1Y20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3MTYzNTYwODIsImV4cCI6MTcxNjM5MjA4Mn0.v_szb1zzoKCfUU37naj_S45R70pBG5UdzDEDVE3lwq4
+Content-Type: application/json
+
+
+### get a specific detailed workout /api/workout/:workoutId
+GET  {{baseUrl}}/api/workout/user-workouts/2024-05-22
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJhemlsdWNtQGdtYWlsLmNvbSIsImlkIjoibHdnb2IzMW1ydmNtbGE0cSIsInVzZXJOYW1lIjoiYmF6aWx1Y20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3MTY0MDQyMjcsImV4cCI6MTcxNjQ0MDIyN30.FI1Tt6JthHMY6GK7RJwm9MBzIA0slt6MSyCfALa6J_Q
+Content-Type: application/json
+
+
+
+
+
+

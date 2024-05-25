@@ -28,12 +28,15 @@ import { IncomingMessage, ServerResponse } from "http";
 import { SWAGGER_TAGS } from "../enums/swagger-tags";
 import { environmentVariables } from "./environment-variables";
 import { CRON_TIME } from "../enums/cron-time";
+import { workoutRoutes } from "../modules/workout/workout.routes";
+import { workoutSchemas } from "../modules/workout/workout.schemas";
+import { TWorkout } from "../modules/workout/workout.types";
 
 declare module "fastify" {
   interface FastifyInstance {
     authenticate: (
       request: FastifyRequest<{
-        Body: TSignInUser | TUpdateUser;
+        Body: TSignInUser | TUpdateUser | TWorkout;
         Querystring: {
           bodyPart: string;
           equipmentType: string;
@@ -108,7 +111,12 @@ export async function buildServer() {
   /**
    * Register the schemas available for validation within the Fastify app, ensuring that incoming requests conform to the specified data structures.
    */
-  registerSchemas(app, [...authSchemas, ...userSchemas, ...exerciseSchemas]);
+  registerSchemas(app, [
+    ...authSchemas,
+    ...userSchemas,
+    ...exerciseSchemas,
+    ...workoutSchemas,
+  ]);
   app.register(swagger, {
     swagger: {
       info: {
@@ -228,6 +236,6 @@ export async function buildServer() {
   app.register(authRoutes, { prefix: "/api/auth" });
   app.register(userRoutes, { prefix: "/api/user" });
   app.register(exerciseRoutes, { prefix: "/api/exercises" });
-
+  app.register(workoutRoutes, { prefix: "/api/workout" });
   return app;
 }

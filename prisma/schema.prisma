@@ -40,35 +40,71 @@ model User {
   avatarImage   String?    @map("avatar_image")
   weight        Int?
   height        Int?
-  goals          String[]   @default([])
+  goals         String[]   @default([])
   activityLevel String?    @map("activity_level")
   gender        String?
   age           Int?
   birthDate     DateTime?  @map("birth_date")
   phoneNumber   String?    @map("phone_number")
   nationality   String?
-  isOnboarded   Boolean    @default(false)@map("is_onboarded")
+  isOnboarded   Boolean    @default(false) @map("is_onboarded")
   createdAt     DateTime   @default(now()) @map("created_at")
   updatedAt     DateTime   @updatedAt @map("updated_at")
   auth          Auth       @relation(fields: [userId], references: [id], onDelete: Cascade)
   //relatonships
   UserRole      UserRole[]
+  Workout       Workout[]
 
   @@map("app_users")
 }
 
 model Exercise {
-  id               String   @id
+  id               String            @id
   name             String
-  bodyPart         String   @map("body_part")
+  bodyPart         String            @map("body_part")
   target           String
   equipment        String
-  gifUrl           String   @map("gif_url")
+  gifUrl           String            @map("gif_url")
   image            String?
-  secondaryMuscles String[] @map("secondary_muscles")
+  secondaryMuscles String[]          @map("secondary_muscles")
   instructions     String[]
+  WorkoutExercise  WorkoutExercise[]
 
   @@map("fitness_exercises")
+}
+
+model Workout {
+  id                 String            @id @default(uuid())
+  userId             String
+  name               String
+  musclesGroupTarget String[]          @map("muscles_group_target")
+  createdAt          DateTime          @default(now()) @map("created_at")
+  updatedAt          DateTime          @updatedAt @map("updated_at")
+  user               User              @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  exercises          WorkoutExercise[]
+
+  @@map("user_workout")
+}
+
+model WorkoutExercise {
+  id         String       @id @default(uuid())
+  workoutId  String       @map("workout_id")
+  exerciseId String       @map("exercise_id")
+  workout    Workout      @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+  exercise   Exercise     @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+  set        WorkoutSet[]
+
+  @@map("workout_exercises")
+}
+
+model WorkoutSet {
+  id                String          @id @default(uuid())
+  workoutExerciseId String          @map("workout_exercise_id")
+  weight            Int
+  reps              Int
+  WorkoutExercise   WorkoutExercise @relation(fields: [workoutExerciseId], references: [id], onDelete: Cascade)
+
+  @@map("workout_sets")
 }
 
 model Role {
