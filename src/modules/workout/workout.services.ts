@@ -1,4 +1,4 @@
-import dayjs, { Dayjs } from "dayjs";
+import { Dayjs } from "dayjs";
 import prisma from "../../config/prisma";
 import { HTTP_STATUS_CODE } from "../../enums/http-status-codes";
 import { createHttpException } from "../../utils/httpResponse";

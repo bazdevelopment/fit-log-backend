@@ -22,7 +22,8 @@ import {
   TWorkout,
   TWorkoutSetAndExercises,
 } from "./workout.types";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
+import { initializeWeek } from "./workout.utils";
 
 /**
  * Controller used to create a new workout
@@ -275,7 +276,7 @@ export const getUserWorkouts = async (
 
   const userId = request.user.id;
 
-  // Initialize the week structure
+  /* Initialize the week structure */
   const workoutsByDay = initializeWeek(startDate, endDate);
 
   const userWorkouts = await getUserWorkoutsService(
@@ -301,26 +302,4 @@ export const getUserWorkouts = async (
       data: workoutsByDay,
     })
   );
-};
-
-const initializeWeek = (
-  startDate: string,
-  endDate: string
-): { [key: string]: null } => {
-  const dates = {};
-  let currentDate = dayjs(startDate);
-
-  while (currentDate.isBefore(endDate) || currentDate.isSame(endDate, "day")) {
-    const month = currentDate.format("YYYY-MM");
-    const day = currentDate.format("YYYY-MM-DD");
-
-    if (!dates[month]) {
-      dates[month] = {};
-    }
-
-    dates[month][day] = null;
-    currentDate = currentDate.add(1, "day");
-  }
-
-  return dates;
 };
