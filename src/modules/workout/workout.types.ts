@@ -2,6 +2,7 @@ import z from "zod";
 
 import {
   addExerciseToWorkoutSchemaResponse,
+  addExercisesToWorkoutSchema,
   addSetToWorkoutExerciseResponseSchema,
   addSetToWorkoutExerciseSchema,
   createWorkoutResponseSchema,
@@ -26,6 +27,9 @@ export type TAddSetToWorkoutExerciseResponse = z.infer<
 export type TUpdateWorkoutName = z.infer<typeof updateWorkoutNameSchema>;
 export type TUpdateWorkoutNameResponse = z.infer<
   typeof updateWorkoutNameSchema
+>;
+export type TMultipleExercisesToWorkout = z.infer<
+  typeof addExercisesToWorkoutSchema
 >;
 
 export type TWorkoutSetAndExercises = TWorkout & {

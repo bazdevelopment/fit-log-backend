@@ -62,6 +62,34 @@ export const addExerciseToWorkoutService = async (
 };
 
 /**
+ * Service used to add an multiple exercises to an existing workout
+ */
+export const addMultipleExerciseSToWorkoutService = async (
+  workoutId: string,
+  exercisesIds: string[]
+) => {
+  try {
+    return await prisma.$transaction(
+      exercisesIds.map((exerciseId: string) =>
+        prisma.workoutExercise.create({
+          data: {
+            workoutId,
+            exerciseId,
+          },
+        })
+      )
+    );
+  } catch (error: unknown) {
+    const errorResponse = error as Error;
+    throw createHttpException({
+      status: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+      message: errorResponse.message,
+      method: "addExerciseToWorkout service",
+    });
+  }
+};
+
+/**
  * Service used to add a new set to an existing workout exercise
  */
 export const addSetToWorkoutExerciseService = async (

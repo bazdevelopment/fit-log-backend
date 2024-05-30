@@ -8,6 +8,9 @@ const createWorkoutFields = {
 };
 
 export const createWorkoutSchema = z.object(createWorkoutFields);
+export const addExercisesToWorkoutSchema = z.object({
+  exercisesIds: z.array(z.string()),
+});
 
 export const createWorkoutResponseSchema = z.object({
   id: z.string(),
@@ -44,6 +47,7 @@ export const { schemas: workoutSchemas, $ref } = buildJsonSchemas(
     createWorkoutJsonSchema: createWorkoutSchema,
     addSetToWorkoutExerciseJsonSchema: addSetToWorkoutExerciseSchema,
     updateWorkoutNameJsonSchema: updateWorkoutNameSchema,
+    addExercisesToWorkoutJsonSchema: addExercisesToWorkoutSchema,
   },
   { $id: "workoutSchema" }
 );

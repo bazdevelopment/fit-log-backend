@@ -84,14 +84,29 @@ export const getExercisesByMuscleTarget = async ({
   limit,
   offset,
 }: {
-  muscleTarget: string;
+  muscleTarget: string[];
   limit: number;
   offset: number;
 }): Promise<TExercisesResponse[]> => {
+  const muscleTargetLowerCase = muscleTarget.map((target) =>
+    target.toLowerCase()
+  );
+
   try {
     return await prisma.exercise.findMany({
       where: {
-        target: muscleTarget,
+        OR: [
+          {
+            target: {
+              in: muscleTargetLowerCase,
+            },
+          },
+          {
+            bodyPart: {
+              in: muscleTargetLowerCase,
+            },
+          },
+        ],
       },
       take: limit,
       skip: offset,

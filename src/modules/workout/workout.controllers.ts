@@ -3,6 +3,7 @@ import { HTTP_STATUS_CODE } from "../../enums/http-status-codes";
 import { createSuccessResponse } from "../../utils/httpResponse";
 import {
   addExerciseToWorkoutService,
+  addMultipleExerciseSToWorkoutService,
   addSetToWorkoutExerciseService,
   createWorkout,
   deleteSetService,
@@ -18,6 +19,7 @@ import {
   TAddSetToWorkoutExercise,
   TAddSetToWorkoutExerciseResponse,
   TCreateWorkoutResponse,
+  TMultipleExercisesToWorkout,
   TUpdateWorkoutName,
   TWorkout,
   TWorkoutSetAndExercises,
@@ -75,6 +77,35 @@ export const addExerciseToWorkout = async (
     createSuccessResponse({
       status: HTTP_STATUS_CODE.OK,
       message: "Exercise added to workout successfully!",
+      data: response,
+    })
+  );
+};
+
+/**
+ * Add multiple exercises to an existing workout
+ */
+export const addMultipleExercisesToWorkout = async (
+  request: FastifyRequest<{
+    Body: TMultipleExercisesToWorkout;
+    Params: {
+      workoutId: string;
+    };
+  }>,
+  reply: FastifyReply
+): Promise<TAddExerciseToWorkoutResponse> => {
+  const { exercisesIds } = request.body;
+  const { workoutId } = request.params;
+
+  const response = await addMultipleExerciseSToWorkoutService(
+    workoutId,
+    exercisesIds
+  );
+
+  return reply.code(HTTP_STATUS_CODE.OK).send(
+    createSuccessResponse({
+      status: HTTP_STATUS_CODE.OK,
+      message: "Exercises added to workout successfully!",
       data: response,
     })
   );

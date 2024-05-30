@@ -94,7 +94,7 @@ export const getExerciseById = async (
 /**
  * Controller used to get the exercises associated with a specific muscle
  */
-export const getExerciseByMuscleTarget = async (
+export const getExercisesByMuscleTargetController = async (
   request: FastifyRequest<{
     Querystring: {
       target: string;
@@ -105,9 +105,10 @@ export const getExerciseByMuscleTarget = async (
   reply: FastifyReply
 ) => {
   const { target, limit, offset } = request.query;
+  const musclesTarget: string[] = JSON.parse(target);
 
   const exercises = await getExercisesByMuscleTarget({
-    muscleTarget: target,
+    muscleTarget: musclesTarget,
     limit: Number(limit),
     offset: Number(offset),
   });
@@ -115,7 +116,7 @@ export const getExerciseByMuscleTarget = async (
   return reply.code(HTTP_STATUS_CODE.ACCEPTED).send(
     createSuccessResponse({
       status: HTTP_STATUS_CODE.ACCEPTED,
-      message: `Exercises with target ${target} has been fetched successfully!`,
+      message: `Exercises with muscles target ${musclesTarget} has been fetched successfully!`,
       data: exercises,
     })
   );

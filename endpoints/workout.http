@@ -13,6 +13,15 @@ Content-Type: application/json
 ### add a new exercise to an workout: /api/workout/:workoutId/exercises/:exerciseId
 POST {{baseUrl}}/api/workout/68bbdc18-44d7-4665-bf71-79047c112ce4/exercises/2355
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJhemlsdWNtQGdtYWlsLmNvbSIsImlkIjoibHdnb2IzMW1ydmNtbGE0cSIsInVzZXJOYW1lIjoiYmF6aWx1Y20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3MTY2MzIyNjUsImV4cCI6MTcxNjY2ODI2NX0.FBzakYKuYuut_Jlnqa1PRyyHCnlTl6nW2HBPagugNF0
+
+### add multiple exercises to an workout: /api/workout/:workoutId/exercises
+POST {{baseUrl}}/api/workout/68bbdc18-44d7-4665-bf71-79047c112ce4/exercises
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJhemlsdWNtQGdtYWlsLmNvbSIsImlkIjoibHdnb2IzMW1ydmNtbGE0cSIsInVzZXJOYW1lIjoiYmF6aWx1Y20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3MTY5MjE2MTksImV4cCI6MTcxNjk1NzYxOX0.xzG7FchRvKtdCDDvaZv6LPxeeK03G7sGKK4a7B1wTWo
+
+{
+  "exercisesIds":["0006", "0007"]
+}
+
 ### add a new set to an existing workout /api/workout/workout-exercise-set/:workoutExerciseId
 POST {{baseUrl}}/api/workout/workout-exercise-set/2cf8696a-4d8f-41b2-9f36-2218d12ffcba
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJhemlsdWNtQGdtYWlsLmNvbSIsImlkIjoibHdkOWpkcW8zMXZ6bmI0aCIsInVzZXJOYW1lIjoiYmF6aWx1Y20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3MTYyNzE0NTUsImV4cCI6MTcxNjMwNzQ1NX0.lTeZjC8O9NxgoCbVg5m4y0FKnEtX_gVrXtpUPhzW2h4

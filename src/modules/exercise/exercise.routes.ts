@@ -3,9 +3,9 @@ import {
   getBodyPartListController,
   getEquipmentListController,
   getExerciseById,
-  getExerciseByMuscleTarget,
   getExercisesByBodyPartController,
   getExercisesByEquipmentController,
+  getExercisesByMuscleTargetController,
   getExercisesByNameController,
   getExercisesController,
   getMuscleTargetListController,
@@ -98,7 +98,7 @@ export const exerciseRoutes = async (app: FastifyInstance) => {
       preHandler: [app.authenticate],
       schema: {
         querystring: {
-          target: { type: "string", enum: Object.values(MUSCLE_TARGET) },
+          target: { type: "array" },
           limit: { type: "string" },
           offset: { type: "string" },
         },
@@ -108,7 +108,7 @@ export const exerciseRoutes = async (app: FastifyInstance) => {
           "Endpoint used to get some fitness exercises for a specific muscle target (lazy loading with limit & offset)",
       },
     },
-    getExerciseByMuscleTarget
+    getExercisesByMuscleTargetController
   );
   app.get(
     EXERCISE_ROUTES.GET_EXERCISE_BY_EQUIPMENT_ROUTE,
