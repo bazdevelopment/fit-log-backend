@@ -14,7 +14,6 @@ import {
   BODY_PART,
   EXERCISE_EQUIPMENT,
   EXERCISE_ROUTES,
-  MUSCLE_TARGET,
 } from "./exercise.constants";
 import { SWAGGER_TAGS } from "../../enums/swagger-tags";
 
