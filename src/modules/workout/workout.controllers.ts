@@ -4,6 +4,7 @@ import { createSuccessResponse } from "../../utils/httpResponse";
 import {
   addExerciseToWorkoutService,
   addMultipleExerciseSToWorkoutService,
+  addMultipleSetsToWorkoutExerciseService,
   addSetToWorkoutExerciseService,
   createWorkout,
   deleteSetService,
@@ -15,6 +16,7 @@ import {
   updateWorkoutNameService,
 } from "./workout.services";
 import {
+  IMultipleSetsToWorkoutExercise,
   TAddExerciseToWorkoutResponse,
   TAddSetToWorkoutExercise,
   TAddSetToWorkoutExerciseResponse,
@@ -144,6 +146,29 @@ export const addSetToWorkoutExercise = async (
 /**
  * Add a new set to an existing workout exercise
  */
+export const addMultipleSetsToWorkoutExercise = async (
+  request: FastifyRequest<{
+    Body: IMultipleSetsToWorkoutExercise;
+  }>,
+  reply: FastifyReply
+): Promise<TAddSetToWorkoutExerciseResponse> => {
+  const sets = request.body;
+
+  const response = await addMultipleSetsToWorkoutExerciseService(sets);
+
+  return reply.code(HTTP_STATUS_CODE.OK).send(
+    createSuccessResponse({
+      status: HTTP_STATUS_CODE.OK,
+      message:
+        "Multiple sets to a workout exercise have been added successfully!",
+      data: response,
+    })
+  );
+};
+
+/**
+ * Edit the workout name
+ */
 export const updateWorkoutName = async (
   request: FastifyRequest<{
     Body: TUpdateWorkoutName;
@@ -202,9 +227,9 @@ export const updateSet = async (
   reply: FastifyReply
 ): Promise<TAddSetToWorkoutExerciseResponse> => {
   const { weight, reps } = request.body;
+
   const { setId } = request.params;
   const response = await updateSetService(setId, weight, reps);
-
   return reply.code(HTTP_STATUS_CODE.OK).send(
     createSuccessResponse({
       status: HTTP_STATUS_CODE.OK,

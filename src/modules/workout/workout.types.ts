@@ -43,3 +43,7 @@ export type TExerciseWithSets = {
   exercise: TExercisesResponse;
   exerciseId: string;
 };
+
+export interface IMultipleSetsToWorkoutExercise {
+  [id: string]: TAddSetToWorkoutExercise[];
+}

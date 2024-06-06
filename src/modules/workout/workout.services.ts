@@ -3,6 +3,7 @@ import prisma from "../../config/prisma";
 import { HTTP_STATUS_CODE } from "../../enums/http-status-codes";
 import { createHttpException } from "../../utils/httpResponse";
 import {
+  IMultipleSetsToWorkoutExercise,
   TAddExerciseToWorkoutResponse,
   TAddSetToWorkoutExerciseResponse,
   TCreateWorkoutResponse,
@@ -111,6 +112,36 @@ export const addSetToWorkoutExerciseService = async (
       status: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
       message: errorResponse.message,
       method: "addSetToWorkoutExercise service",
+    });
+  }
+};
+
+/**
+ * Service used to add multiple sets to an existing workout exercise
+ */
+export const addMultipleSetsToWorkoutExerciseService = async (
+  workoutSets: IMultipleSetsToWorkoutExercise
+) => {
+  try {
+    const addMultipleSetsPromises = Object.entries(workoutSets).map(
+      ([workoutExerciseId, sets]) => {
+        const data = sets.map((set) => ({
+          workoutExerciseId,
+          weight: set.weight,
+          reps: set.reps,
+        }));
+        return prisma.workoutSet.createMany({
+          data,
+        });
+      }
+    );
+    await Promise.all(addMultipleSetsPromises);
+  } catch (error: unknown) {
+    const errorResponse = error as Error;
+    throw createHttpException({
+      status: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+      message: errorResponse.message,
+      method: "addMultipleSetsToWorkoutExerciseService service",
     });
   }
 };
@@ -266,7 +297,11 @@ export const getDetailedWorkoutsByDate = async (
         exercises: {
           include: {
             exercise: true,
-            set: true,
+            set: {
+              orderBy: {
+                id: "desc",
+              },
+            },
           },
         },
       },
