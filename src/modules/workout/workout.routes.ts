@@ -5,6 +5,7 @@ import { SWAGGER_TAGS } from "../../enums/swagger-tags";
 import {
   addExerciseToWorkout,
   addMultipleExercisesToWorkout,
+  addMultipleSetsToWorkoutExercise,
   addSetToWorkoutExercise,
   createWorkoutController,
   deleteSet,
@@ -84,6 +85,22 @@ export const workoutRoutes = async (app: FastifyInstance) => {
     addSetToWorkoutExercise
   );
 
+  /* ADD MULTIPLE SETS TO AN EXISTING WORKOUT EXERCISE */
+  app.post(
+    WORKOUT_ROUTES.ADD_MULTIPLE_SETS_TO_WORKOUT_EXERCISE,
+    {
+      preHandler: [app.authenticate],
+      schema: {
+        body: $ref("addMultipleSetsToWorkoutExerciseJsonSchema"),
+        tags: [SWAGGER_TAGS.WORKOUT],
+        summary: "Add multiple sets to an existing workout exercise",
+        description:
+          "Endpoint used add multiple sets to an existing workout exercise",
+      },
+    },
+    addMultipleSetsToWorkoutExercise
+  );
+
   /* UPDATE WORKOUT NAME  */
   app.put(
     WORKOUT_ROUTES.UPDATE_WORKOUT_NAME,
@@ -117,7 +134,7 @@ export const workoutRoutes = async (app: FastifyInstance) => {
   );
 
   /* UPDATE SET  */
-  app.put(
+  app.patch(
     WORKOUT_ROUTES.UPDATE_SET,
     {
       preHandler: [app.authenticate],

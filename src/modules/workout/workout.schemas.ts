@@ -31,6 +31,11 @@ export const addSetToWorkoutExerciseSchema = z.object({
   weight: z.number(),
   reps: z.number(),
 });
+
+export const addMultipleSetsToWorkoutExerciseSchema = z.record(
+  z.array(addSetToWorkoutExerciseSchema)
+);
+
 export const addSetToWorkoutExerciseResponseSchema = z.object({
   id: z.string(),
   workoutExerciseId: z.string(),
@@ -46,6 +51,8 @@ export const { schemas: workoutSchemas, $ref } = buildJsonSchemas(
   {
     createWorkoutJsonSchema: createWorkoutSchema,
     addSetToWorkoutExerciseJsonSchema: addSetToWorkoutExerciseSchema,
+    addMultipleSetsToWorkoutExerciseJsonSchema:
+      addMultipleSetsToWorkoutExerciseSchema,
     updateWorkoutNameJsonSchema: updateWorkoutNameSchema,
     addExercisesToWorkoutJsonSchema: addExercisesToWorkoutSchema,
   },
