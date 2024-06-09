@@ -3,4 +3,5 @@ export const enum SWAGGER_TAGS {
   USER = "User",
   EXERCISE = "Exercise",
   WORKOUT = "Workout",
+  MEMBERSHIP_CARD = "MembershipCard",
 }

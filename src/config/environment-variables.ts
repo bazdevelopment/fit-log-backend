@@ -12,7 +12,7 @@ export const environmentVariables = {
     jwtRefreshTokenExpires: process.env.JWT_REFRESH_TOKEN_EXPIRES,
   },
   emailProvider: {
-    resendApiKey: process.env.RESEND_API_KEY,
+    resendApiKey: process.env.RESEND_API_KEY_YAHOO,
   },
   default: {
     port: process.env.PORT,

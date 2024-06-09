@@ -1,0 +1,28 @@
+
+### Store memberhip card : /api/membership-card
+POST  {{baseUrl}}/api/membership-card
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJhemlsdWNtQGdtYWlsLmNvbSIsImlkIjoibHdnb2IzMW1ydmNtbGE0cSIsInVzZXJOYW1lIjoiYmF6aWx1Y20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3MTc5MTU0ODksImV4cCI6MTcxNzk1MTQ4OX0.SuOysFEffPfp9P65zXhzF_thub14Z_UV1BYJJdRu1Qw
+
+{
+ "cardNumber":"f19e1fe"
+}
+
+
+### Store gym visit by scnaning membership card : /api/membership-card/visit
+POST  {{baseUrl}}/api/membership-card/visit
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJhemlsdWNtQGdtYWlsLmNvbSIsImlkIjoibHdnb2IzMW1ydmNtbGE0cSIsInVzZXJOYW1lIjoiYmF6aWx1Y20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3MTc5MTU0ODksImV4cCI6MTcxNzk1MTQ4OX0.SuOysFEffPfp9P65zXhzF_thub14Z_UV1BYJJdRu1Qw
+
+{
+ "cardNumber":"f19e1fe"
+}
+
+
+### Verify today's gym visit status : /api/membership-card/visit
+GET  {{baseUrl}}/api/membership-card/visit
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJhemlsdWNtQGdtYWlsLmNvbSIsImlkIjoibHdnb2IzMW1ydmNtbGE0cSIsInVzZXJOYW1lIjoiYmF6aWx1Y20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3MTc5MTU0ODksImV4cCI6MTcxNzk1MTQ4OX0.SuOysFEffPfp9P65zXhzF_thub14Z_UV1BYJJdRu1Qw
+
+
+
