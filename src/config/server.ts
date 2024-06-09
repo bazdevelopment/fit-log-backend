@@ -31,6 +31,8 @@ import { CRON_TIME } from "../enums/cron-time";
 import { workoutRoutes } from "../modules/workout/workout.routes";
 import { workoutSchemas } from "../modules/workout/workout.schemas";
 import { TWorkout } from "../modules/workout/workout.types";
+import { membershipCardRoutes } from "../modules/membership-card/mermbership-card.routes";
+import { membershipCardSchemas } from "../modules/membership-card/mermbership-card.schemas";
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -116,6 +118,7 @@ export async function buildServer() {
     ...userSchemas,
     ...exerciseSchemas,
     ...workoutSchemas,
+    ...membershipCardSchemas,
   ]);
   app.register(swagger, {
     swagger: {
@@ -237,5 +240,7 @@ export async function buildServer() {
   app.register(userRoutes, { prefix: "/api/user" });
   app.register(exerciseRoutes, { prefix: "/api/exercises" });
   app.register(workoutRoutes, { prefix: "/api/workout" });
+  app.register(membershipCardRoutes, { prefix: "/api/membership-card" });
+
   return app;
 }

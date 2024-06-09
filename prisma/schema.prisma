@@ -36,24 +36,27 @@ model Auth {
 }
 
 model User {
-  userId        String     @id @unique @map("user_id")
-  avatarImage   String?    @map("avatar_image")
-  weight        Int?
-  height        Int?
-  goals         String[]   @default([])
-  activityLevel String?    @map("activity_level")
-  gender        String?
-  age           Int?
-  birthDate     DateTime?  @map("birth_date")
-  phoneNumber   String?    @map("phone_number")
-  nationality   String?
-  isOnboarded   Boolean    @default(false) @map("is_onboarded")
-  createdAt     DateTime   @default(now()) @map("created_at")
-  updatedAt     DateTime   @updatedAt @map("updated_at")
-  auth          Auth       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId           String          @id @unique @map("user_id")
+  cardMembershipId String?         @unique @map("card_membership_id")
+  avatarImage      String?         @map("avatar_image")
+  weight           Int?
+  height           Int?
+  goals            String[]        @default([])
+  activityLevel    String?         @map("activity_level")
+  gender           String?
+  age              Int?
+  birthDate        DateTime?       @map("birth_date")
+  phoneNumber      String?         @map("phone_number")
+  nationality      String?
+  isOnboarded      Boolean         @default(false) @map("is_onboarded")
+  createdAt        DateTime        @default(now()) @map("created_at")
+  updatedAt        DateTime        @updatedAt @map("updated_at")
   //relatonships
-  UserRole      UserRole[]
-  Workout       Workout[]
+  UserRole         UserRole[]
+  Workout          Workout[]
+  auth             Auth            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  card             MembershipCard?
+  visits           Visit[]
 
   @@map("app_users")
 }
@@ -153,4 +156,25 @@ model RolePermission {
 
   @@unique([roleId, permissionId])
   @@map("role_permissions")
+}
+
+model Visit {
+  id               String         @id @default(uuid())
+  userId           String         @unique @map("user_id")
+  user             User           @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  cardMembershipId String         @map("card_membership_id")
+  card             MembershipCard @relation(fields: [cardMembershipId], references: [cardNumber], onDelete: Cascade)
+  createdAt        DateTime       @default(now()) @map("created_at")
+
+  @@map("gym_visits")
+}
+
+model MembershipCard {
+  id         String  @id @default(uuid())
+  cardNumber String  @unique @map("card_number")
+  userId     String  @unique @map("user_id")
+  user       User    @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  visits     Visit[]
+
+  @@map("membership_card")
 }

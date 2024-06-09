@@ -39,7 +39,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJhemlsd
 Content-Type: application/json
 
 {
-  "975b8064-68f8-4d6e-b10e-31e31b241a0f":[{
+  "975b8064-68f8-4d6e-b10e-31e31b241a0f":[
+  {
   "weight": 60,
   "reps": 10
   },

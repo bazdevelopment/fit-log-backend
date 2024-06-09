@@ -31,6 +31,7 @@ export const getUserById = async (userId: string) => {
           nationality: true,
           phoneNumber: true,
           isOnboarded: true,
+          cardMembershipId: true,
         },
       }),
     ]);
