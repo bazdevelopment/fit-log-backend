@@ -1,5 +1,4 @@
 import { FastifyInstance } from "fastify";
-import { WORKOUT_ROUTES } from "../workout/workout.contants";
 import { MEMBERSHIP_CARD_ROUTES } from "./membership-card.constants";
 import { SWAGGER_TAGS } from "../../enums/swagger-tags";
 import { $ref } from "./mermbership-card.schemas";
@@ -8,8 +7,10 @@ import {
   storeGymVisitsController,
   verifyGymVisitController,
 } from "./mermbership-card.controllers";
-import { verifyTodayGymVisitService } from "./mermbership-card.services";
 
+/**
+ * All the routes related to membership card are grouped here
+ */
 export const membershipCardRoutes = async (app: FastifyInstance) => {
   /* Register membership card */
   app.post(

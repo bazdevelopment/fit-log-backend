@@ -115,7 +115,7 @@ export const verifyTodayGymVisitService = async (userId: string) => {
     const endOfDay = dayjs().endOf("day").toDate();
     const visit = await prisma.visit.findFirst({
       where: {
-        userId: userId,
+        userId,
         createdAt: {
           gte: startOfDay,
           lte: endOfDay,

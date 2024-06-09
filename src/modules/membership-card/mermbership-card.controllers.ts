@@ -7,6 +7,10 @@ import {
   verifyTodayGymVisitService,
 } from "./mermbership-card.services";
 
+/**
+ * Controller user to register the membership card and assign to the user the card id
+ * the card id should be unique per user
+ */
 export const registerMembershipCardController = async (
   request: FastifyRequest<{
     Body: {
@@ -28,6 +32,9 @@ export const registerMembershipCardController = async (
   );
 };
 
+/**
+ * Controller used to store the gym visit when scanning the membership card
+ */
 export const storeGymVisitsController = async (
   request: FastifyRequest<{
     Body: {
@@ -47,7 +54,9 @@ export const storeGymVisitsController = async (
     })
   );
 };
-
+/**
+ * Controller used to verify if the user visited the gym (scanned once per day)
+ */
 export const verifyGymVisitController = async (
   request: FastifyRequest,
   reply: FastifyReply
