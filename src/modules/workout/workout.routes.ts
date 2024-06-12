@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify";
-import { WORKOUT_ROUTES } from "./workout.contants";
+import { WORKOUT_ACTION, WORKOUT_ROUTES } from "./workout.contants";
 import { $ref } from "./workout.schemas";
 import { SWAGGER_TAGS } from "../../enums/swagger-tags";
 import {
@@ -13,6 +13,7 @@ import {
   getDetailedWorkoutById,
   getDetailedWorkoutsByDateController,
   getUserWorkouts,
+  submitWorkoutActionController,
   updateSet,
   updateWorkoutName,
 } from "./workout.controllers";
@@ -219,5 +220,23 @@ export const workoutRoutes = async (app: FastifyInstance) => {
       },
     },
     getUserWorkouts
+  );
+
+  /* Submit workout start/stop actions */
+  app.post(
+    WORKOUT_ROUTES.STORE_WORKOUT_ACTION,
+    {
+      preHandler: [app.authenticate],
+      schema: {
+        params: {
+          action: { type: "string", enum: Object.values(WORKOUT_ACTION) },
+        },
+        tags: [SWAGGER_TAGS.WORKOUT],
+        summary: "Store workout action",
+        description:
+          "Endpoint used to submit the workout action and fill in start/end date time based on the action",
+      },
+    },
+    submitWorkoutActionController
   );
 };

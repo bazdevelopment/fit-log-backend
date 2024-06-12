@@ -12,6 +12,7 @@ import {
   getDetailedWorkoutService,
   getDetailedWorkoutsByDate,
   getUserWorkoutsService,
+  submitWorkoutTimestamp,
   updateSetService,
   updateWorkoutNameService,
 } from "./workout.services";
@@ -28,6 +29,7 @@ import {
 } from "./workout.types";
 import dayjs from "dayjs";
 import { initializeWeek } from "./workout.utils";
+import { WORKOUT_ACTION } from "./workout.contants";
 
 /**
  * Controller used to create a new workout
@@ -356,6 +358,30 @@ export const getUserWorkouts = async (
       status: HTTP_STATUS_CODE.OK,
       message: "Workouts fetched successfully!",
       data: workoutsByDay,
+    })
+  );
+};
+/**
+ * Controller used to submit workout action and store start/end date time
+ */
+export const submitWorkoutActionController = async (
+  request: FastifyRequest<{
+    Params: {
+      action: WORKOUT_ACTION;
+      workoutId: string;
+    };
+  }>,
+  reply: FastifyReply
+) => {
+  const { action, workoutId } = request.params;
+
+  const response = await submitWorkoutTimestamp(workoutId, action);
+
+  return reply.code(HTTP_STATUS_CODE.OK).send(
+    createSuccessResponse({
+      status: HTTP_STATUS_CODE.OK,
+      message: "Successfully stored start/end date time for workout",
+      data: response,
     })
   );
 };
