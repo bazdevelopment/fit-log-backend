@@ -10,6 +10,7 @@ const DELETE_SET = "/workout-sets/:setId";
 const GET_DETAILED_WORKOUT = "/:workoutId";
 const GET_USER_WORKOUTS = "/user-workouts";
 const GET_USER_WORKOUTS_BY_DATE = "/user-workouts/:date";
+const STORE_WORKOUT_ACTION = "/:workoutId/:action";
 
 export const WORKOUT_ROUTES = {
   CREATE_WORKOUT_ROUTE,
@@ -24,4 +25,10 @@ export const WORKOUT_ROUTES = {
   GET_USER_WORKOUTS_BY_DATE,
   ADD_MULTIPLE_EXERCISES_TO_WORKOUT,
   ADD_MULTIPLE_SETS_TO_WORKOUT_EXERCISE,
+  STORE_WORKOUT_ACTION,
 };
+
+export enum WORKOUT_ACTION {
+  START = "start",
+  STOP = "stop",
+}

@@ -81,6 +81,8 @@ model Workout {
   userId             String
   name               String
   musclesGroupTarget String[]          @map("muscles_group_target")
+  startDateTime      DateTime?         @map("start_date_time")
+  endDateTime        DateTime?         @map("end_date_time")
   createdAt          DateTime          @default(now()) @map("created_at")
   updatedAt          DateTime          @updatedAt @map("updated_at")
   user               User              @relation(fields: [userId], references: [userId], onDelete: Cascade)
@@ -160,7 +162,7 @@ model RolePermission {
 
 model Visit {
   id               String         @id @default(uuid())
-  userId           String         @unique @map("user_id")
+  userId           String         @map("user_id")
   user             User           @relation(fields: [userId], references: [userId], onDelete: Cascade)
   cardMembershipId String         @map("card_membership_id")
   card             MembershipCard @relation(fields: [cardMembershipId], references: [cardNumber], onDelete: Cascade)

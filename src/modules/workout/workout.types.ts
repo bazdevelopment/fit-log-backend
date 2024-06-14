@@ -47,3 +47,8 @@ export type TExerciseWithSets = {
 export interface IMultipleSetsToWorkoutExercise {
   [id: string]: TAddSetToWorkoutExercise[];
 }
+
+export interface IWorkoutActionData {
+  startDateTime?: Date;
+  endDateTime?: Date;
+}

@@ -4,11 +4,13 @@ import { HTTP_STATUS_CODE } from "../../enums/http-status-codes";
 import { createHttpException } from "../../utils/httpResponse";
 import {
   IMultipleSetsToWorkoutExercise,
+  IWorkoutActionData,
   TAddExerciseToWorkoutResponse,
   TAddSetToWorkoutExerciseResponse,
   TCreateWorkoutResponse,
   TWorkoutSetAndExercises,
 } from "./workout.types";
+import { WORKOUT_ACTION } from "./workout.contants";
 
 /**
  * Service used create a new workout in db
@@ -341,6 +343,37 @@ export const getUserWorkoutsService = async (
       status: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
       message: errorResponse.message,
       method: "getUserWorkoutsService service",
+    });
+  }
+};
+
+/**
+ * Service to submit startDateTime/endDateTime for workout based on the action start/stop
+ */
+export const submitWorkoutTimestamp = async (
+  workoutId: string,
+  action: WORKOUT_ACTION
+) => {
+  try {
+    let updateData: IWorkoutActionData = {};
+
+    if (action === WORKOUT_ACTION.START) {
+      updateData.startDateTime = new Date();
+    } else if (action === WORKOUT_ACTION.STOP) {
+      updateData.endDateTime = new Date();
+    }
+    return await prisma.workout.update({
+      where: {
+        id: workoutId,
+      },
+      data: updateData,
+    });
+  } catch (error: unknown) {
+    const errorResponse = error as Error;
+    throw createHttpException({
+      status: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+      message: errorResponse.message,
+      method: "submitWorkoutTimestamp service",
     });
   }
 };

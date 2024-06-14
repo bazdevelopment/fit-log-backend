@@ -66,6 +66,12 @@ GET  {{baseUrl}}/api/workout/user-workouts/2024-05-22
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJhemlsdWNtQGdtYWlsLmNvbSIsImlkIjoibHdnb2IzMW1ydmNtbGE0cSIsInVzZXJOYW1lIjoiYmF6aWx1Y20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3MTY0MDQyMjcsImV4cCI6MTcxNjQ0MDIyN30.FI1Tt6JthHMY6GK7RJwm9MBzIA0slt6MSyCfALa6J_Q
 Content-Type: application/json
 
+### get a specific detailed workout /api/workout/:workoutId/start | stop
+POST  {{baseUrl}}/api/workout/a6ee7faf-2b48-40f4-9d06-ac9aab133b4c/stop
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJhemlsdWNtYXJpYW45OEB5YWhvby5jb20iLCJpZCI6Imx4N2hrYXVuenkwN3R3Zm4iLCJ1c2VyTmFtZSI6ImJhenppbGxsIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3MTgxMjk0ODksImV4cCI6MTcxODE2NTQ4OX0.pgrMe0TxWUPUbeXcetS6JkrPrI4yaRInMynmmMlZp_Q
+
+
+
 
 
 

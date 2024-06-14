@@ -24,7 +24,7 @@ async function main() {
     host: environmentVariables.default.host,
   });
   initializeSocketServer();
-  // startArduinoCommunication();
+  startArduinoCommunication();
 
   /** enable all the jobs */
   app.cron.startAllJobs();
