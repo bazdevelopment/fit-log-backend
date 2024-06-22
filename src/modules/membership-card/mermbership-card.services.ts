@@ -133,3 +133,36 @@ export const verifyTodayGymVisitService = async (userId: string) => {
     });
   }
 };
+
+/**
+ * Service used to store a gym visit in db
+ */
+export const getGymVisits = async (userId: string) => {
+  try {
+    const visits = await prisma.visit.findMany({
+      where: { userId },
+      select: {
+        createdAt: true,
+        id: true,
+      },
+    });
+
+    const groupedVisits = visits.reduce((acc, visit) => {
+      const month = dayjs(visit.createdAt).format("YYYY-MM");
+      if (!acc[month]) {
+        acc[month] = [];
+      }
+      acc[month].push(visit);
+      return acc;
+    }, {});
+
+    return groupedVisits;
+  } catch (error: unknown) {
+    const errorResponse = error as Error;
+    throw createHttpException({
+      status: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+      message: errorResponse.message,
+      method: "verifyTodayGymVisit service",
+    });
+  }
+};

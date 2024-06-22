@@ -3,6 +3,7 @@ import { MEMBERSHIP_CARD_ROUTES } from "./membership-card.constants";
 import { SWAGGER_TAGS } from "../../enums/swagger-tags";
 import { $ref } from "./mermbership-card.schemas";
 import {
+  getGymVisitsController,
   registerMembershipCardController,
   storeGymVisitsController,
   verifyGymVisitController,
@@ -54,5 +55,19 @@ export const membershipCardRoutes = async (app: FastifyInstance) => {
       },
     },
     verifyGymVisitController
+  );
+
+  /* Verify today gym visit status */
+  app.get(
+    MEMBERSHIP_CARD_ROUTES.GET_ALL_GYM_VISITS,
+    {
+      preHandler: [app.authenticate],
+      schema: {
+        tags: [SWAGGER_TAGS.MEMBERSHIP_CARD],
+        summary: "Get all gym visits",
+        description: "Endpoint used to get all gym visits",
+      },
+    },
+    getGymVisitsController
   );
 };
