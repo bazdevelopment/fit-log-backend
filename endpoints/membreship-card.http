@@ -24,5 +24,11 @@ GET  {{baseUrl}}/api/membership-card/visit
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJhemlsdWNtQGdtYWlsLmNvbSIsImlkIjoibHdnb2IzMW1ydmNtbGE0cSIsInVzZXJOYW1lIjoiYmF6aWx1Y20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3MTc5MTU0ODksImV4cCI6MTcxNzk1MTQ4OX0.SuOysFEffPfp9P65zXhzF_thub14Z_UV1BYJJdRu1Qw
 
+### Get all fym visists /api/membership-card/visits
+GET  {{baseUrl}}/api/membership-card/visits
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJhemlsdWNtQGdtYWlsLmNvbSIsImlkIjoibHdnb2IzMW1ydmNtbGE0cSIsInVzZXJOYW1lIjoiYmF6aWx1Y20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3MTgzODM1OTMsImV4cCI6MTcxODQxOTU5M30.CxgUJE63QhfSATvhmb2ZvClqrU-nhxDnFABRxvHP5Fs
+
+
 
 
