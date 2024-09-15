@@ -5,7 +5,7 @@ const Readline = require("@serialport/parser-readline").ReadlineParser;
 /** Serial port declaration */
 const port = new SerialPort({
   baudRate: 9600,
-  path: "/dev/cu.usbmodem143101", //! this path can be found on arduino studio and each usb slot has a different value
+  path: "/dev/cu.usbmodem11101", //! this path can be found on arduino studio and each usb slot has a different value
 });
 
 /**Function used to return the scanned card id + communicating with sockets */

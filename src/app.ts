@@ -23,8 +23,8 @@ async function main() {
     port: Number(environmentVariables.default.port),
     host: environmentVariables.default.host,
   });
-  initializeSocketServer();
-  startArduinoCommunication();
+  // initializeSocketServer();
+  // startArduinoCommunication();
 
   /** enable all the jobs */
   app.cron.startAllJobs();
